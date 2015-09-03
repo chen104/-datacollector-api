@@ -18,12 +18,47 @@
 package com.streamsets.pipeline.api.base;
 
 import com.streamsets.pipeline.api.ErrorCode;
+import com.streamsets.pipeline.api.Record;
 import com.streamsets.pipeline.api.StageException;
 
+/**
+ * Exception a stage can throw when a specific record should go to the error pipeline.
+ * A record should be considered in error if it is un-parseable or may be missing required information.
+ *
+ * This should not be thrown due to issues such as destination connectivity, etc. Those error conditions
+ * should be considered a {@link StageException} in which the pipeline should stop in an error state.
+ */
 public class OnRecordErrorException extends StageException {
+  private final Record record;
 
+  /**
+   * Class constructor specifying the error code and any parameters to be interpolated into the error message.
+   *
+   * @param errorCode ErrorCode describing the problem
+   * @param params Parameters to be interpolated into the ErrorCode's error message
+   */
   public OnRecordErrorException(ErrorCode errorCode, Object... params) {
-    super(errorCode, params);
+    this(null, errorCode, params);
   }
 
+  /**
+   * Optional class constructor which also specifies the record in error. Useful when error records
+   * must be batched up prior to handling.
+   *
+   * @param record Record which caused the error
+   * @param errorCode ErrorCode describing the problem
+   * @param params Parameters to be interpolated into the ErrorCode's error message
+   */
+  public OnRecordErrorException(Record record, ErrorCode errorCode, Object... params) {
+    super(errorCode, params);
+    this.record = record;
+  }
+
+  /**
+   * Getter for the record which caused the error.
+   * @return error record
+   */
+  public Record getRecord() {
+    return record;
+  }
 }
