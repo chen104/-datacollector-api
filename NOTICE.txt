@@ -1,0 +1,11 @@
+This product includes software developed by StreamSets, Inc.
+(http://www.streamsets.com/).
+
+This product includes components of the following software:
+
+  Project Name                    License
+-----------------------------------------------------------------------
+  Dropwizzard Metrics             Apache License 2.0
+  Log4J                           Apache License 2.0
+  SLF4J                           MIT License
+-----------------------------------------------------------------------
