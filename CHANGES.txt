@@ -1,0 +1,8 @@
+Release Notes - StreamSets Data Collector API - Version 1.1.0
+
+Up to version 1.1.0, the Data Collector API was not being tracked
+seperately from the the Data Collector. In the future this file
+will track changes to the API seperately. For the 1.1.0 release
+see:
+
+https://github.com/StreamSets/datacollector/blob/master/CHANGES.txt
