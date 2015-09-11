@@ -28,7 +28,3 @@ StreamSets Data Collector is built on open source technologies, our code is lice
 Contributing code
 -----------
 We welcome contributors, please check out our [guidelines](CONTRIBUTING.md) to get started.
-
-Changelog
-----------
-<<point to the changelog file in github>>
