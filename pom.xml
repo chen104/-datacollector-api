@@ -217,6 +217,8 @@
         <configuration>
           <excludes>
 
+            <exclude>CHANGES.txt</exclude>
+
             <exclude>.idea/**</exclude>
             <exclude>**/*.iml</exclude>
 
