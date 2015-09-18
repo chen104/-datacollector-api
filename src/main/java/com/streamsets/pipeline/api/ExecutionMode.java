@@ -19,10 +19,10 @@ package com.streamsets.pipeline.api;
 
 public enum ExecutionMode implements Label {
   STANDALONE("Standalone"),
-  CLUSTER("Cluster"),
+  CLUSTER_BATCH("Cluster Batch"),
+  CLUSTER_STREAMING("Cluster Streaming"),
   SLAVE("Slave")
   ;
-
   private final String label;
 
   ExecutionMode(String label) {

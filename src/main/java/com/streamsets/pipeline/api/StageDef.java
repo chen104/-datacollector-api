@@ -76,12 +76,14 @@ public @interface StageDef {
 
   Class<? extends Label> outputStreams() default DefaultOutputStreams.class;
 
-  ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER };
+  ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER_BATCH, ExecutionMode.CLUSTER_STREAMING };
 
   boolean recordsByRef() default false;
 
   boolean privateClassLoader() default false;
 
   Class<? extends StageUpgrader> upgrader() default StageUpgrader.Default.class;
+
+  String[] libJarsRegex() default {};
 
 }
