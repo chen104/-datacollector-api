@@ -19,6 +19,7 @@ package com.streamsets.pipeline.api;
 
 public enum ExecutionMode implements Label {
   STANDALONE("Standalone"),
+  CLUSTER("Cluster"), //Kept for backward compatibility - replaced by CLUSTER_BATCH and CLUSTER_STREAMING
   CLUSTER_BATCH("Cluster Batch"),
   CLUSTER_STREAMING("Cluster Streaming"),
   SLAVE("Slave")
