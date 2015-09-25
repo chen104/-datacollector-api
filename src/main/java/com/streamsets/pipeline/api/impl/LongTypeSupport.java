@@ -19,7 +19,7 @@ package com.streamsets.pipeline.api.impl;
 
 import com.streamsets.pipeline.api.base.Errors;
 
-import java.math.BigDecimal;
+import java.util.Date;
 
 public class LongTypeSupport extends TypeSupport<Long> {
 
@@ -48,6 +48,9 @@ public class LongTypeSupport extends TypeSupport<Long> {
     }
     if (value instanceof Number) {
       return ((Number)value).longValue();
+    }
+    if (value instanceof Date) {
+      return ((Date)value).getTime();
     }
     throw new IllegalArgumentException(Utils.format(Errors.API_14.getMessage(),
                                                     value.getClass().getSimpleName(), value));

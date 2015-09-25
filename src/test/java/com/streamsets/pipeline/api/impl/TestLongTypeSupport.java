@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class TestLongTypeSupport {
 
@@ -56,6 +57,7 @@ public class TestLongTypeSupport {
     Assert.assertEquals(new Long(1), support.convert((float)1));
     Assert.assertEquals(new Long(1), support.convert((double)1));
     Assert.assertEquals(new Long(1), support.convert(new BigDecimal(1)));
+    Assert.assertEquals(new Long(67264872), support.convert(new Date(67264872)));
   }
 
   @Test(expected = IllegalArgumentException.class)
