@@ -17,7 +17,6 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface Source extends Stage<Source.Context> {
@@ -31,6 +30,4 @@ public interface Source extends Stage<Source.Context> {
   // returns offset NULL if done
   public String produce(String lastSourceOffset, int maxBatchSize, BatchMaker batchMaker) throws StageException;
 
-  // TODO - Move this to ClusterSource
-  public int getParallelism() throws IOException;
 }

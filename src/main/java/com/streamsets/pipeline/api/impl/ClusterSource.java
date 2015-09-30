@@ -19,6 +19,7 @@ package com.streamsets.pipeline.api.impl;
 
 import com.streamsets.pipeline.api.Source;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public interface ClusterSource extends Source {
    */
   Map<String, String> getConfigsToShip();
 
+  int getParallelism() throws IOException;
 
   void shutdown();
 

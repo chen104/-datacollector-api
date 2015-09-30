@@ -34,11 +34,6 @@ public class DummySource implements Source {
   }
 
   @Override
-  public int getParallelism() throws IOException {
-    return 0;
-  }
-
-  @Override
   public List<ConfigIssue> init(Info info, Context context) {
     return null;
   }
