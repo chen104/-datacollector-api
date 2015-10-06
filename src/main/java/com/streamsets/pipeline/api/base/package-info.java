@@ -16,6 +16,6 @@
  * limitations under the License.
  */
  /**
- * Convenience classes
+ * Convenience Data Collector API classes
  */
 package com.streamsets.pipeline.api.base;

@@ -15,16 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.streamsets.pipeline.api;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
-@java.lang.annotation.Target(ElementType.FIELD)
-public @interface FieldValueChooserModel {
-
-  Class<? extends ChooserValues> value();
-
-}
+ /**
+ * Data Collector API EL (expression language) classes
+ */
+package com.streamsets.pipeline.api.el;

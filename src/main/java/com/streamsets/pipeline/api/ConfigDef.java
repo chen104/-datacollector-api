@@ -27,20 +27,36 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The <code>ConfigDef</code> annotation is used to define stage configuration variables and their visual
+ * representation in the UI.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigDef {
 
+  /**
+   * Enum defining the possible types of the configuration variable.
+   */
   public enum Type {
     BOOLEAN(false),
     NUMBER(0),
     STRING(""),
     LIST(Collections.emptyList()),
     MAP(Collections.emptyList()),
+    /**
+     * If a configuration variable is defined as <code>Model</code>, the variable must also be annotated with a model
+     * annotation.
+     *
+     * @see FieldSelectorModel
+     * @see ValueChooserModel
+     * @see MultiValueChooserModel
+     * @see PredicateModel
+     * @see ListBeanModel
+     */
     MODEL(""),
     CHARACTER(' '),
     TEXT("")
-
     ;
 
     private final Object defaultValue;
@@ -49,6 +65,13 @@ public @interface ConfigDef {
       this.defaultValue = defaultValue;
     }
 
+    /**
+     * Returns the default value for the configuration type to be used when there is no default value defined.
+     *
+     * @param variableClass the variable class.
+     *
+     * @return the default value for the configuration type.
+     */
     public Object getDefault(Class variableClass) {
       Object value;
       if (variableClass.isEnum()) {
@@ -64,41 +87,128 @@ public @interface ConfigDef {
     }
   }
 
+  /**
+   * Enum defining the possible UI syntax highlighting for a configuration of type {@link Type#TEXT}.
+   *
+   * @see #mode()
+   */
   public enum Mode {JAVA, JAVASCRIPT, JSON, PLAIN_TEXT, PYTHON, RUBY, SCALA, SQL}
 
+  /**
+   * Enum defining the possible EL evaluation modes for configuration variables.
+   */
   public enum Evaluation {IMPLICIT, EXPLICIT}
 
+  /**
+   * The configuration type for the configuration variable.
+   */
   Type type();
 
+  /**
+   * The default value for the configuration variable. If the {@link #evaluation()} is
+   * {@link com.streamsets.pipeline.api.ConfigDef.Evaluation#IMPLICIT} the default value can be an EL and it will
+   * be resolved by the Data Collector at stage initialization time.
+   * <p/>
+   * If the variable itself has default value assigned, the default value set here is ignored.
+   */
   String defaultValue() default "";
 
+  /**
+   * Indicates if a configuration value is required or not. This is enforced by the validation logic.
+   */
   boolean required();
 
+  /**
+   * The default label for the UI.
+   */
   String label();
 
+  /**
+   * The default tooltip description for the UI.
+   */
   String description() default "";
 
+  /**
+   * The configuration group for the UI.
+   * <p/>
+   * If the configuration variable is within a configuration bean, instead hardcoding the group name it is possible
+   * to reference the group ordinal (using <code>#N</code> where <b>N</b> is the ordinal) of the groups defined in
+   * {@link ConfigDefBean} annotation of the configuration bean variable.
+   *
+   * @see ConfigDefBean
+   */
   String group() default "";
 
-  String dependsOn() default "";
-
+  /**
+   * The display position in the UI.
+   */
   int displayPosition() default 0;
 
+  /**
+   * The name of the configuration this configuration depends on, if any.
+   * <p/>
+   * If it depends on another configuration, this configuration will be displayed only if the <i>depends on</i>
+   * configuration value matches one of the trigger values.
+   * <p/>
+   * If using {@link ConfigDefBean} configuration variables can be in different classes and at different depths.
+   * For these cases, if the <i>depends on</i> configuration variable is not in the same class as the configuration
+   * variable referring to it, use <b>^[CONFIGURATION NAME]</b> to specify the full configuration name from the stage.
+   * Or use <b>[CONFIGURATION NAME]^...^</b> to specify a relative configuration name, going back from the current
+   * configuration.
+   *
+   * @see #triggeredByValue()
+   */
+  String dependsOn() default "";
+
+  /**
+   * The trigger values of the <i>depends on</i> configuration that activate this configuration.
+   *
+   * @see #dependsOn()
+   *
+   */
   String[] triggeredByValue() default {};
 
+  /**
+   * Indicates the minimum value for configuration variables of type {@link Type#NUMBER}.
+   */
   long min() default Long.MIN_VALUE;
 
+  /**
+   * Indicates the maximum value for configuration variables of type {@link Type#NUMBER}.
+   */
   long max() default Long.MAX_VALUE;
 
-  //O displays 1 line in UI, text box cannot be re-sized and user can enter just one line of input
-  //1 displays 1 line in UI, text box can be re-sized and user can enter n lines of input
-  //n indicates n lines in UI, text box can be re-sized and user can enter just one line of input
+  /**
+   * Indicates the number of lines in the UI for configuration variables of type {@link Type#TEXT}.
+   * <p/>
+   * <ul>
+   *   <li><b>0</b> - displays 1 line, the text box cannot re-size and it accepts only one line of input</li>
+   *   <li><b>1</b> - displays 1 line, the text box can be re-size and it accepts multiple lines of</li>
+   *   <li><b>n</b> - displays <b>n</b> lines, the text box can be re-size and it accepts only one line of input</li>
+   * </ul>
+   */
   int lines() default 0;
 
-  Mode mode() default Mode.PLAIN_TEXT;
+  /**
+   * Indicates the expected syntax for a configuration of type {@link Type#TEXT}. It is used by the UI to provide
+   * syntax highlighting.
+   */
+   Mode mode() default Mode.PLAIN_TEXT;
 
+  /**
+   * Defines custom EL functions and constants available to EL evalutors of this configuration variable.
+   *
+   * @see ElFunction
+   * @see ElConstant
+   * @see com.streamsets.pipeline.api.Stage.ELContext
+   */
   Class[] elDefs() default {};
 
+  /**
+   * Indicates if the Data Collector evaluates ELs in the configuration and the stages sees the already resolved value
+   * (implicit), or if the Data Collector does not evaluate the EL and the stage must use a
+   * {@link com.streamsets.pipeline.api.el.ELEval} to explicitly perform the EL evaluation.
+   */
   Evaluation evaluation() default Evaluation.IMPLICIT;
 
 }

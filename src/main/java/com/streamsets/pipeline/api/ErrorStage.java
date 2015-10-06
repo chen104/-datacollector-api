@@ -17,8 +17,13 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Used to define destination ({@link Target}) stages that specialize in handling records sent to error.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.TYPE)
 public @interface ErrorStage {

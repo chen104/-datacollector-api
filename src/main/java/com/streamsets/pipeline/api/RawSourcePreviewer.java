@@ -19,12 +19,32 @@ package com.streamsets.pipeline.api;
 
 import java.io.InputStream;
 
+/**
+ * Interface that provides raw preview capabilities to Data Collector origin ({@link Source} stages via the
+ * {@link RawSource} annotation.
+ */
 public interface RawSourcePreviewer {
 
+  /**
+   * Returns the <code>InputStream</code> containing raw data for preview.
+   *
+   * @param maxLength returns the maximum length for the returned input stream.
+   * @return the <code>InputStream</code> containing raw data for preview.
+   */
   InputStream preview(int maxLength);
 
+  /**
+   * Returns the MIME type of the raw data.
+   *
+   * @return the MIME type of the raw data.
+   */
   String getMimeType();
 
+  /**
+   * Sets the MIME type of the raw data.
+   *
+   * @param mimeType the MIME type of the raw data.
+   */
   void setMimeType(String mimeType);
 
 }

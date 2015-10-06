@@ -22,8 +22,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Methods defined as EL functions must use this annotation to give the UI name to the EL function parameters.
+ *
+ * @see ElFunction
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
 public @interface ElParam {
+
+  /**
+   * UI name for the parameter.
+   */
   String value();
 }

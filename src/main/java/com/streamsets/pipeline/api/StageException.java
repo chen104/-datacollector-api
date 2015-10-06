@@ -20,6 +20,9 @@ package com.streamsets.pipeline.api;
 
 import com.streamsets.pipeline.api.impl.ErrorMessage;
 
+/***
+ * Exception thrown by stages when there is an error while processing.
+ */
 public class StageException extends Exception {
 
   private static Throwable getCause(Object... params) {
@@ -34,7 +37,13 @@ public class StageException extends Exception {
   private final ErrorMessage errorMessage;
   private final Object[] params;
 
-  // last parameter can be an exception cause
+  /**
+   * Exception constructor.
+   *
+   * @param errorCode error code.
+   * @param params parameters for the error code message template, if the last parameter is an exception it is
+   * considered the cause of the exception.
+   */
   public StageException(ErrorCode errorCode, Object... params) {
     super(getCause(params));
     this.errorCode = errorCode;
@@ -42,19 +51,39 @@ public class StageException extends Exception {
     errorMessage = new ErrorMessage(errorCode, params);
   }
 
+  /**
+   * Returns the error code associated with the exception.
+   *
+   * @return the error code associated with the exception.
+   */
   public ErrorCode getErrorCode() {
     return errorCode;
   }
 
+  /**
+   * Returns the error parameters of the exception.
+   *
+   * @return the error parameters of the exception.
+   */
   public Object[] getParams() {
     return params;
   }
 
+  /**
+   * Returns the exception message, not localized.
+   *
+   * @return the exception message, not localized.
+   */
   @Override
   public String getMessage() {
     return errorMessage.getNonLocalized();
   }
 
+  /**
+   * Returns the exception message, localized.
+   *
+   * @return the exception message, localized.
+   */
   @Override
   public String getLocalizedMessage() {
     return errorMessage.getLocalized();

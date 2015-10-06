@@ -19,15 +19,48 @@ package com.streamsets.pipeline.api;
 
 import java.util.List;
 
+/**
+ * A <code>Source</code> is Data Collector origin stage. Origin stages consume data from an external system
+ * creating records that can be processed by processor ({@link Processor}) or destination ({@link Target}) stages.
+ *
+ * @see Processor
+ * @see Target
+ */
 public interface Source extends Stage<Source.Context> {
 
+  /**
+   * <code>Source</code> stage context.
+   */
   public interface Context extends Stage.Context {
 
+    /**
+     * Returns the output lane names (stream names) of the <code>Source</code>.
+     *
+     * @return the output lane names (stream names) of the <code>Source</code>.
+     */
     public List<String> getOutputLanes();
 
   }
 
-  // returns offset NULL if done
+  /**
+   * When running a pipeline, the Data Collector calls this method from the <code>Source</code> stage to obtain a batch
+   * of records for processing.
+   * <p/>
+   * <code>Source</code> stages should not block indefinitely within this method if there is no data. They should have
+   * an internal timeout after which they produce an empty batch. By doing so it gives the chance to other stages in
+   * pipeline to know that the pipeline is still healthy but there is no data coming; and potentially allowing
+   * notifications to external systems.
+   *
+   * @param lastSourceOffset the offset returned by the previous call to this method, or <code>NULL</code> if this
+   * method is being called for the first time ever.
+   * @param maxBatchSize the requested maximum batch size a single call to this method should produce.
+   * @param batchMaker records created by the <code>Source</code> stage must be added to the <code>BatchMaker</code>
+   * for them to be available to the rest of the pipeline.
+   * @return the offset for the next call to this method. If <code>NULL</code> is returned it means the
+   * <code>Source</code> stage has fully process that data, that no more data is to be expected and that the
+   * pipeline should finish once the current batch is fully processed.
+   * @throws StageException if the <code>Source</code> had an error while consuming data or creating records.
+   */
   public String produce(String lastSourceOffset, int maxBatchSize, BatchMaker batchMaker) throws StageException;
 
 }

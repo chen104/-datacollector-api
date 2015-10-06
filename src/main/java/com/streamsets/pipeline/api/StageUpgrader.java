@@ -19,8 +19,18 @@ package com.streamsets.pipeline.api;
 
 import java.util.List;
 
+/**
+ * The <code>StageUpgrader</code> allows stages to upgrade their configuration from previous versions of the stage.
+ * <p/>
+ * The upgrader is called only when the version of a stage configuration in a pipeline is older than the version of
+ * the stage being used in the pipeline (this typically happens immediately after a Data Collector or stage library
+ * upgrade).
+ */
 public interface StageUpgrader {
 
+  /**
+   * Error codes used by the upgrader.
+   */
   @GenerateResourceBundle
   public enum Error implements ErrorCode {
     UPGRADER_00("Upgrader not implemented for stage '{}:{}' instance '{}'"),
@@ -46,8 +56,14 @@ public interface StageUpgrader {
     }
   }
 
+  /**
+   * Default <code>StageUpgrader</code>  implementation. It fails all upgrades.
+   */
   public static class Default implements StageUpgrader {
 
+    /**
+     * This implementation always throws an exception.
+     */
     @Override
     public List<Config> upgrade(String library, String stageName, String stageInstance, int fromVersion, int toVersion,
         List<Config> configs) throws
@@ -56,6 +72,18 @@ public interface StageUpgrader {
     }
   };
 
+  /**
+   * Upgrades the stage cofiguration from a previous version to current version.
+   *
+   * @param library stage library name.
+   * @param stageName stage name.
+   * @param stageInstance stage instance name.
+   * @param fromVersion version recorded in the stage configuration to upgrade.
+   * @param toVersion version of of the stage library, the version to upgrade the configuration to.
+   * @param configs The configurations to upgrade.
+   * @return The upgraded configuration.
+   * @throws StageException if the configurations could not be upgraded.
+   */
   public List<Config> upgrade(String library, String stageName, String stageInstance, int fromVersion, int toVersion,
       List<Config> configs) throws StageException;
 

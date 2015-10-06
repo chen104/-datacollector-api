@@ -23,12 +23,25 @@ import com.streamsets.pipeline.api.Stage.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stage implementation providing empty Data Collector lifecycle methods and convenience methods for subclasses.
+ */
 public abstract class BaseStage<C extends Context> implements Stage<C> {
   private Info info;
   private C context;
   private boolean requiresSuperInit;
   private boolean superInitCalled;
 
+  /**
+   * Initializes the stage.
+   * <p/>
+   * Stores the <code>Stage.Info</code> and <code>Stage.Context</code> in instance variables and calls the
+   * {@link #init()} method.
+   * <p/>
+   * @param info the stage information.
+   * @param context the stage context.
+   * @return the list of configuration issues found during initialization, an empty list if none.
+   */
   @Override
   public List<ConfigIssue> init(Info info, C context) {
     List<ConfigIssue> issues = new ArrayList<>();
@@ -41,6 +54,13 @@ public abstract class BaseStage<C extends Context> implements Stage<C> {
     return issues;
   }
 
+  /**
+   * Initializes the stage. Subclasses should override this method for stage initialization.
+   * <p/>
+   * This implementation is a no-operation.
+   *
+   * @return the list of configuration issues found during initialization, an empty list if none.
+   */
   protected List<ConfigIssue> init() {
     return new ArrayList<>();
   }
@@ -53,14 +73,27 @@ public abstract class BaseStage<C extends Context> implements Stage<C> {
     superInitCalled = true;
   }
 
+  /**
+   * Returns the stage information passed by the Data Collector during initialization.
+   * @return the stage information passed by the Data Collector during initialization.
+   */
   protected Info getInfo() {
     return info;
   }
 
+  /**
+   * Returns the stage context passed by the Data Collector during initialization.
+   * @return the stage context passed by the Data Collector during initialization.
+   */
   protected C getContext() {
     return context;
   }
 
+  /**
+   * Destroy the stage. Subclasses should override this method for stage cleanup.
+   * <p/>
+   * This implementation is a no-operation.
+   */
   @Override
   public void destroy() {
   }

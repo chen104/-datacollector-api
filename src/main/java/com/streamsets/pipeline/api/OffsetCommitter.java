@@ -18,11 +18,21 @@
 package com.streamsets.pipeline.api;
 
 /**
- * If implemented by a source, the data collector will not keep track of the offsets locally. It will rely
- * on the source functionality for it.
+ * {@link Source}s that keep track of the data offset on their own should implement this interface.
+ * <p/>
+ * The Data Collector will not keep track of the offset.
  */
 public interface OffsetCommitter {
 
+  /**
+   * Invoked by the Data Collector after the completion of each batch to signal the <code>Source</code> that the
+   * batch has been fully processed.
+   * <p/>
+   *
+   * @param offset the offset of the batch being committed, this is the same offset the <code>Source</code> returned
+   * when producing the batch.
+   * @throws StageException if there was an error committing the batch.
+   */
   public void commit(String offset) throws StageException;
 
 }

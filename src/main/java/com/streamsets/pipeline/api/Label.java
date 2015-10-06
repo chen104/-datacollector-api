@@ -18,6 +18,16 @@
 package com.streamsets.pipeline.api;
 
 // interface used by enums to provide localized labels for the enums
+
+/**
+ * Interface used by stage enums used in the configuration to provide the default UI label for the enums.
+ */
 public interface Label {
+
+  /**
+   * Returns the default label.
+   *
+   * @return the default label.
+   */
   public String getLabel();
 }

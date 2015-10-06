@@ -25,8 +25,25 @@ import com.streamsets.pipeline.api.impl.Utils;
 
 import java.util.Iterator;
 
+/**
+ * The <code>RecordProcessor</code> is an convenience {@link com.streamsets.pipeline.api.Processor} that handles
+ * one record at the time (instead of batch) and has a built-in record error handling for the stage 'on record error'
+ * configuration.
+ */
 public abstract class RecordProcessor extends BaseProcessor {
 
+  /**
+   * Processes the batch by calling the {@link #process(Record, BatchMaker)} method for each record in the batch.
+   * <p/>
+   * If the calls to the {@link #process(Record, BatchMaker)} throws an {@link OnRecordErrorException}, the error
+   * handling is done based on the stage 'on record error' configuration, discarded, sent to error, or stopping the
+   * pipeline.
+   *
+   * @param batch the batch of records to process.
+   * @param batchMaker records created by the <code>Processor</code> stage must be added to the <code>BatchMaker</code>
+   * for them to be available to the rest of the pipeline.
+   * @throws StageException if the <code>Processor</code> had an error while processing records.
+   */
   @Override
   public void process(Batch batch, BatchMaker batchMaker) throws StageException {
     Iterator<Record> it = batch.getRecords();
@@ -55,8 +72,29 @@ public abstract class RecordProcessor extends BaseProcessor {
     }
   }
 
+  /**
+   * Processes one record.
+   * <p/>
+   *
+   * @param record the record to process.
+   * @param batchMaker records created by the <code>Processor</code> stage must be added to the <code>BatchMaker</code>
+   * for them to be available to the rest of the pipeline.
+   * @throws StageException if the <code>Processor</code> had an error while processing records.
+   * @throws OnRecordErrorException if the <code>Record</code> cannot be processed correctly. The handling of this
+   * exception will be base on the stage 'on record error' configuration
+   */
   protected abstract void process(Record record, BatchMaker batchMaker) throws StageException, OnRecordErrorException;
 
+  /**
+   * Called if the batch to process does not have any records to allow the <code>RecordProcessor</code> to do a special
+   * handling in those situations.
+   * <p/>
+   * This implementation is a no-operation.
+   *
+   * @param batchMaker records created by the <code>RecordProcessor</code> stage must be added to the
+   *                   <code>BatchMaker</code>
+   * @throws StageException
+   */
   protected void emptyBatch(BatchMaker batchMaker) throws StageException {
   }
 

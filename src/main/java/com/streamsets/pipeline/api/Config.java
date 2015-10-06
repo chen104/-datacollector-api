@@ -17,27 +17,52 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.io.Serializable;
-
 import com.streamsets.pipeline.api.impl.Utils;
 
-public class Config implements Serializable{
+/**
+ * A <code>Config</code> bean holds a configuration (both name and value) of a stage.
+ * <p/>
+ * They are use by {@link StageUpgrader} implementations when upgrading the configuration of an older stage version
+ * to the current stage version.
+ */
+public class Config {
   private final String name;
   private final Object value;
 
+  /**
+   * Creates a <code>Config</code> bean.
+   *
+   * @param name the name of the configuration.
+   * @param value the value of the configuration.
+   */
   public Config(String name, Object value) {
     this.name = name;
     this.value = value;
   }
 
+  /**
+   * Returns the name of the configuration.
+   *
+   * @return the name of the configuration.
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Returns the value of the configuration.
+   *
+   * @return the value of the configuration.
+   */
   public Object getValue() {
     return value;
   }
 
+  /**
+   * Returns the string representation of the configuration.
+   *
+   * @return the string representation of the configuration.
+   */
   @Override
   public String toString() {
     return Utils.format("Config[name='{}' value='{}']", getName(), getValue());

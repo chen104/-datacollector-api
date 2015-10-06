@@ -21,10 +21,21 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Annotation for configuration variables that can hold multiple values from a given list of values.
+ * <p/>
+ * The configuration definition must be of type {@link com.streamsets.pipeline.api.ConfigDef.Type#MODEL}.
+ * <p/>
+ * The configuration variable must be of type <code>java.util.List&lt;String></code> or
+ * <code>java.util.List&lt;Enum></code>.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.FIELD)
 public @interface MultiValueChooserModel {
 
+  /**
+   * Indicates the <code>ChooserValues</code> class providing the valid values.
+   */
   Class<? extends ChooserValues> value();
 
 }

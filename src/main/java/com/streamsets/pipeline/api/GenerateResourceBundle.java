@@ -22,6 +22,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation to flag the generation of resource bundles for stages and related classes that have labels or messages
+ * that show up in the UI and need to be localized.
+ *
+ * @see Source
+ * @see Processor
+ * @see Target
+ * @see Label
+ * @see ErrorCode
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface GenerateResourceBundle {

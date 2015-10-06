@@ -22,9 +22,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Defines an EL constant.
+ * <p/>
+ * The variable must be <code>public</code>, <code>static</code> and <code>final</code>.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface ElConstant {
+
+  /**
+   * Constant name to be used within ELs.
+   */
   String name();
+
+  /**
+   * Description of the constant, for the UI help.
+   */
   String description();
 }

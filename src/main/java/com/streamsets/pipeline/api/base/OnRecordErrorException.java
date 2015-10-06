@@ -23,8 +23,9 @@ import com.streamsets.pipeline.api.StageException;
 
 /**
  * Exception a stage can throw when a specific record should go to the error pipeline.
+ * <p/>
  * A record should be considered in error if it is un-parseable or may be missing required information.
- *
+ * <p/>
  * This should not be thrown due to issues such as destination connectivity, etc. Those error conditions
  * should be considered a {@link StageException} in which the pipeline should stop in an error state.
  */

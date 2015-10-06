@@ -19,10 +19,26 @@ package com.streamsets.pipeline.api;
 
 import java.util.List;
 
+/**
+ * Data Collector origin ({@link Source}) and processor ({@link Processor}) stages receive an instance of a
+ * <code>BatchMaker</code> to write to the pipeline the records they create or process.
+ */
 public interface BatchMaker {
 
+  /**
+   * Returns the available lane names (stream names) for the stage.
+   *
+   * @return the available lane names (stream names) for the stage.
+   */
   public List<String> getLanes();
 
+  /**
+   * Adds a record to the <code>BatchMaker</code>.
+   *
+   * @param record the record to add.
+   * @param lanes the lane(s)/stream(s) to add the record to. If the stage has a single output lane there is no need
+   * to specify the lane name.
+   */
   public void addRecord(Record record, String... lanes);
 
 }

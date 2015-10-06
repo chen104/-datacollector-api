@@ -17,8 +17,19 @@
  */
 package com.streamsets.pipeline.api;
 
+/**
+ * Defines the execution modes of a pipeline.
+ * <p/>
+ * It is used in stage definitions to restrict the execution modes the stage supports.
+ * <p/>
+ * Accessible via the stage context to know the current execution mode of the pipeline.
+ *
+ * @see StageDef#execution()
+ * @see Stage.Context#getExecutionMode()
+ */
 public enum ExecutionMode implements Label {
   STANDALONE("Standalone"),
+  @Deprecated
   CLUSTER("Cluster"), //Kept for backward compatibility - replaced by CLUSTER_BATCH and CLUSTER_STREAMING
   CLUSTER_BATCH("Cluster Batch"),
   CLUSTER_STREAMING("Cluster Streaming"),
@@ -30,6 +41,11 @@ public enum ExecutionMode implements Label {
     this.label = label;
   }
 
+  /**
+   * Returns the default value of localizable label, for the UI, of the execution mode enum.
+   *
+   * @return the default value of localizable label.
+   */
   @Override
   public String getLabel() {
     return label;

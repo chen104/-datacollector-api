@@ -23,6 +23,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Classes annotated with <code>ElDef</code> are automatically scanned for EL constants and EL function definitions
+ * and they are made available to all configurations of the stage library.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface ElDef {

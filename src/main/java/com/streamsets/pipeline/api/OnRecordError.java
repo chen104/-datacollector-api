@@ -17,8 +17,10 @@
  */
 package com.streamsets.pipeline.api;
 
-import com.streamsets.pipeline.api.Label;
 
+/**
+ * Enumeration defining the error record handling for stages via the built-in 'on record error' configuration.
+ */
 // we are using the annotation for reference purposes only.
 // the annotation processor does not work on this maven project
 // we have a hardcoded 'datacollector-resource-bundles.json' file in resources
@@ -27,7 +29,6 @@ public enum OnRecordError implements Label {
   DISCARD("Discard"),
   TO_ERROR("Send to Error"),
   STOP_PIPELINE("Stop Pipeline"),
-
   ;
 
   private final String label;

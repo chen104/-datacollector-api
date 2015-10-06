@@ -18,12 +18,31 @@
 package com.streamsets.pipeline.api;
 
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Annotation to hide stage configurations in the UI.
+ * <p/>
+ * Useful to hide/disable built in configurations fields, preconditions and on error record; as well as user defined
+ * configurations when sub-classing stages to perform specialized tasks.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.TYPE)
 public @interface HideConfigs {
+  /**
+   * Hides system defined 'required fields' and preconditions configurations from the UI.
+   */
   boolean preconditions() default false;
+
+  /**
+   * Hides system defined 'on error record' configuration from the UI.
+   */
   boolean onErrorRecord() default false;
+
+  /**
+   * Hides the specifiedd user defined configurations from the UI.
+   */
   String[] value() default {};
 }

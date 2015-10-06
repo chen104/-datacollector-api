@@ -24,10 +24,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation to define the configuration groups for a stage.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ConfigGroups {
 
+  /**
+   * Indicates the enum class implementing {@link Label} defining the groups of the stage configuration.
+   */
   Class<? extends Label> value();
 
 }

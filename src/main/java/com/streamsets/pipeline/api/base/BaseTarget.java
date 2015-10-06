@@ -19,5 +19,8 @@ package com.streamsets.pipeline.api.base;
 
 import com.streamsets.pipeline.api.Target;
 
+/**
+ * Target implementation providing empty Data Collector lifecycle methods and convenience methods for subclasses.
+ */
 public abstract class BaseTarget extends BaseStage<Target.Context> implements Target {
 }

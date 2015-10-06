@@ -25,16 +25,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Base {@link ChooserValues} implementation for enums.
+ */
 public abstract class BaseEnumChooserValues<T extends Enum> implements ChooserValues {
   private String resourceBundle;
   private List<String> values;
   private List<String> labels;
 
+  /**
+   * Creates a <code>ChooserValues</code> with all the enum values of the given enum class.
+   *
+   * @param klass enum class.
+   */
   @SuppressWarnings("unchecked")
   public BaseEnumChooserValues(Class<? extends Enum> klass) {
     this((T[])klass.getEnumConstants());
   }
 
+  /**
+   * Creates a <code>ChooserValues</code> with the specified enum values.
+   *
+   * @param enums enums for the <code>ChooserValues</code>.
+   */
   @SuppressWarnings("unchecked")
   public BaseEnumChooserValues(T ... enums) {
     Utils.checkNotNull(enums, "enums");

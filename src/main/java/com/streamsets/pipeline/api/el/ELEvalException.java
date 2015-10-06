@@ -20,6 +20,9 @@ package com.streamsets.pipeline.api.el;
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.StageException;
 
+/**
+ * Exception thrown if an EL expression could not be evaluated properly.
+ */
 public class ELEvalException extends StageException {
 
   public ELEvalException(ErrorCode errorCode, Object... params) {

@@ -47,7 +47,7 @@ package com.streamsets.pipeline.api;
  *
  * <p>
  * Built in localization looks for a <code>Properties</code> based <code>ResourceBundle</code> matching the
- * <code>ErrorCode</code> implementation. The * <code>ErrorCode</code>'s <code>code</code> is used as the key within the
+ * <code>ErrorCode</code> implementation. The <code>ErrorCode</code>'s <code>code</code> is used as the key within the
  * <code>ResourceBundle</code>. If the bundle is not available, or the key is not defined within the bundle, the
  * <code>ErrorCode</code>'s <code>message</code> will be used.
  * </p>

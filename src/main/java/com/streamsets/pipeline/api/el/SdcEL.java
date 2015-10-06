@@ -20,6 +20,9 @@ package com.streamsets.pipeline.api.el;
 import com.streamsets.pipeline.api.ElFunction;
 import com.streamsets.pipeline.api.impl.Utils;
 
+/**
+ * Class defining the <code>sdc:id()</code> function.
+ */
 public class SdcEL {
 
   private static final String PREFIX = "sdc";

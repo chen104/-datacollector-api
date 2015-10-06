@@ -23,13 +23,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Used to define a configuration bean for stages.
+ * <p/>
+ * Configuration beans can have arbitrary levels of nesting allowing composition and reuse.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigDefBean {
 
-  // groups must be a valid group from the StageDef
-  // or an ordinal reference to the parent's groups (StageDef or other ConfigDefBean)
-  // a reference to the parent's group is done via '#N' where N is the ordinal group name of the parent
+  /**
+   * Allows to redefine the groups available to the configurations of the configuration bean.
+   * <p/>
+   * The redefinition can be done using an explicit subset of the group names of the parent configuration or stage, or
+   * by referencing the group ordinals (using <code>#N</code> where <b>N</b> is the ordinal) of the groups of the
+   * parent configuration of stage.
+   */
   String[] groups() default {};
 
 }

@@ -22,15 +22,21 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Annotation for configuration variables that need to be populated with record field names. It supports single
+ * and multi value selections.
+ * <p/>
+ * The configuration definition must be of type {@link com.streamsets.pipeline.api.ConfigDef.Type#MODEL}.
+ * <p/>
+ * If defined to support multi value selections, the variable must be of type <code>java.util.List&lt;?></code>. If
+ * defined for single value the variable should be of type {@link String}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.FIELD)
-/**
- * Marker annotation to be applied on a field which shall hold the names of
- * all the selected fields.
- *
- * The type of the field on which this annotation is applied should be "List<String>"
- */
 public @interface FieldSelectorModel {
 
+  /**
+   * Indicates if the selection should be single value (default) or multi value.
+   */
   boolean singleValued() default false;
 }

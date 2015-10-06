@@ -43,31 +43,35 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * A <code>Field</code> is a type/value pair, where the type o the value matches the <code>Field</code> type.
+ * A <code>Field</code> is the basic building block to represent data within Data Collector stages. Stages receive and
+ * produce batches of {@link Record}s, a <code>Record</code> as a <code>Field</code> to hold its data.
+ * <p/>
+ * A <code>Field</code> is a data structure construct consisting of a type/value pair. It supports basic types
+ * (i.e. numbers, strings, dates) as well as structure oriented types (i.e. Maps and Lists).
+ * <p/>
  * <code>Field</code> values can be automatically converted to compatible Java primitive types and classes.
- * <code>Field</code> values can be <code>null</code>.
- * </p>
- * <p>
- * The {@link Type} enumeration defines the supported types for <code>Field</code> values.
- * </p>
- * <p>
+ * <code>Field</code> values can be <code>NULL</code> (while preserving the type).
+ * <p/>
+ * The {@link Type} enumeration defines all the supported types.
+ * <p/>
  * Except for the Collection based types, <code>Field</code> values are immutable. Collection <code>Field</code> values
- * can be modified using the corresponding Collection manipulation methods.
- * </p>
- * <p>
+ * can be modified using the corresponding Collection manipulation API.
+ * <p/>
  * <b>NOTE:</b> Java <code>Date</code> and <code>byte[]</code> are not immutable. <code>Field</code> makes immutable
  * by performing a copy on <code>create()</code> and on <code>get()</code>. This means that if a <code>Date</code> or
  * <code>byte[]</code> instance obtained from a <code>Field</code> is modified, the actual value stored in the
  * <code>Field</code> is not modified.
- * </p>
- * <p>
+ * <p/>
  * The {@link #hashCode}, {@link #equals} and {@link #clone} methods work in deep operation mode on the
  * <code>Field</code>.
- * </p>
+ *
+ * @see Record
  */
 public class Field implements Cloneable {
 
+  /**
+   * Enum defining all <code>Field</code> types.
+   */
   public enum Type {
     BOOLEAN(new BooleanTypeSupport()),
     CHAR(new CharTypeSupport()),
@@ -120,81 +124,214 @@ public class Field implements Cloneable {
 
   }
 
+  /**
+   * Creates a <code>BOOLEAN</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>boolean Field</code> with the given value.
+   */
   public static Field create(boolean v) {
     return new Field(Type.BOOLEAN, v);
   }
 
+  /**
+   * Creates a <code>CHAR</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>char Field</code> with the given value.
+   */
   public static Field create(char v) {
     return new Field(Type.CHAR, v);
   }
 
+  /**
+   * Creates a <code>BYTE</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>byte Field</code> with the given value.
+   */
   public static Field create(byte v) {
     return new Field(Type.BYTE, v);
   }
 
+  /**
+   * Creates a <code>SHORT</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>short Field</code> with the given value.
+   */
   public static Field create(short v) {
     return new Field(Type.SHORT, v);
   }
 
+  /**
+   * Creates a <code>INTEGER</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>int Field</code> with the given value.
+   */
   public static Field create(int v) {
     return new Field(Type.INTEGER, v);
   }
 
+  /**
+   * Creates a <code>LONG</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>long Field</code> with the given value.
+   */
   public static Field create(long v) {
     return new Field(Type.LONG, v);
   }
 
+  /**
+   * Creates a <code>FLOAT</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>float Field</code> with the given value.
+   */
   public static Field create(float v) {
     return new Field(Type.FLOAT, v);
   }
 
+  /**
+   * Creates a <code>DOUBLE</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>double Field</code> with the given value.
+   */
   public static Field create(double v) {
     return new Field(Type.DOUBLE, v);
   }
 
+  /**
+   * Creates a <code>DECIMAL</code> Field.
+   *
+   * @param v value.
+   *
+   * @return a <code>BigDecimal Field</code> with the given value.
+   */
   public static Field create(BigDecimal v) {
     return new Field(Type.DECIMAL, v);
   }
 
+  /**
+   * Creates a <code>STRING</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>String Field</code> with the given value.
+   */
   public static Field create(String v) {
     return new Field(Type.STRING, v);
   }
 
+  /**
+   * Creates a <code>BYTE_ARRAY</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>byte array Field</code> with the given value.
+   */
   public static Field create(byte[] v) {
     return new Field(Type.BYTE_ARRAY, v);
   }
 
-  // copy
+  /**
+   * Creates a <code>DATE</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>Date Field</code> with the given value.
+   */
   public static Field createDate(Date v) {
     return new Field(Type.DATE, v);
   }
 
-  // copy
+  /**
+   * Creates a <code>DATETIME</code> field.
+   * <p/>
+   * Java does not have Datetime field, the intent of the {@link Type#DATETIME} type is to use only the year, month
+   * and day information of the Date.
+   *
+   * @param v value.
+   *
+   * @return a <code>Datetime Field</code> with the given value.
+   */
   public static Field createDatetime(Date v) {
     return new Field(Type.DATETIME, v);
   }
 
-  // deep copy
+  /**
+   * Creates a <code>LIST</code> field. The keys of the Map must be of <code>String</code> type and the values must be
+   * of <code>Field</code> type, <code>NULL</code> values are not allowed as key or values.
+   * <p/>
+   * This method performs a deep copy of the given Map.
+   *
+   * @param v value.
+   *
+   * @return a <code>Map Field</code> with the given value.
+   */
   public static Field create(Map<String, Field> v) {
     return new Field(Type.MAP, v);
   }
 
-  // deep copy
+  /**
+   * Creates a <code>LIST</code> field. The values of the List must be of <code>Field</code> type, <code>NULL</code>
+   * values are not allowed.
+   * <p/>
+   * This method performs a deep copy of the given List.
+   * <p/>
+   *
+   * @param v value.
+   *
+   * @return a <code>List Field</code> with the given value.
+   */
   public static Field create(List<Field> v) {
     return new Field(Type.LIST, v);
   }
 
-  // deep copy
+  /**
+   * Creates a <code>LIST_MAP</code> field. The keys of the ordered Map must be of <code>String</code> type and the
+   * values must be of <code>Field</code> type, <code>NULL</code> values are not allowed as key or values.
+   * <p/>
+   * This method performs a deep copy of the ordered Map.
+   *
+   * @param v value.
+   *
+   * @return a <code>List-Map Field</code> with the given value.
+   */
   public static Field createListMap(LinkedHashMap<String, Field> v) {
     return new Field(Type.LIST_MAP, v);
   }
 
-  // deep copy for MAP and LIST type
+  /**
+   * Creates a field of a given type, the value is converted to the specified type.
+   * <p/>
+   * If the type is <code>MAP</code>, <code>LIST</code> or <code>LIST_MAP</code> this method performs a deep copy of
+   * the value.
+   *
+   * @param type the type of the field to create.
+   * @param value the value to set in the field.
+   * @return the created Field.
+   * @throws IllegalArgumentException if the value cannot be converted to the specified type.
+   */
   public static <T> Field create(Type type, T value) {
     return new Field(Utils.checkNotNull(type, "type"), type.convert(value));
   }
 
-  // deep copy for MAP and LIST type
+  /**
+   * DO NOT USE, TO BE REMOVED
+   */
+  @Deprecated
   public static <T> Field create(Field field, T value) {
     return create(Utils.checkNotNull(field, "field").getType(), value);
   }
@@ -211,100 +348,224 @@ public class Field implements Cloneable {
     this.value = (CreateByRef.isByRef()) ? value : type.constructorCopy(value);
   }
 
+  /**
+   * Returns the type of the field.
+   *
+   * @return the type of the field.
+   */
   public Type getType() {
     return type;
   }
 
-  // by ref
+  /**
+   * Returns the value of the field.
+   * <p/>
+   * For fields with <code>DATE</code>, <code>DATETIME</code> or <code>BYTE_ARRAY</code> type, a copy of the value is
+   * returned. If the returned instance is modified, the changes are not reflected in the field value itself.
+   * <p/>
+   * For fields with a collection type (<code>MAP</code>, <code>LIST</code> and <code>LIST_MAP</code>), a reference to
+   * the value is returned, any changes to the returned collection object will be reflected in the field value itself.
+   * <p/>
+   * For all other types, the values are immutable.
+   * <p/>
+   * @return the value of the field.
+   */
   public Object getValue() {
     return type.getReference(value);
   }
 
+  /**
+   * Returns the boolean value of the field.
+   *
+   * @return the boolean value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to boolean.
+   */
   public boolean getValueAsBoolean() {
     return (boolean) type.convert(getValue(), Type.BOOLEAN);
   }
 
+  /**
+   * Returns the char value of the field.
+   *
+   * @return the char value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to char.
+   */
   public char getValueAsChar() {
     return (char) type.convert(getValue(), Type.CHAR);
   }
 
+  /**
+   * Returns the byte value of the field.
+   *
+   * @return the byte value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to byte.
+   */
   public byte getValueAsByte() {
     return (byte) type.convert(getValue(), Type.BYTE);
   }
 
+  /**
+   * Returns the short value of the field.
+   *
+   * @return the short value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to short.
+   */
   public short getValueAsShort() {
     return (short) type.convert(getValue(), Type.SHORT);
   }
 
+  /**
+   * Returns the int value of the field.
+   *
+   * @return the int value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to int.
+   */
   public int getValueAsInteger() {
     return (int) type.convert(getValue(), Type.INTEGER);
   }
 
+  /**
+   * Returns the long value of the field.
+   *
+   * @return the long value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to long.
+   */
   public long getValueAsLong() {
     return (long) type.convert(getValue(), Type.LONG);
   }
 
+  /**
+   * Returns the float value of the field.
+   *
+   * @return the float value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to float.
+   */
   public float getValueAsFloat() {
     return (float) type.convert(getValue(), Type.FLOAT);
   }
 
+  /**
+   * Returns the double value of the field.
+   *
+   * @return the double value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to double.
+   */
   public double getValueAsDouble() {
     return (double) type.convert(getValue(), Type.DOUBLE);
   }
 
-  // copy, date is handled as immutable
+  /**
+   * Returns the Date value of the field.
+   *
+   * @return the Date value of the field. It returns a copy of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to Date.
+   */
   public Date getValueAsDate() {
     return (Date) type.convert(getValue(), Type.DATE);
   }
 
-  // copy, date is handled as immutable
+  /**
+   * Returns the Date value of the field.
+   *
+   * @return the Date value of the field. it returns a copy of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to Date.
+   */
   public Date getValueAsDatetime() {
     return (Date) type.convert(getValue(), Type.DATE);
   }
 
+  /**
+   * Returns the BigDecimal value of the field.
+   *
+   * @return the BigDecimal value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to BigDecimal.
+   */
   public BigDecimal getValueAsDecimal() {
     return (BigDecimal) type.convert(getValue(), Type.DECIMAL);
   }
 
+  /**
+   * Returns the String value of the field.
+   *
+   * @return the String value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to String.
+   */
   public String getValueAsString() {
     return (String) type.convert(getValue(), Type.STRING);
   }
 
-  // copy, byte[] is handled as immutable
+  /**
+   * Returns the byte array value of the field.
+   *
+   * @return the byte array value of the field. It returns a copy of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to byte array.
+   */
   public byte[] getValueAsByteArray() {
     return (byte[]) type.convert(getValue(), Type.BYTE_ARRAY);
   }
 
-  // by ref, changes to the returned Map will change the Map stored in the <code>Field</code
+  /**
+   * Returns the Map value of the field.
+   *
+   * @return the Map value of the field. It returns a reference of the value both for <code>MAP</code> and
+   * <code>LIST_MAP</code>.
+   * @throws IllegalArgumentException if the value cannot be converted to Map.
+   */
   @SuppressWarnings("unchecked")
   public Map<String, Field> getValueAsMap() {
     return (Map<String, Field>) type.convert(getValue(), Type.MAP);
   }
 
-  // by ref, changes to the returned List will change the Map stored in the <code>Field</code
-  // by ref
+  /**
+   * Returns the List value of the field.
+   *
+   * @return the List value of the field. It returns a reference of the value if the type is <code>LIST</code>, if
+   * the type is <code>LIST_MAP</code> it returns a copy of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to List.
+   */
   @SuppressWarnings("unchecked")
   public List<Field> getValueAsList() {
     return (List<Field>) type.convert(getValue(), Type.LIST);
   }
 
+  /**
+   * Returns the ordered Map value of the field.
+   *
+   * @return the ordered Map value of the field. It returns a reference of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to ordered Map.
+   */
   @SuppressWarnings("unchecked")
   public LinkedHashMap<String, Field> getValueAsListMap() {
     return (LinkedHashMap<String, Field>) type.convert(getValue(), Type.LIST_MAP);
   }
 
+  /**
+   * Returns the string representation of the field.
+   *
+   * @return the string representation of the field.
+   */
   @Override
   public String toString() {
     return type.toString(value);
   }
 
-  // deep hashcode(), value based
+  /**
+   * Returns the hashcode of the field.
+   * <p/>
+   * The hashcode is value based and it is computed in a deep fashion.
+   * @return the hashcode of the field.
+   */
   @Override
   public int hashCode() {
     return (value != null) ? value.hashCode() : 0;
   }
 
-  // deep equals(), value based
+  /**
+   * Compares if the field is equal to another field.
+   * <p/>
+   * The comparison is done in a deep fashion.
+   * @return if the field is equal to another field.
+   */
   @Override
   public boolean equals(Object obj) {
     boolean eq = false;
@@ -321,7 +582,7 @@ public class Field implements Cloneable {
 
   /**
    * <p>
-   * Clones the <code>Field</code>.
+   * Returns a clone of the field.
    * </p>
    * <p>
    * For <code>Field</code> instances  of non-Collection based types it returns the same instance as the are immutable
@@ -330,16 +591,11 @@ public class Field implements Cloneable {
    * * For <code>Field</code> instances  of Collection based types it returns the deep copy of the <code>Field</code>
    * instance.
    *
-   * @return a clone the <code>Filed</code> instance.
+   * @return a clone of the field.
    */
   @Override
   public Field clone() {
     return (type != Type.MAP && type != Type.LIST && type != Type.LIST_MAP) ? this : new Field(type, value);
-  }
-
-  public void set(Type type, Object value) {
-    this.type = type;
-    this.value = type.constructorCopy(value);
   }
 
 }

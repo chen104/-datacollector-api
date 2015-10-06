@@ -24,6 +24,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation do declare Data Collector stages classes. Classes must implement {@link Source}, {@link Processor} or
+ * {@link Target}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface StageDef {
@@ -33,6 +37,11 @@ public @interface StageDef {
   // we are using the annotation for reference purposes only.
   // the annotation processor does not work on this maven project
   // we have a hardcoded 'datacollector-resource-bundles.json' file in resources
+
+  /**
+   * Enumeration to use in {@link #outputStreams()} to indicate that the output streams are variable, driven by the
+   * stage configuration specified in {@link #outputStreamsDrivenByConfig()}.
+   */
   @GenerateResourceBundle
   public enum VariableOutputStreams implements Label {
     ;
@@ -43,11 +52,9 @@ public @interface StageDef {
     }
   }
 
-  //default enum for processors that don;'t specify 'outputStreams'
-
-  // we are using the annotation for reference purposes only.
-  // the annotation processor does not work on this maven project
-  // we have a hardcoded 'datacollector-resource-bundles.json' file in resources
+  /**
+   * Default enumeration used by stages having a single output stream.
+   */
   @GenerateResourceBundle
   public enum DefaultOutputStreams implements Label {
     OUTPUT("Output");
@@ -64,26 +71,66 @@ public @interface StageDef {
     }
   }
 
+  /**
+   * Indicates the version of the stage.
+   * <p/>
+   * The version is used to track the configuration of a stage definition and any necessary upgrade via a
+   * {@link StageUpgrader}
+   */
   int version();
 
+  /**
+   * Indicates the UI default label for the stage.
+   */
   String label();
 
+  /**
+   * Indicates the UI default description for the stage.
+   */
   String description() default "";
 
+  /**
+   * Indicates the UI icon for the stage.
+   */
   String icon() default "";
 
+  /**
+   * If the number of output streams is driven a stage configuration (it must be a {@link java.util.List}), the name
+   * of the configuration must be indicated here.
+   */
   String outputStreamsDrivenByConfig() default ""; //selector  case
 
+  /**
+   * Indicates an enum (implementing {@link Label}) that defines the output streams names and UIL labels for the stage.
+   * If not set the stage has one output with name <i>output</i> and label <i>Output</i>.
+   * <p/>
+   * If setting {@link #outputStreamsDrivenByConfig()} the {@link VariableOutputStreams} enum must be used.
+   */
   Class<? extends Label> outputStreams() default DefaultOutputStreams.class;
 
+  /**
+   * Indicates the stage supported execution modes.
+   */
   ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER_BATCH, ExecutionMode.CLUSTER_STREAMING };
 
   boolean recordsByRef() default false;
 
+  /**
+   * Indicates each stage instance should use a private classloader.
+   */
   boolean privateClassLoader() default false;
 
+  /**
+   * Indicates the upgrader implementation class to use to upgrade stage configurations for older stage versions.
+   */
   Class<? extends StageUpgrader> upgrader() default StageUpgrader.Default.class;
 
+  /**
+   * Indicates an array of regex patterns of the stage library JARs that must be used for the slave Data Collectors
+   * at bootstrap time.
+   * <p/>
+   * <b>IMPORTANT:</b> applicable to cluster mode executions only.
+   */
   String[] libJarsRegex() default {};
 
 }

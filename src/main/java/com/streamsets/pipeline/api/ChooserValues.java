@@ -19,12 +19,37 @@ package com.streamsets.pipeline.api;
 
 import java.util.List;
 
+/**
+ * <code>ChooserValues</code> provide a list of values and localizable labels for stage configurations using one of
+ * the following models: {@link ValueChooserModel} or {@link MultiValueChooserModel}.
+ * <p/>
+ * The {@link com.streamsets.pipeline.api.base.BaseEnumChooserValues} implementation is a convenience implementation
+ * that handles enums classes, or a subset of an enum class, as the possible values.
+ *
+ */
 public interface ChooserValues {
 
+  /**
+   * Returns the name of the resource bundle to get the localized labels for the values.
+   *
+   * @return the name of the resource bundle to get the localized labels for the values.
+   */
   public String getResourceBundle();
 
+  /**
+   * Returns the list of available values to choose from.
+   *
+   * @return The list of available values to choose from.
+   */
   public List<String> getValues();
 
+  /**
+   * Returns the list of labels for the values.
+   * <p/>
+   * If the resource bundle is available, the labels will be localized using it.
+   *
+   * @return the list of labels for the values.
+   */
   public List<String> getLabels();
 
 }

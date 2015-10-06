@@ -18,11 +18,16 @@
 package com.streamsets.pipeline.api;
 
 /**
- * If implemented, the pipeline will call the errorNotification method when the pipeline encounters
- * an error. The errorNotification method should not throw an exception of any kind.
+ * If the execution of a pipeline throws an exception, all stages in the pipeline implementing this interface will
+ * be notified via the {@link #errorNotification(Throwable)} method.
  */
 public interface ErrorListener {
 
+  /**
+   * Invoked when the execution of a pipeline throws an exception.
+   *
+   * @param throwable the exception thrown by the pipeline.
+   */
   void errorNotification(Throwable throwable);
 
 }

@@ -19,5 +19,8 @@ package com.streamsets.pipeline.api.base;
 
 import com.streamsets.pipeline.api.Processor;
 
+/**
+ * Processor implementation providing empty Data Collector lifecycle methods and convenience methods for subclasses.
+ */
 public abstract class BaseProcessor extends BaseStage<Processor.Context> implements Processor {
 }

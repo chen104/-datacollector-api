@@ -19,22 +19,65 @@ package com.streamsets.pipeline.api;
 
 import java.util.List;
 
+/**
+ * A <code>Processor</code> is a Data Collector processor stage. Processor stages receive records from an origin
+ * ({@link Source}) or other processors stages, perform operations on the records and write them out so they can be
+ * processed by another processor or destination ({@link Target}) stages.
+ *
+ * @see Source
+ * @see Target
+ */
 public interface Processor extends Stage<Processor.Context> {
 
+  /**
+   * <code>Processor</code> stage context.
+   */
   public interface Context extends Stage.Context {
 
+    /**
+     * Returns the output lane names (stream names) of the <code>Source</code>.
+     *
+     * @return the output lane names (stream names) of the <code>Source</code>.
+     */
     public List<String> getOutputLanes();
 
-    public Record createRecord(String recordId);
-
+    /**
+     * Creates an empty record indicating another record as its source.
+     *
+     * @param originatorRecord the original record.
+     * @return an empty record with the specified ID and raw data.
+     */
     public Record createRecord(Record originatorRecord);
 
+    /**
+     * Creates an empty record indicating another record as its source, including the original raw data of the record.
+     *
+     * @param originatorRecord the original record.
+     * @param raw the record raw data.
+     * @param rawMime the MIME type of the raw data.
+     * @return an empty record with the specified ID and raw data.
+     */
     public Record createRecord(Record originatorRecord, byte[] raw, String rawMime);
 
+    /**
+     * Clones a record.
+     *
+     * @param record the record to clone.
+     * @return the cloned record. The cloned record is a share-nothing deep-copy of the original record.
+     */
     public Record cloneRecord(Record record);
 
   }
 
+  /**
+   * When running a pipeline, the Data Collector calls this method from the <code>Processor</code> stage with a
+   * batch of records to process.
+   *
+   * @param batch the batch of records to process.
+   * @param batchMaker records created by the <code>Processor</code> stage must be added to the <code>BatchMaker</code>
+   * for them to be available to the rest of the pipeline.
+   * @throws StageException if the <code>Processor</code> had an error while processing records.
+   */
   public void process(Batch batch, BatchMaker batchMaker) throws StageException;
 
 }

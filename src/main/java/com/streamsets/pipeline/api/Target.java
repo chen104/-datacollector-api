@@ -17,12 +17,29 @@
  */
 package com.streamsets.pipeline.api;
 
+/**
+ * A <code>Target</code> is a Data Collector destination stage. Destination stages receive records from origin
+ * ({@link Source}) or processor ({@link Processor}) stages and write them to an external system.
+ *
+ * @see Source
+ * @see Processor
+ */
 public interface Target extends Stage<Target.Context> {
 
+  /**
+   * <code>Target</code> stage context.
+   */
   public interface Context extends Stage.Context {
 
   }
 
+  /**
+   * When running a pipeline, the Data Collector calls this method from the <code>Target</code> stage to write a batch
+   * of records to an external system.
+   * <p/>
+   * @param batch the batch of record to write to the external system.
+   * @throws StageException if the <code>Target</code> had an error while writing to the external system.
+   */
   public void write(Batch batch) throws StageException;
 
 }

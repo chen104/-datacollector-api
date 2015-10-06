@@ -19,5 +19,8 @@ package com.streamsets.pipeline.api.base;
 
 import com.streamsets.pipeline.api.Source;
 
+/**
+ * Source implementation providing empty Data Collector lifecycle methods and convenience methods for subclasses.
+ */
 public abstract class BaseSource extends BaseStage<Source.Context> implements Source {
 }

@@ -21,12 +21,24 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;
 
+/**
+ * Annotation for Data Collector origin ({@link Source}) stages that provide a way to view the raw data they produce
+ * during preview mode.
+ *
+ * @see RawSourcePreviewer
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.TYPE)
 public @interface RawSource {
 
+  /**
+   * Indicates the implementation class providing raw preview capabilities.
+   */
   Class<? extends RawSourcePreviewer> rawSourcePreviewer();
 
+  /**
+   * Indicates the MIME type of the raw data, for UI syntax highlighting.
+   */
   String mimeType() default "*/*";
 
 }

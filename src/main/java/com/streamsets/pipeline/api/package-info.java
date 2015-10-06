@@ -16,6 +16,6 @@
  * limitations under the License.
  */
  /**
- * Pipeline API
+ * Data Collector API
  */
 package com.streamsets.pipeline.api;

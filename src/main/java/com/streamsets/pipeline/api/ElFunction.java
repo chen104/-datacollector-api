@@ -23,10 +23,28 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Defines an EL function.
+ * <p/>
+ * The method must be <code>public</code>, <code>static</code>. Parameters of the function should use the
+ * {@link ElParam} annotation.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface ElFunction {
+
+  /**
+   * Function prefix to be used within ELs.
+   */
   String prefix() default "";
+
+  /**
+   * Function name to be used within ELs.
+   */
   String name();
+
+  /**
+   * Description of the constant, for the UI help.
+   */
   String description() default "";
 }

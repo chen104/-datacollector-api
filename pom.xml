@@ -154,6 +154,25 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>javadoc-java8</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <jdk>1.8</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <!-- Thank you Java 8 -->
+              <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <build>
@@ -303,6 +322,7 @@
             <phase>prepare-package</phase>
             <goals>
               <goal>javadoc</goal>
+              <goal>jar</goal>
             </goals>
             <configuration>
               <doctitle>StreamSets Data Collector API ${project.version}</doctitle>
@@ -321,13 +341,8 @@
               </groups>
 
               <includeDependencySources>false</includeDependencySources>
+
             </configuration>
-          </execution>
-          <execution>
-            <id>attach-javadocs-jar</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>

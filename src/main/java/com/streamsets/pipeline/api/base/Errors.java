@@ -20,6 +20,9 @@ package com.streamsets.pipeline.api.base;
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
 
+/**
+ * Error codes produced by the Data Collector where there is a stage configuration issue.
+ */
 // we are using the annotation for reference purposes only.
 // the annotation processor does not work on this maven project
 // we have a hardcoded 'datacollector-resource-bundles.json' file in resources

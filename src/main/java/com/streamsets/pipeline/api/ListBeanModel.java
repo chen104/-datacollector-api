@@ -21,6 +21,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Annotation for configuration variables that can hold a list of a configuration bean.
+ * <p/>
+ * The configuration definition must be of type {@link com.streamsets.pipeline.api.ConfigDef.Type#MODEL}.
+ * <p/>
+ * The configuration variable must be of type <code>java.util.List&lt;?></code> where the class is a Java bean with
+ * configuration definitions.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.FIELD)
 public @interface ListBeanModel {

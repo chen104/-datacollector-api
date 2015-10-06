@@ -21,10 +21,20 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Annotation for configuration variables that can hold a single value from a given list of values.
+ * <p/>
+ * The configuration definition must be of type {@link com.streamsets.pipeline.api.ConfigDef.Type#MODEL}.
+ * <p/>
+ * The configuration variable must be of type {@link String} or {@link Enum}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(ElementType.FIELD)
 public @interface ValueChooserModel {
 
+  /**
+   * Indicates the <code>ChooserValues</code> class providing the valid values.
+   */
   Class<? extends ChooserValues> value();
 
 }
