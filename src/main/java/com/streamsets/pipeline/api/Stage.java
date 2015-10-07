@@ -59,8 +59,6 @@ public interface Stage<C extends Stage.Context> {
 
     public boolean isPreview();
 
-    public boolean isClusterMode();
-
     public ConfigIssue createConfigIssue(String configGroup, String configName, ErrorCode errorCode, Object... args);
 
     public List<Info> getPipelineInfo();
