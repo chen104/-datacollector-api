@@ -113,6 +113,11 @@ public @interface StageDef {
    */
   ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER_BATCH, ExecutionMode.CLUSTER_STREAMING };
 
+  /**
+   * Indicates wheather stage (Origin) supports resetting offset
+   */
+  boolean resetOffset() default false;
+
   boolean recordsByRef() default false;
 
   /**
