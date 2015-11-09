@@ -111,7 +111,7 @@ public @interface StageDef {
   /**
    * Indicates the stage supported execution modes.
    */
-  ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER_BATCH, ExecutionMode.CLUSTER_STREAMING };
+  ExecutionMode[] execution() default { ExecutionMode.STANDALONE, ExecutionMode.CLUSTER_BATCH, ExecutionMode.CLUSTER_YARN_STREAMING, ExecutionMode.CLUSTER_MESOS_STREAMING };
 
   /**
    * Indicates wheather stage (Origin) supports resetting offset

@@ -32,7 +32,8 @@ public enum ExecutionMode implements Label {
   @Deprecated
   CLUSTER("Cluster"), //Kept for backward compatibility - replaced by CLUSTER_BATCH and CLUSTER_STREAMING
   CLUSTER_BATCH("Cluster Batch"),
-  CLUSTER_STREAMING("Cluster Streaming"),
+  CLUSTER_YARN_STREAMING("Cluster Yarn Streaming"),
+  CLUSTER_MESOS_STREAMING("Cluster Mesos Streaming"),
   SLAVE("Slave")
   ;
   private final String label;
