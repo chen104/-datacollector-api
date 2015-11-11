@@ -278,6 +278,7 @@
 
             <exclude>.git/**</exclude>
             <exclude>.gitignore</exclude>
+            <exclude>.gitreview</exclude>
 
             <exclude>**/target/**</exclude>
 
