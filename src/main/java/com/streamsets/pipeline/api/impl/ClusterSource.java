@@ -18,6 +18,7 @@
 package com.streamsets.pipeline.api.impl;
 
 import com.streamsets.pipeline.api.Source;
+import com.streamsets.pipeline.api.StageException;
 
 import java.io.IOException;
 import java.util.List;
@@ -60,7 +61,7 @@ public interface ClusterSource extends Source {
    */
   Map<String, String> getConfigsToShip();
 
-  int getParallelism() throws IOException;
+  int getParallelism() throws IOException, StageException;
 
   void shutdown();
 
