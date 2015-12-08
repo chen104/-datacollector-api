@@ -25,7 +25,7 @@ import com.streamsets.pipeline.api.StageException;
 import java.io.IOException;
 import java.util.List;
 
-@StageDef(label = "S", version = 1)
+@StageDef(label = "S", version = 1, onlineHelpRefUrl = "")
 public class DummySource implements Source {
 
   @Override

@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation do declare Data Collector stages classes. Classes must implement {@link Source}, {@link Processor} or
+ * Annotation to declare Data Collector stages classes. Classes must implement {@link Source}, {@link Processor} or
  * {@link Target}.
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -138,4 +138,8 @@ public @interface StageDef {
    */
   String[] libJarsRegex() default {};
 
+  /**
+   * Relative path to online help for this stage.
+   */
+  String onlineHelpRefUrl();
 }

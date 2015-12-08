@@ -26,7 +26,7 @@ import com.streamsets.pipeline.api.StageException;
 import java.io.IOException;
 import java.util.List;
 
-@StageDef(label = "T", version = 1)
+@StageDef(label = "T", version = 1, onlineHelpRefUrl = "")
 @GenerateResourceBundle
 public class DummyTarget implements Source {
 
