@@ -43,7 +43,7 @@ public class ListTypeSupport extends TypeSupport<List> {
       List list = (List) value;
       LinkedHashMap<String, Field> listMap = new LinkedHashMap<>(list.size());
       for (int i = 0; i < list.size(); i++) {
-        listMap.put(i + "", (Field)list.get(i));
+        listMap.put(Integer.toString(i), (Field)list.get(i));
       }
       return listMap;
     } else {
@@ -61,7 +61,7 @@ public class ListTypeSupport extends TypeSupport<List> {
     return list;
   }
 
-  private List<Field> deepCopy(List<Field> list) {
+  private static List<Field> deepCopy(List<Field> list) {
     List<Field> copy = new ArrayList<>(list.size());
     for (int i = 0; i < list.size(); i++) {
       Field field = list.get(i);

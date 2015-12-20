@@ -59,7 +59,7 @@ public abstract class BaseEnumChooserValues<T extends Enum> implements ChooserVa
     for (T e : enums) {
       String value = e.name();
       values.add(value);
-      String label = (isEnumWithLabels) ? ((Label)e).getLabel() : value;
+      String label = isEnumWithLabels ? ((Label)e).getLabel() : value;
       labels.add(label);
     }
     values = Collections.unmodifiableList(values);

@@ -28,6 +28,7 @@ import com.streamsets.pipeline.api.impl.Utils;
  * @see com.streamsets.pipeline.api.Stage.ELContext
  */
 public abstract class ELEval {
+  private static final ThreadLocal<ELVars> VARIABLES_IN_SCOPE_TL = new ThreadLocal<>();
 
   /**
    * Returns the stage configuration associated with the <code>ELEval</code> instance.
@@ -76,8 +77,6 @@ public abstract class ELEval {
       VARIABLES_IN_SCOPE_TL.set(null);
     }
   }
-
-  private final static ThreadLocal<ELVars> VARIABLES_IN_SCOPE_TL = new ThreadLocal<>();
 
   /**
    * Returns the <code>ELVars</code> in scope while an EL is being evaluated.

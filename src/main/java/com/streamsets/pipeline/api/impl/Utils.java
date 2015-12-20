@@ -30,6 +30,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class Utils {
+  // we cache a splitted version of the templates to speed up formatting
+  private static final Map<String, String[]> TEMPLATES = new ConcurrentHashMap<>();
+  private static final String TOKEN = "{}";
+  private static final String PADDING = "000000000000000000000000000000000000";
+  private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+  private static final String ISO8601_UTC_MASK = "yyyy-MM-dd'T'HH:mm'Z'";
+
+  private static Callable<String> sdcIdCallable;
 
   Utils() {
   }
@@ -52,11 +60,6 @@ public final class Utils {
       throw new IllegalStateException((msg != null) ? msg.toString() : "");
     }
   }
-
-  // we cache a splitted version of the templates to speed up formatting
-  private static final Map<String, String[]> TEMPLATES = new ConcurrentHashMap<>();
-
-  private static final String TOKEN = "{}";
 
   static String[] prepareTemplate(String template) {
     List<String> list = new ArrayList<>();
@@ -82,10 +85,8 @@ public final class Utils {
     StringBuilder sb = new StringBuilder(template.length() * 2);
     for (int i = 0; i < templateArr.length; i++) {
       sb.append(templateArr[i]);
-      if (args != null) {
-        if (i < templateArr.length - 1) {
-          sb.append((i < args.length) ? args[i] : TOKEN);
-        }
+      if (args != null && i < templateArr.length - 1) {
+        sb.append((i < args.length) ? args[i] : TOKEN);
       }
     }
     return sb.toString();
@@ -101,20 +102,15 @@ public final class Utils {
     };
   }
 
-  private static final String PADDING = "000000000000000000000000000000000000";
-
-  public static String intToPaddedString(int value, int padding) {
+  public static String intToPaddedString(int value, int pad) {
     StringBuilder sb = new StringBuilder();
     sb.append(value);
-    padding = padding - sb.length();
+    int padding = pad - sb.length();
     if (padding > 0) {
       sb.insert(0, PADDING.subSequence(0, padding));
     }
     return sb.toString();
   }
-
-  private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
-  private static final String ISO8601_UTC_MASK = "yyyy-MM-dd'T'HH:mm'Z'";
 
   private static DateFormat getISO8601DateFormat() {
     DateFormat dateFormat = new SimpleDateFormat(ISO8601_UTC_MASK);
@@ -140,7 +136,7 @@ public final class Utils {
     long absNumber = Math.abs(number);
     double result;
     String prefix = number < 0 ? "-" : "";
-    String suffix = "";
+    String suffix;
     if (absNumber < 1000) {
       // since no division has occurred, don't format with a decimal point
       return number + " bytes";
@@ -156,8 +152,6 @@ public final class Utils {
     }
     return prefix + oneDecimal.format(result) + suffix;
   }
-
-  private static Callable<String> sdcIdCallable;
 
   public static void setSdcIdCallable(Callable<String> callable) {
     sdcIdCallable = callable;

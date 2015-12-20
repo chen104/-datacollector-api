@@ -30,7 +30,7 @@ import com.streamsets.pipeline.api.StageException;
  * should be considered a {@link StageException} in which the pipeline should stop in an error state.
  */
 public class OnRecordErrorException extends StageException {
-  private final Record record;
+  private final transient Record record;
 
   /**
    * Class constructor specifying the error code and any parameters to be interpolated into the error message.

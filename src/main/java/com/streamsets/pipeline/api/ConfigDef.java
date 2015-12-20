@@ -23,7 +23,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public @interface ConfigDef {
     TEXT("")
     ;
 
-    private final Object defaultValue;
+    private final transient Object defaultValue;
 
     Type(Object defaultValue) {
       this.defaultValue = defaultValue;

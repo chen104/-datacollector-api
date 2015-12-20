@@ -20,13 +20,14 @@ package com.streamsets.pipeline.api.impl;
 import java.util.concurrent.Callable;
 
 public class CreateByRef {
-
   private static final ThreadLocal<Boolean> BY_REF_TL = new ThreadLocal<Boolean>() {
     @Override
     protected Boolean initialValue() {
       return Boolean.FALSE;
     }
   };
+
+  private CreateByRef() {}
 
   public static boolean isByRef() {
     return BY_REF_TL.get() == Boolean.TRUE;

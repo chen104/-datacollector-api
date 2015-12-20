@@ -83,7 +83,7 @@ public abstract class RecordProcessor extends BaseProcessor {
    * @throws OnRecordErrorException if the <code>Record</code> cannot be processed correctly. The handling of this
    * exception will be base on the stage 'on record error' configuration
    */
-  protected abstract void process(Record record, BatchMaker batchMaker) throws StageException, OnRecordErrorException;
+  protected abstract void process(Record record, BatchMaker batchMaker) throws StageException;
 
   /**
    * Called if the batch to process does not have any records to allow the <code>RecordProcessor</code> to do a special

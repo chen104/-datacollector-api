@@ -30,6 +30,7 @@ public interface RecordWriter extends Closeable {
 
   public void flush() throws IOException;
 
+  @Override
   public void close();
 
 }

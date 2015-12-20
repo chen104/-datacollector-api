@@ -43,7 +43,7 @@ public @interface StageDef {
    * stage configuration specified in {@link #outputStreamsDrivenByConfig()}.
    */
   @GenerateResourceBundle
-  public enum VariableOutputStreams implements Label {
+  enum VariableOutputStreams implements Label {
     ;
 
     @Override

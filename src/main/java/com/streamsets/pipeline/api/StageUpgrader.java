@@ -70,7 +70,7 @@ public interface StageUpgrader {
         StageException {
       throw new StageException(Error.UPGRADER_00, library, stageName, stageInstance);
     }
-  };
+  }
 
   /**
    * Upgrades the stage cofiguration from a previous version to current version.

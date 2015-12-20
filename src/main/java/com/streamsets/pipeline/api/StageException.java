@@ -24,18 +24,9 @@ import com.streamsets.pipeline.api.impl.ErrorMessage;
  * Exception thrown by stages when there is an error while processing.
  */
 public class StageException extends Exception {
-
-  private static Throwable getCause(Object... params) {
-    Throwable throwable = null;
-    if (params.length > 0 && params[params.length - 1] instanceof Throwable) {
-      throwable = (Throwable) params[params.length - 1];
-    }
-    return throwable;
-  }
-
-  private final ErrorCode errorCode;
-  private final ErrorMessage errorMessage;
-  private final Object[] params;
+  private final transient ErrorCode errorCode;
+  private final transient ErrorMessage errorMessage;
+  private final transient Object[] params;
 
   /**
    * Exception constructor.
@@ -49,6 +40,14 @@ public class StageException extends Exception {
     this.errorCode = errorCode;
     this.params = params;
     errorMessage = new ErrorMessage(errorCode, params);
+  }
+
+  private static Throwable getCause(Object... params) {
+    Throwable throwable = null;
+    if (params.length > 0 && params[params.length - 1] instanceof Throwable) {
+      throwable = (Throwable) params[params.length - 1];
+    }
+    return throwable;
   }
 
   /**

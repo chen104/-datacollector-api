@@ -24,8 +24,9 @@ import com.streamsets.pipeline.api.impl.Utils;
  * Class defining the <code>sdc:id()</code> function.
  */
 public class SdcEL {
-
   private static final String PREFIX = "sdc";
+
+  private SdcEL() {}
 
   @ElFunction(prefix = PREFIX, name = "id", description = "Unique ID for the SDC")
   public static String getId() {

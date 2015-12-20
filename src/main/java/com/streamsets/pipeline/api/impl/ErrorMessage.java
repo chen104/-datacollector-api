@@ -68,9 +68,13 @@ public class ErrorMessage implements LocalizableString {
 
   public ErrorMessage(String resourceBundle, ErrorCode errorCode, Object... params) {
     this.errorCode = Utils.checkNotNull(errorCode, "errorCode").getCode();
-    params = (params != null) ? params : NULL_ONE_ARG;
-    localizableMessage = new LocalizableMessage(errorCode.getClass().getClassLoader(), resourceBundle,
-                                                errorCode.getCode(), errorCode.getMessage(), params);
+    localizableMessage = new LocalizableMessage(
+        errorCode.getClass().getClassLoader(),
+        resourceBundle,
+        errorCode.getCode(),
+        errorCode.getMessage(),
+        (params != null) ? params : NULL_ONE_ARG
+    );
     timestamp = System.currentTimeMillis();
     preppendErrorCode = true;
   }
@@ -85,14 +89,14 @@ public class ErrorMessage implements LocalizableString {
 
   @Override
   public String getNonLocalized() {
-    return (preppendErrorCode) ? Utils.format("{} - {}", getErrorCode(), localizableMessage.getNonLocalized())
-                               : localizableMessage.getNonLocalized();
+    return preppendErrorCode ? Utils.format("{} - {}", getErrorCode(), localizableMessage.getNonLocalized()) :
+        localizableMessage.getNonLocalized();
   }
 
   @Override
   public String getLocalized() {
-    return (preppendErrorCode) ? Utils.format("{} - {}", getErrorCode(), localizableMessage.getLocalized())
-                               : localizableMessage.getLocalized();
+    return preppendErrorCode ? Utils.format("{} - {}", getErrorCode(), localizableMessage.getLocalized()) :
+        localizableMessage.getLocalized();
   }
 
   @Override

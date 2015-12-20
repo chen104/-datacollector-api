@@ -34,7 +34,6 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -114,10 +113,8 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     }
 
     // Generate files only if this is the last round and there is no error
-    if(roundEnv.processingOver()) {
-      if(!error) {
-        generateFiles();
-      }
+    if(roundEnv.processingOver() && !error) {
+      generateFiles();
     }
     return true;
   }

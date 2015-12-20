@@ -54,7 +54,7 @@ public class MapTypeSupport extends TypeSupport<Map> {
     return map;
   }
 
-  private Map<String, Field> deepCopy(Map<String, Field> map) {
+  private static Map<String, Field> deepCopy(Map<String, Field> map) {
     Map<String, Field> copy = new LinkedHashMap<>();
     for (Map.Entry<String, Field> entry : map.entrySet()) {
       String name = entry.getKey();

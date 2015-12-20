@@ -18,7 +18,6 @@
 package com.streamsets.pipeline.api.base;
 
 import com.streamsets.pipeline.api.Batch;
-import com.streamsets.pipeline.api.BatchMaker;
 import com.streamsets.pipeline.api.Record;
 import com.streamsets.pipeline.api.StageException;
 import com.streamsets.pipeline.api.impl.Utils;
@@ -81,7 +80,7 @@ public abstract class RecordTarget extends BaseTarget {
    * @throws OnRecordErrorException if the <code>Record</code> cannot be processed correctly. The handling of this
    * exception will be base on the stage 'on record error' configuration
    */
-  protected abstract void write(Record record) throws StageException, OnRecordErrorException;
+  protected abstract void write(Record record) throws StageException;
 
   /**
    * Called if the batch to write does not have any records to allow the <code>RecordTarget</code> to do a special

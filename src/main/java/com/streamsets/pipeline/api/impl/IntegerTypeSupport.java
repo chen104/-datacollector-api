@@ -19,8 +19,6 @@ package com.streamsets.pipeline.api.impl;
 
 import com.streamsets.pipeline.api.base.Errors;
 
-import java.math.BigDecimal;
-
 public class IntegerTypeSupport extends TypeSupport<Integer> {
 
   @Override

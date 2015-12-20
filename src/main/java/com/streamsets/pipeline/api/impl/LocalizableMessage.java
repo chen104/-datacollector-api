@@ -70,16 +70,14 @@ public class LocalizableMessage implements LocalizableString {
           ResourceBundle rb = ResourceBundle.getBundle(bundle, locale, classLoader);
           if (rb.containsKey(id)) {
             templateToUse = rb.getString(id);
-          } else {
-            if (!MISSING_KEY_WARNS.contains(bundle + " " + id)) {
-              MISSING_KEY_WARNS.add(bundle + " " + id);
-              LOG.warn("ResourceBundle '{}' does not have key '{}' via ClassLoader '{}'", bundle, id, classLoader);
-            }
+          } else if (!MISSING_KEY_WARNS.contains(bundle + " " + id)) {
+            MISSING_KEY_WARNS.add(bundle + " " + id);
+            LOG.warn("ResourceBundle '{}' does not have key '{}' via ClassLoader '{}'", bundle, id, classLoader);
           }
         } catch (MissingResourceException ex) {
           if (!MISSING_BUNDLE_WARNS.contains(bundle)) {
             MISSING_BUNDLE_WARNS.add(bundle);
-            LOG.warn("ResourceBundle '{}' not found via ClassLoader '{}'", bundle, classLoader);
+            LOG.warn("ResourceBundle '{}' not found via ClassLoader '{}'", bundle, classLoader, ex);
           }
         }
       }
@@ -87,6 +85,7 @@ public class LocalizableMessage implements LocalizableString {
     return Utils.format(templateToUse, args);
   }
 
+  @Override
   public String toString() {
     return getNonLocalized();
   }

@@ -68,6 +68,8 @@ import java.util.Map;
  * @see Record
  */
 public class Field implements Cloneable {
+  private Type type;
+  private Object value;
 
   /**
    * Enum defining all <code>Field</code> types.
@@ -90,9 +92,9 @@ public class Field implements Cloneable {
     LIST(new ListTypeSupport()),
     LIST_MAP(new ListMapTypeSupport());
 
-    final TypeSupport<?> supporter;
+    final transient TypeSupport<?> supporter;
 
-    private Type(TypeSupport<?> supporter) {
+    Type(TypeSupport<?> supporter) {
       this.supporter = supporter;
     }
 
@@ -122,6 +124,23 @@ public class Field implements Cloneable {
       return Utils.format("Field[{}:{}]", this, value);
     }
 
+  }
+
+  // need default constructor for deserialization purposes (Kryo)
+  private Field() {
+  }
+
+  private Field(Type type, Object value) {
+    this.type = type;
+    this.value = CreateByRef.isByRef() ? value : type.constructorCopy(value);
+  }
+
+  /**
+   * @deprecated DO NOT USE, TO BE REMOVED
+   */
+  @Deprecated
+  public static <T> Field create(Field field, T value) {
+    return create(Utils.checkNotNull(field, "field").getType(), value);
   }
 
   /**
@@ -326,26 +345,6 @@ public class Field implements Cloneable {
    */
   public static <T> Field create(Type type, T value) {
     return new Field(Utils.checkNotNull(type, "type"), type.convert(value));
-  }
-
-  /**
-   * DO NOT USE, TO BE REMOVED
-   */
-  @Deprecated
-  public static <T> Field create(Field field, T value) {
-    return create(Utils.checkNotNull(field, "field").getType(), value);
-  }
-
-  private Type type;
-  private Object value;
-
-  // need default constructor for deserialization purposes (Kryo)
-  private Field() {
-  }
-
-  private Field(Type type, Object value) {
-    this.type = type;
-    this.value = (CreateByRef.isByRef()) ? value : type.constructorCopy(value);
   }
 
   /**
@@ -569,12 +568,10 @@ public class Field implements Cloneable {
   @Override
   public boolean equals(Object obj) {
     boolean eq = false;
-    if (obj != null) {
-      if (obj instanceof Field) {
-        Field other = (Field) obj;
-        if (type == other.type) {
-          eq = (value == other.value) || type.equals(value, other.value);
-        }
+    if (obj != null && obj instanceof Field) {
+      Field other = (Field) obj;
+      if (type == other.type) {
+        eq = (value == other.value) || type.equals(value, other.value);
       }
     }
     return eq;
@@ -588,7 +585,7 @@ public class Field implements Cloneable {
    * For <code>Field</code> instances  of non-Collection based types it returns the same instance as the are immutable
    * (this deviates from the expected behavior documented in the  <code>Object.clone()</code>.
    * </p>
-   * * For <code>Field</code> instances  of Collection based types it returns the deep copy of the <code>Field</code>
+   * * For <code>Field</code> instances of Collection based types it returns the deep copy of the <code>Field</code>
    * instance.
    *
    * @return a clone of the field.

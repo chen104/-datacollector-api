@@ -17,11 +17,17 @@
  */
 package com.streamsets.pipeline.api.impl;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestLocaleInContext {
 
@@ -32,23 +38,26 @@ public class TestLocaleInContext {
 
   @Test
   public void testFirstUseInThread() throws Exception {
-    Thread t = new Thread() {
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    Callable<Boolean> tester = new Callable<Boolean>() {
       @Override
-      public void run() {
-        Assert.assertEquals(Locale.getDefault(), LocaleInContext.get());
+      public Boolean call() throws Exception {
+        return Locale.getDefault().equals(LocaleInContext.get());
       }
     };
-    t.start();
-    t.join();
+
+    Future<Boolean> future = executor.submit(tester);
+    assertTrue(future.get());
+    executor.shutdownNow();
   }
 
   @Test
   public void testSet() {
     Locale locale = Locale.forLanguageTag("xyz");
     LocaleInContext.set(locale);
-    Assert.assertEquals(locale, LocaleInContext.get());
+    assertEquals(locale, LocaleInContext.get());
     LocaleInContext.set(null);
-    Assert.assertEquals(Locale.getDefault(), LocaleInContext.get());
+    assertEquals(Locale.getDefault(), LocaleInContext.get());
   }
 
 }

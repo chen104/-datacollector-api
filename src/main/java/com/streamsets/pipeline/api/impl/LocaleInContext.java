@@ -27,6 +27,8 @@ public abstract class LocaleInContext {
     }
   };
 
+  private LocaleInContext() {}
+
   public static void set(Locale locale) {
     LOCALE_TL.set((locale != null) ? locale : Locale.getDefault());
   }

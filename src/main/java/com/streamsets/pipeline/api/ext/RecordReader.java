@@ -30,6 +30,7 @@ public interface RecordReader extends Closeable {
 
   public Record readRecord() throws IOException;
 
+  @Override
   public void close() throws IOException;
 
 }
