@@ -53,7 +53,7 @@ import java.util.Set;
  *   <li>/contactInfo/phone[[1]]/type</li>
  * </ul>
  * Using field-path expressions is possible to check for existence, access, modify and delete a <code>Field</code> data
- * structure. The {@link #get(String)}, {@link #has(String)}, {@link #delete(String)} and {@link #getFieldPaths()}
+ * structure. The {@link #get(String)}, {@link #has(String)}, {@link #delete(String)} and {@link #getEscapedFieldPaths()}
  * methods work using field- path expressions.
  * <p/>
  * <b>IMPORTANT:</b> Map key names that are not a word or use any of the following 3 special
@@ -251,10 +251,23 @@ public interface Record {
   public boolean has(String fieldPath);
 
   /**
-   * Returns all available field-paths in the record.
+   * Returns all available field-paths in the record. This method is deprecated, and {@link #getEscapedFieldPaths()}
+   * should be used instead.
+   *
    * @return all available field-paths in the record.
    */
+  @Deprecated
   public Set<String> getFieldPaths();
+
+  /**
+   * Returns all available field-paths in the record. Field-paths that contain any non-word characters are escaped by
+   * single quotes.
+   *
+   * @return all available field-paths in the record.
+   *
+   * @since 1.2.2.0
+   */
+  public Set<String> getEscapedFieldPaths();
 
   /**
    * Sets a <code>Field</code> in the specified field-path.
