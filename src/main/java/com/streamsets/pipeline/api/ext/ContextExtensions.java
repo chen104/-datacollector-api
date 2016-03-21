@@ -17,9 +17,12 @@
  */
 package com.streamsets.pipeline.api.ext;
 
+import com.streamsets.pipeline.api.StageException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 public interface ContextExtensions {
 
@@ -27,5 +30,7 @@ public interface ContextExtensions {
       throws IOException;
 
   public  RecordWriter createRecordWriter(OutputStream outputStream) throws IOException;
+
+  public void notify(List<String> addresses, String subject, String body) throws StageException;
 
 }
