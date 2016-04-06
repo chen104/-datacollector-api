@@ -197,6 +197,12 @@ public interface Record {
      */
     public long getErrorTimestamp();
 
+    /**
+     * StackTrace is set when error record is caused from exceptions.
+     *
+     * @return Stack trace from exception in String format.
+     */
+    public String getErrorStackTrace();
   }
 
   /**

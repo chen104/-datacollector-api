@@ -55,9 +55,16 @@ public class TestStageException {
     Assert.assertEquals("API_00 - Hello XYZ 'a'", ex.getLocalizedMessage());
     LocaleInContext.set(null);
     Assert.assertNull(ex.getCause());
+  }
 
-    ex = new StageException(Errors.API_00, "a", 1, cause);
-    Assert.assertEquals("API_00 - " + Utils.format(Errors.API_00.getMessage(), "a", 1), ex.getMessage());
+  @Test
+  public void testStacktrace() {
+    Exception cause = new Exception();
+    StageException ex = new StageException(Errors.API_00, "a", 1, cause);
+    Assert.assertEquals(
+        "API_00 - " + Utils.format(Errors.API_00.getMessage(), "a", 1),
+        ex.getMessage());
+
     LocaleInContext.set(Locale.forLanguageTag("xyz"));
     Assert.assertEquals("API_00 - Hello XYZ 'a'", ex.getLocalizedMessage());
     LocaleInContext.set(null);

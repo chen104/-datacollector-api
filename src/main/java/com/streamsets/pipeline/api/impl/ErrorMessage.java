@@ -20,6 +20,10 @@ package com.streamsets.pipeline.api.impl;
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.StageException;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+
 public class ErrorMessage implements LocalizableString {
   private static final Object[] NULL_ONE_ARG = {null};
 
@@ -27,10 +31,13 @@ public class ErrorMessage implements LocalizableString {
   private final LocalizableString localizableMessage;
   private final long timestamp;
   private final boolean preppendErrorCode;
+  private final String stackTrace;
 
   public ErrorMessage(final StageException ex) {
     errorCode = ex.getErrorCode().getCode();
     timestamp = System.currentTimeMillis();
+    stackTrace = toStackTrace(ex);
+
     localizableMessage = new LocalizableString() {
       @Override
       public String getNonLocalized() {
@@ -59,6 +66,7 @@ public class ErrorMessage implements LocalizableString {
       }
     };
     this.timestamp = timestamp;
+    stackTrace = null;
     preppendErrorCode = true;
   }
 
@@ -68,6 +76,12 @@ public class ErrorMessage implements LocalizableString {
 
   public ErrorMessage(String resourceBundle, ErrorCode errorCode, Object... params) {
     this.errorCode = Utils.checkNotNull(errorCode, "errorCode").getCode();
+    if ( params != null && params.length > 0 && params[params.length-1] instanceof Throwable){
+      stackTrace = toStackTrace((Throwable)params[params.length-1]);
+    } else {
+      stackTrace = null;
+    }
+
     localizableMessage = new LocalizableMessage(
         errorCode.getClass().getClassLoader(),
         resourceBundle,
@@ -77,6 +91,19 @@ public class ErrorMessage implements LocalizableString {
     );
     timestamp = System.currentTimeMillis();
     preppendErrorCode = true;
+  }
+
+  /*
+    Utility function, accessible from tests
+  */
+  public static String toStackTrace(Throwable e){
+    StringWriter writer = new StringWriter();
+    e.printStackTrace(new PrintWriter(writer));
+    return writer.toString();
+  }
+
+  public String getErrorStackTrace(){
+    return stackTrace;
   }
 
   public String getErrorCode() {
