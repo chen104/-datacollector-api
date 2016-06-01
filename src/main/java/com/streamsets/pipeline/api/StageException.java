@@ -36,10 +36,13 @@ public class StageException extends Exception {
    * considered the cause of the exception.
    */
   public StageException(ErrorCode errorCode, Object... params) {
-    super(getCause(params));
     this.errorCode = errorCode;
     this.params = params;
     errorMessage = new ErrorMessage(errorCode, params);
+    Throwable cause = getCause(params);
+    if(cause != null) {
+      initCause(cause);
+    }
   }
 
   private static Throwable getCause(Object... params) {

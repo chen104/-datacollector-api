@@ -72,4 +72,12 @@ public class TestStageException {
 
   }
 
+  @Test
+  public void testInitCause() {
+    StageException ex = new StageException(Errors.API_00);
+    Exception cause = new IllegalArgumentException();
+    ex.initCause(cause);
+    Assert.assertEquals(cause, ex.getCause());
+  }
+
 }
