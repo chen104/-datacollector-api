@@ -85,6 +85,7 @@ public class Field implements Cloneable {
     DOUBLE(new DoubleTypeSupport()),
     DATE(new DateTypeSupport()),
     DATETIME(new DateTypeSupport()),
+    TIME(new DateTypeSupport()),
     DECIMAL(new DecimalTypeSupport()),
     STRING(new StringTypeSupport()),
     BYTE_ARRAY(new ByteArrayTypeSupport()),
@@ -290,6 +291,20 @@ public class Field implements Cloneable {
   }
 
   /**
+   * Creates a <code>TIME</code> field.
+   * <p/>
+   * Java does not have Time field, the intent of the {@link Type#DATETIME} type is to use only the hour, minute,
+   * and second information of the Date.
+   *
+   * @param v value.
+   *
+   * @return a <code>Time Field</code> with the given value.
+   */
+  public static Field createTime(Date v) {
+    return new Field(Type.TIME, v);
+  }
+
+  /**
    * Creates a <code>LIST</code> field. The keys of the Map must be of <code>String</code> type and the values must be
    * of <code>Field</code> type, <code>NULL</code> values are not allowed as key or values.
    * <p/>
@@ -471,6 +486,16 @@ public class Field implements Cloneable {
    */
   public Date getValueAsDatetime() {
     return (Date) type.convert(getValue(), Type.DATE);
+  }
+
+  /**
+   * Returns the Date value of the field.
+   *
+   * @return the Date value of the field. it returns a copy of the value.
+   * @throws IllegalArgumentException if the value cannot be converted to Date.
+   */
+  public Date getValueAsTime() {
+    return (Date) type.convert(getValue(), Type.TIME);
   }
 
   /**

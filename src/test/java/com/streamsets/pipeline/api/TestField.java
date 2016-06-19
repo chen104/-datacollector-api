@@ -59,6 +59,7 @@ public class TestField {
     Assert.assertEquals(DecimalTypeSupport.class, Type.DECIMAL.supporter.getClass());
     Assert.assertEquals(DateTypeSupport.class, Type.DATE.supporter.getClass());
     Assert.assertEquals(DateTypeSupport.class, Type.DATETIME.supporter.getClass());
+    Assert.assertEquals(DateTypeSupport.class, Type.TIME.supporter.getClass());
     Assert.assertEquals(StringTypeSupport.class, Type.STRING.supporter.getClass());
     Assert.assertEquals(ByteArrayTypeSupport.class, Type.BYTE_ARRAY.supporter.getClass());
   }
@@ -120,6 +121,13 @@ public class TestField {
     d = new Date();
     f = Field.createDatetime(d);
     Assert.assertEquals(Type.DATETIME, f.getType());
+    Assert.assertEquals(d, f.getValue());
+    Assert.assertNotSame(d, f.getValue());
+    Assert.assertNotNull(f.toString());
+
+    d = new Date(70, 0, 1, d.getHours(), d.getMinutes(), d.getSeconds());
+    f = Field.createTime(d);
+    Assert.assertEquals(Type.TIME, f.getType());
     Assert.assertEquals(d, f.getValue());
     Assert.assertNotSame(d, f.getValue());
     Assert.assertNotNull(f.toString());
@@ -204,6 +212,7 @@ public class TestField {
 
   private static final Date DATE_VALUE = new Date(System.currentTimeMillis() + 100);
   private static final Date DATETIME_VALUE = new Date(System.currentTimeMillis() - 100);
+  private static final Date TIME_VALUE = new Date(System.currentTimeMillis() - 1000);
 
   private static final List<Field> FIELDS = ImmutableList.of(
       Field.create(true),
@@ -216,6 +225,7 @@ public class TestField {
       Field.create((double) 6.2),
       Field.createDate(DATE_VALUE),
       Field.createDatetime(DATETIME_VALUE),
+      Field.createTime(TIME_VALUE),
       Field.create(new BigDecimal(7.3)),
       Field.create("s"),
       Field.create(new byte[]{1, 2}),
@@ -235,7 +245,7 @@ public class TestField {
       .put(Type.INTEGER, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
                                           Type.FLOAT, Type.DOUBLE, Type.DECIMAL))
       .put(Type.LONG, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
-                                       Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME))
+                                       Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME, Type.TIME))
       .put(Type.FLOAT, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
                                         Type.FLOAT, Type.DOUBLE, Type.DECIMAL))
       .put(Type.DOUBLE, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
@@ -243,13 +253,15 @@ public class TestField {
       .put(Type.DECIMAL, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
                                           Type.FLOAT, Type.DOUBLE, Type.DECIMAL))
       .put(Type.STRING, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
-                                         Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME, Type.CHAR))
+                                         Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME, Type.CHAR,
+                                         Type.TIME ))
       .put(Type.BYTE_ARRAY, ImmutableList.of(Type.BYTE_ARRAY))
       .put(Type.MAP, ImmutableList.of(Type.MAP, Type.LIST_MAP))
       .put(Type.LIST, ImmutableList.of(Type.LIST, Type.LIST_MAP))
       .put(Type.LIST_MAP, ImmutableList.of(Type.LIST_MAP, Type.MAP, Type.LIST))
-      .put(Type.DATE, ImmutableList.of(Type.DATE, Type.DATETIME, Type.STRING, Type.LONG))
-      .put(Type.DATETIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.STRING, Type.LONG))
+      .put(Type.DATE, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
+      .put(Type.DATETIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
+      .put(Type.TIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
       .build();
 
   @Test
@@ -448,6 +460,9 @@ public class TestField {
                 case DATETIME:
                   Assert.assertEquals(DATETIME_VALUE, f.getValueAsDate());
                   break;
+                case TIME:
+                  Assert.assertEquals(TIME_VALUE, f.getValueAsDate());
+                  break;
               }
               break;
             case DATETIME:
@@ -458,8 +473,23 @@ public class TestField {
                 case DATETIME:
                   Assert.assertEquals(DATETIME_VALUE, f.getValueAsDatetime());
                   break;
+                case TIME:
+                  Assert.assertEquals(TIME_VALUE, f.getValueAsDatetime());
+                  break;
               }
               break;
+            case TIME:
+              switch (f.getType()) {
+                case DATE:
+                  Assert.assertEquals(DATE_VALUE, f.getValueAsTime());
+                  break;
+                case DATETIME:
+                  Assert.assertEquals(DATETIME_VALUE, f.getValueAsTime());
+                  break;
+                case TIME:
+                  Assert.assertEquals(TIME_VALUE, f.getValueAsTime());
+                  break;
+              }
             case DECIMAL:
               switch (f.getType()) {
                 case BOOLEAN:
@@ -536,6 +566,9 @@ public class TestField {
                 break;
               case DATETIME:
                 f.getValueAsDatetime();
+                break;
+              case TIME:
+                f.getValueAsTime();
                 break;
               case DECIMAL:
                 f.getValueAsDecimal();
