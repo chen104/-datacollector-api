@@ -56,7 +56,10 @@ public class DateTypeSupport extends TypeSupport<Date> {
 
   @Override
   public Object clone(Object value) {
-    return ((Date) value).clone();
+    // Various sources can return subclass of java.sql.Date (for example JDBC) which can change implementation of
+    // toString() and other methods that we're using for serialization. To avoid any such trobules, we're creating
+    // our own instance of Date from epoch.
+    return new Date(((Date) value).getTime());
   }
 
 }
