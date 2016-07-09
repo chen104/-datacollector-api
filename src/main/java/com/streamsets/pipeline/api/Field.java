@@ -125,6 +125,16 @@ public class Field implements Cloneable {
       return Utils.format("Field[{}:{}]", this, value);
     }
 
+    public boolean isOneOf(Type ...types) {
+      if(types == null) {
+        return false;
+      }
+
+      for(Type t : types) {
+        if(this == t) return true;
+      }
+      return false;
+    }
   }
 
   // need default constructor for deserialization purposes (Kryo)

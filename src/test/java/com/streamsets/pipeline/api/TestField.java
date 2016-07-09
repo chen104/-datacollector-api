@@ -663,8 +663,14 @@ public class TestField {
     Assert.assertEquals(40, secondField.getValue());
     thirdField = listMap.get("column3");
     Assert.assertEquals(true, thirdField.getValue());
-
   }
 
+  @Test
+  public void testTypeIsOneOf() {
+    Assert.assertTrue(Type.DATE.isOneOf(Type.TIME, Type.DATE));
+    Assert.assertTrue(Type.DATE.isOneOf(Type.DATE));
+
+    Assert.assertFalse(Type.DATE.isOneOf(Type.STRING, Type.LONG));
+  }
 
 }
