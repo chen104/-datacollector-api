@@ -287,6 +287,21 @@ public interface Stage<C extends Stage.Context> {
      */
     public boolean isStopped();
 
+    /**
+     * Creates standard event record with pre-filled required header attributes.
+     *
+     * @param type Type of the event (value is up to the generating stage)
+     * @param version Version of the event type (to support event evolution)
+     * @return New record.
+     */
+    public EventRecord createEventRecord(String type, int version);
+
+    /**
+     * Sends given event record to event lane.
+     *
+     * @param record Record that should be send on event lane
+     */
+    public void toEvent(EventRecord record);
   }
 
   /**
