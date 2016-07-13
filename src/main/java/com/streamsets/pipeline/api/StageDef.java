@@ -142,4 +142,9 @@ public @interface StageDef {
    * Relative path to online help for this stage.
    */
   String onlineHelpRefUrl();
+
+  /**
+   * Indicates if this stage can produce events.
+   */
+  boolean producesEvents() default false;
 }
