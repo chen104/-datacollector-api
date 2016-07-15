@@ -27,11 +27,13 @@ import com.streamsets.pipeline.api.impl.CharTypeSupport;
 import com.streamsets.pipeline.api.impl.DateTypeSupport;
 import com.streamsets.pipeline.api.impl.DecimalTypeSupport;
 import com.streamsets.pipeline.api.impl.DoubleTypeSupport;
+import com.streamsets.pipeline.api.impl.FileRefTypeSupport;
 import com.streamsets.pipeline.api.impl.FloatTypeSupport;
 import com.streamsets.pipeline.api.impl.IntegerTypeSupport;
 import com.streamsets.pipeline.api.impl.LongTypeSupport;
 import com.streamsets.pipeline.api.impl.ShortTypeSupport;
 import com.streamsets.pipeline.api.impl.StringTypeSupport;
+import com.streamsets.pipeline.api.impl.TestFileRefTypeSupport;
 import com.streamsets.pipeline.api.impl.Utils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -62,6 +64,7 @@ public class TestField {
     Assert.assertEquals(DateTypeSupport.class, Type.TIME.supporter.getClass());
     Assert.assertEquals(StringTypeSupport.class, Type.STRING.supporter.getClass());
     Assert.assertEquals(ByteArrayTypeSupport.class, Type.BYTE_ARRAY.supporter.getClass());
+    Assert.assertEquals(FileRefTypeSupport.class, Type.FILE_REF.supporter.getClass());
   }
 
   @Test
@@ -145,6 +148,14 @@ public class TestField {
     Assert.assertEquals(Type.BYTE_ARRAY, f.getType());
     Assert.assertArrayEquals(array, (byte[]) f.getValue());
     Assert.assertNotSame(array, f.getValue());
+    Assert.assertNotNull(f.toString());
+
+    byte[] fileRefBytes = "This is a file ref byte".getBytes();
+    TestFileRefTypeSupport.ByteArrayRef byteArrayRef = new TestFileRefTypeSupport.ByteArrayRef(fileRefBytes);
+    f = Field.create(byteArrayRef);
+    Assert.assertEquals(Type.FILE_REF, f.getType());
+    Assert.assertArrayEquals(fileRefBytes, ((TestFileRefTypeSupport.ByteArrayRef) f.getValue()).byteData);
+    Assert.assertSame(byteArrayRef, f.getValue());
     Assert.assertNotNull(f.toString());
   }
 
@@ -231,7 +242,8 @@ public class TestField {
       Field.create(new byte[]{1, 2}),
       Field.create(new LinkedHashMap<String, Field>()),
       Field.create(new ArrayList<Field>()),
-      Field.createListMap(new LinkedHashMap<String, Field>())
+      Field.createListMap(new LinkedHashMap<String, Field>()),
+      Field.create(new TestFileRefTypeSupport.ByteArrayRef("This is a file ref".getBytes()))
   );
 
   @SuppressWarnings("unchecked")
@@ -262,6 +274,7 @@ public class TestField {
       .put(Type.DATE, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
       .put(Type.DATETIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
       .put(Type.TIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
+      .put(Type.FILE_REF, ImmutableList.of(Type.FILE_REF))
       .build();
 
   @Test
@@ -587,6 +600,9 @@ public class TestField {
                 break;
               case LIST_MAP:
                 f.getValueAsListMap();
+                break;
+              case FILE_REF:
+                f.getValueAsFileRef();
                 break;
             }
             Assert.fail(Utils.format("Failed asserting that type '{}' cannot be get as a '{}'", f.getType(), t));

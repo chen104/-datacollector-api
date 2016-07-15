@@ -33,6 +33,7 @@ import com.streamsets.pipeline.api.impl.ListMapTypeSupport;
 import com.streamsets.pipeline.api.impl.ListTypeSupport;
 import com.streamsets.pipeline.api.impl.LongTypeSupport;
 import com.streamsets.pipeline.api.impl.MapTypeSupport;
+import com.streamsets.pipeline.api.impl.FileRefTypeSupport;
 import com.streamsets.pipeline.api.impl.ShortTypeSupport;
 import com.streamsets.pipeline.api.impl.StringTypeSupport;
 import com.streamsets.pipeline.api.impl.TypeSupport;
@@ -90,6 +91,7 @@ public class Field implements Cloneable {
     TIME(new DateTypeSupport()),
     DECIMAL(new DecimalTypeSupport()),
     STRING(new StringTypeSupport()),
+    FILE_REF(new FileRefTypeSupport()),
     BYTE_ARRAY(new ByteArrayTypeSupport()),
     MAP(new MapTypeSupport()),
     LIST(new ListTypeSupport()),
@@ -360,6 +362,17 @@ public class Field implements Cloneable {
   }
 
   /**
+   * Creates a <code>FILE_REF</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>FILE_REF Field</code> with the given value.
+   */
+  public static Field create(FileRef v) {
+    return new Field(Type.FILE_REF, v);
+  }
+
+  /**
    * Creates a field of a given type, the value is converted to the specified type.
    * <p/>
    * If the type is <code>MAP</code>, <code>LIST</code> or <code>LIST_MAP</code> this method performs a deep copy of
@@ -576,6 +589,17 @@ public class Field implements Cloneable {
   }
 
   /**
+   * Returns the {@link FileRef} value of the field.
+   *
+   * @return the {@link FileRef} value of the field.
+   * @throws IllegalArgumentException if the value cannot be converted to {@link FileRef}.
+   */
+  @SuppressWarnings("unchecked")
+  public FileRef getValueAsFileRef() {
+    return (FileRef) type.convert(getValue(), Type.FILE_REF);
+  }
+
+  /**
    * Returns the string representation of the field.
    *
    * @return the string representation of the field.
@@ -629,7 +653,7 @@ public class Field implements Cloneable {
    */
   @Override
   public Field clone() {
-    return (type != Type.MAP && type != Type.LIST && type != Type.LIST_MAP) ? this : new Field(type, value);
+    return (!type.isOneOf(Type.LIST, Type.MAP, Type.LIST_MAP)) ? this : new Field(type, value);
   }
 
 }
