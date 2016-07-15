@@ -24,4 +24,20 @@ package com.streamsets.pipeline.api;
  * header fields like type, version and creation_time.
  */
 public interface EventRecord extends Record {
+
+  /**
+   * Type of the event, it's value is defined by generating stage.
+   */
+  public static final String TYPE = "sdc.event.type";
+
+  /**
+   * Each event type is versioned separately. This is also defined by generating stage.
+   */
+  public static final String VERSION = "sdc.event.version";
+
+  /**
+   * Timestamp of the time when the event was generated.
+   */
+  public static final String CREATION_TIMESTAMP = "sdc.event.creation_timestamp";
+
 }
