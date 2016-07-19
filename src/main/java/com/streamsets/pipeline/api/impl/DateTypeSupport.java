@@ -42,6 +42,9 @@ public class DateTypeSupport extends TypeSupport<Date> {
     if (value instanceof Long) {
       return new Date((long) value);
     }
+    if (value instanceof Integer) {
+      return new Date((int) value);
+    }
     throw new IllegalArgumentException(Utils.format(Errors.API_07.getMessage(),
                                                     value.getClass().getSimpleName(), value));
   }
