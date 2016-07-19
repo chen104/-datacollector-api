@@ -56,6 +56,8 @@ public class TestDateTypeSupport {
     d = Utils.parse("2014-10-22T13:30Z");
     Assert.assertEquals(d, support.convert("2014-10-22T13:30Z"));
     Assert.assertEquals(d, support.convert(d.getTime()));
+    // Calling with int type
+    Assert.assertEquals(new Date(54000000), support.convert(54000000));
   }
 
   @Test(expected = IllegalArgumentException.class)

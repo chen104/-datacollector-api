@@ -243,7 +243,7 @@ public class TestField {
       .put(Type.SHORT, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
                                         Type.FLOAT, Type.DOUBLE, Type.DECIMAL))
       .put(Type.INTEGER, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
-                                          Type.FLOAT, Type.DOUBLE, Type.DECIMAL))
+                                          Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME, Type.TIME))
       .put(Type.LONG, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
                                        Type.FLOAT, Type.DOUBLE, Type.DECIMAL, Type.DATE, Type.DATETIME, Type.TIME))
       .put(Type.FLOAT, ImmutableList.of(Type.BOOLEAN, Type.BYTE, Type.STRING, Type.SHORT, Type.INTEGER, Type.LONG,
