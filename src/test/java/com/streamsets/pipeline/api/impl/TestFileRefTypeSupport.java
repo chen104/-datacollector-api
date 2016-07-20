@@ -19,67 +19,44 @@
  */
 package com.streamsets.pipeline.api.impl;
 
-import com.google.common.collect.ImmutableSet;
 import com.streamsets.pipeline.api.FileRef;
+import com.streamsets.pipeline.api.TestFileRef;
 import com.streamsets.pipeline.api.base.Errors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class TestFileRefTypeSupport {
-  public static class ByteArrayRef extends FileRef {
-    public final byte[] byteData;
-    public ByteArrayRef(byte[] data) {
-      super(data.length);
-      byteData = data;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends AutoCloseable> Set<Class<T>> getSupportedStreamClasses() {
-      return ImmutableSet.of((Class<T>) InputStream.class);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends AutoCloseable> T createInputStream(Class<T> streamClassType) throws IOException {
-      return (T) new ByteArrayInputStream(byteData);
-    }
-  }
 
   @Test
   public void testCreate() {
     FileRefTypeSupport frTs = new FileRefTypeSupport();
     byte[] data = "This is streamsets file ref support".getBytes();
-    ByteArrayRef byteArrayRef = new ByteArrayRef(data);
-    ByteArrayRef createdByteArrayRef = (ByteArrayRef) frTs.create(byteArrayRef);
+    TestFileRef.ByteArrayRef byteArrayRef = new TestFileRef.ByteArrayRef(data);
+    TestFileRef.ByteArrayRef createdByteArrayRef = (TestFileRef.ByteArrayRef) frTs.create(byteArrayRef);
     Assert.assertEquals(byteArrayRef, createdByteArrayRef);
     Assert.assertEquals(byteArrayRef.byteData, createdByteArrayRef.byteData);
   }
 
   @Test
-  public void testGet() {
+  public void testGet() throws Exception {
     FileRefTypeSupport frTs = new FileRefTypeSupport();
     byte[] data = "This is streamsets file ref support".getBytes();
-    ByteArrayRef o = new ByteArrayRef(data);
+    TestFileRef.ByteArrayRef o = new TestFileRef.ByteArrayRef(data);
     Assert.assertSame(o, frTs.get(o));
-    Assert.assertSame(o.byteData, ((ByteArrayRef)frTs.get(o)).byteData);
+    Assert.assertSame(o.byteData, ((TestFileRef.ByteArrayRef)frTs.get(o)).byteData);
   }
 
   @Test
   public void testClone() {
     FileRefTypeSupport frTs = new FileRefTypeSupport();
     byte[] data = "This is streamsets file ref support".getBytes();
-    ByteArrayRef byteArrayRef = new ByteArrayRef(data);
-    ByteArrayRef clonedByteArrayRef = (ByteArrayRef) frTs.clone(byteArrayRef);
+    TestFileRef.ByteArrayRef byteArrayRef = new TestFileRef.ByteArrayRef(data);
+    TestFileRef.ByteArrayRef clonedByteArrayRef = (TestFileRef.ByteArrayRef) frTs.clone(byteArrayRef);
     Assert.assertSame(byteArrayRef, clonedByteArrayRef);
     Assert.assertSame(byteArrayRef.byteData, clonedByteArrayRef.byteData);
   }
@@ -88,7 +65,7 @@ public class TestFileRefTypeSupport {
   public void testConvertValid() {
     FileRefTypeSupport frTs = new FileRefTypeSupport();
     byte[] data = "This is streamsets file ref support".getBytes();
-    ByteArrayRef byteArrayRef = new ByteArrayRef(data);
+    TestFileRef.ByteArrayRef byteArrayRef = new TestFileRef.ByteArrayRef(data);
     Assert.assertSame(byteArrayRef, frTs.convert(byteArrayRef));
   }
 
@@ -131,7 +108,7 @@ public class TestFileRefTypeSupport {
 
   @Test
   public void testConvertFromFilRefInvalid() {
-    FileRef fileRef = new ByteArrayRef("This is file ref Filed".getBytes());
+    FileRef fileRef = new TestFileRef.ByteArrayRef("This is file ref Field".getBytes());
     testConvertFromFilRefInvalid(new IntegerTypeSupport(), fileRef);
     testConvertFromFilRefInvalid(new LongTypeSupport(), fileRef);
     testConvertFromFilRefInvalid(new FloatTypeSupport(), fileRef);

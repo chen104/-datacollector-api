@@ -35,7 +35,7 @@ public abstract class FileRef {
   /**
    * Defines the supported stream classes for this {@link FileRef}.
    * The minimal requirement is that this should contain
-   * atleast {@link java.io.InputStream}
+   * at least {@link java.io.InputStream}
    * @param <T> Stream Implementation of {@link AutoCloseable}
    * @return the supported stream classes.
    */
@@ -43,12 +43,16 @@ public abstract class FileRef {
 
   /**
    * Creates the Stream instance based on the stream class type.
+   * @param context the context of the stage creating the stream.
    * @param streamClassType the stream class type
    * @param <T> Stream Implementation of {@link AutoCloseable}
    * @return the stream
    * @throws IOException if there are issues in creating the stream.
    */
-  public abstract <T extends AutoCloseable> T createInputStream(Class<T> streamClassType) throws IOException;
+  public abstract <T extends AutoCloseable> T createInputStream(
+      Stage.Context context,
+      Class<T> streamClassType
+  ) throws IOException;
 
   /**
    * Returns the buffer size of the returned input stream.

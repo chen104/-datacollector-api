@@ -33,7 +33,6 @@ import com.streamsets.pipeline.api.impl.IntegerTypeSupport;
 import com.streamsets.pipeline.api.impl.LongTypeSupport;
 import com.streamsets.pipeline.api.impl.ShortTypeSupport;
 import com.streamsets.pipeline.api.impl.StringTypeSupport;
-import com.streamsets.pipeline.api.impl.TestFileRefTypeSupport;
 import com.streamsets.pipeline.api.impl.Utils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -151,10 +150,10 @@ public class TestField {
     Assert.assertNotNull(f.toString());
 
     byte[] fileRefBytes = "This is a file ref byte".getBytes();
-    TestFileRefTypeSupport.ByteArrayRef byteArrayRef = new TestFileRefTypeSupport.ByteArrayRef(fileRefBytes);
+    TestFileRef.ByteArrayRef byteArrayRef = new TestFileRef.ByteArrayRef(fileRefBytes);
     f = Field.create(byteArrayRef);
     Assert.assertEquals(Type.FILE_REF, f.getType());
-    Assert.assertArrayEquals(fileRefBytes, ((TestFileRefTypeSupport.ByteArrayRef) f.getValue()).byteData);
+    Assert.assertArrayEquals(fileRefBytes, ((TestFileRef.ByteArrayRef) f.getValue()).byteData);
     Assert.assertSame(byteArrayRef, f.getValue());
     Assert.assertNotNull(f.toString());
   }
@@ -243,7 +242,7 @@ public class TestField {
       Field.create(new LinkedHashMap<String, Field>()),
       Field.create(new ArrayList<Field>()),
       Field.createListMap(new LinkedHashMap<String, Field>()),
-      Field.create(new TestFileRefTypeSupport.ByteArrayRef("This is a file ref".getBytes()))
+      Field.create(new TestFileRef.ByteArrayRef("This is a file ref".getBytes()))
   );
 
   @SuppressWarnings("unchecked")
