@@ -20,6 +20,7 @@
 package com.streamsets.pipeline.api;
 
 import com.codahale.metrics.Counter;
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -176,6 +177,14 @@ public interface Stage<C extends Stage.Context> {
     public Timer createTimer(String name);
 
     /**
+     * Gets the already created {@link Timer} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Timer</code> name.
+     * @return the already created <code>Timer</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
+    public Timer getTimer(String name);
+
+    /**
      * Creates a {@link Meter} namespaced with the pipeline name and the stage instance name plus the given name.
      *
      * @param name the <code>Meter</code> name.
@@ -184,12 +193,46 @@ public interface Stage<C extends Stage.Context> {
     public Meter createMeter(String name);
 
     /**
+     * Gets the already created {@link Meter} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Meter</code> name.
+     * @return the already created <code>Meter</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
+    public Meter getMeter(String name);
+
+    /**
      * Creates a {@link Counter} namespaced with the pipeline name and the stage instance name plus the given name.
      *
      * @param name the <code>Counter</code> name.
      * @return a <code>Counter</code> namespaced with the pipeline name and the stage instance name plus the given name.
      */
     public Counter createCounter(String name);
+
+    /**
+     * Gets the already created {@link Counter} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Counter</code> name.
+     * @return the already created <code>Counter</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
+    public Counter getCounter(String name);
+
+    /**
+     * Creates a {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Gauge</code> name.
+     * @param gauge Gauge
+     * @param <T> Gauge Object Type.
+     */
+   public <T> Gauge<T> createGauge(String name, Gauge<T> gauge);
+
+      /**
+       * Gets the already created {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
+       *
+       * @param name the <code>Gauge</code> name.
+       * @param <T> Gauge Object Type.
+       * @return the already created <code>Gauge</code> namespaced with the pipeline name and the stage instance name plus the given name.
+       */
+    public <T> Gauge<T> getGauge(String name);
 
     /**
      * Reports an <code>Exception</code> as an error.
