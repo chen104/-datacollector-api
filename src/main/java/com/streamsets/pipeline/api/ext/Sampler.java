@@ -19,22 +19,15 @@
  */
 package com.streamsets.pipeline.api.ext;
 
-import com.streamsets.pipeline.api.StageException;
+import com.streamsets.pipeline.api.Record;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
+public interface Sampler {
 
-public interface ContextExtensions {
-
-  public RecordReader createRecordReader(InputStream inputStream, long initialPosition, int maxObjectLen)
-      throws IOException;
-
-  public  RecordWriter createRecordWriter(OutputStream outputStream) throws IOException;
-
-  public void notify(List<String> addresses, String subject, String body) throws StageException;
-
-  public Sampler getSampler();
+  /**
+   * Indicates if the argument record is selected by the sampler
+   * @param record
+   * @return <code>true</code> if the argument record is selected by the sampler
+   */
+  public boolean sample(Record record);
 
 }
