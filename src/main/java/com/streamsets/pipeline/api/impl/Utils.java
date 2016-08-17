@@ -19,6 +19,8 @@
  */
 package com.streamsets.pipeline.api.impl;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -32,7 +34,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class Utils {
-  // we cache a splitted version of the templates to speed up formatting
+  // we cache a split version of the templates to speed up formatting
   private static final Map<String, String[]> TEMPLATES = new ConcurrentHashMap<>();
   private static final String TOKEN = "{}";
   private static final String PADDING = "000000000000000000000000000000000000";
@@ -44,22 +46,47 @@ public final class Utils {
   Utils() {
   }
 
-  public static <T> T checkNotNull(T value, Object varName) {
+  /**
+   * Ensures that an object reference passed as a parameter to the calling method is not null.
+   *
+   * @param value an object reference
+   * @param varName the variable name to use in an exception message if the check fails
+   * @return the non-null reference that was validated
+   * @throws NullPointerException if {@code value} is null
+   */
+  public static <T> T checkNotNull(@Nullable T value, Object varName) {
     if (value == null) {
       throw new NullPointerException(format("{} cannot be null", varName));
     }
     return value;
   }
 
-  public static void checkArgument(boolean expression, Object msg) {
+  /**
+   * Ensures the truth of an expression involving one or more parameters to the calling method.
+   *
+   * @param expression a boolean expression
+   * @param msg the exception message to use if the check fails; will be converted to a
+   *     string using {@link String#valueOf(Object)}
+   * @throws IllegalArgumentException if {@code expression} is false
+   */
+  public static void checkArgument(boolean expression, @Nullable Object msg) {
     if (!expression) {
-      throw new IllegalArgumentException((msg != null) ? msg.toString() : "");
+      throw new IllegalArgumentException(String.valueOf(msg));
     }
   }
 
-  public static void checkState(boolean expression, Object msg) {
+  /**
+   * Ensures the truth of an expression involving the state of the calling instance, but not
+   * involving any parameters to the calling method.
+   *
+   * @param expression a boolean expression
+   * @param msg the exception message to use if the check fails; will be converted to a
+   *     string using {@link String#valueOf(Object)}
+   * @throws IllegalStateException if {@code expression} is false
+   */
+  public static void checkState(boolean expression, @Nullable Object msg) {
     if (!expression) {
-      throw new IllegalStateException((msg != null) ? msg.toString() : "");
+      throw new IllegalStateException(String.valueOf(msg));
     }
   }
 

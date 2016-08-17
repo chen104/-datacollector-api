@@ -113,6 +113,12 @@
       <version>${metrics.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations-java5</artifactId>
+      <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
