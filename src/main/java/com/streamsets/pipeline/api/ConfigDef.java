@@ -170,6 +170,15 @@ public @interface ConfigDef {
   String[] triggeredByValue() default {};
 
   /**
+   * List of {@linkplain Dependency} instances that can specify the parameters and their respective trigger values that
+   * this configName depends on. Only if <i>all</i> of these dependencies match at least one of their respective
+   * trigger values will enable this config itself.
+   *
+   * @see Dependency
+   */
+  Dependency[] dependencies() default {};
+
+  /**
    * Indicates the minimum value for configuration variables of type {@link Type#NUMBER}.
    */
   long min() default Long.MIN_VALUE;

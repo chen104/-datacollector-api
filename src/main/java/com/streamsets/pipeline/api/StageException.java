@@ -34,7 +34,7 @@ public class StageException extends Exception {
    * Exception constructor.
    *
    * @param errorCode error code.
-   * @param params parameters for the error code message template, if the last parameter is an exception it is
+   * @param params parameters for the error code message template, if the last configName is an exception it is
    * considered the cause of the exception.
    */
   public StageException(ErrorCode errorCode, Object... params) {

@@ -34,7 +34,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface ElParam {
 
   /**
-   * UI name for the parameter.
+   * UI name for the configName.
    */
   String value();
 }
