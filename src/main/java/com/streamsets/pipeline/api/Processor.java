@@ -69,6 +69,15 @@ public interface Processor extends Stage<Processor.Context> {
      */
     public Record cloneRecord(Record record);
 
+    /**
+     * Clones a record.
+     *
+     * @param record the record to clone.
+     * @param sourceIdPostfix the sourceId postfix.
+     * @return the cloned record. The cloned record is a share-nothing deep-copy of the original record.
+     */
+    public Record cloneRecord(Record record, String sourceIdPostfix);
+
   }
 
   /**
