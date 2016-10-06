@@ -52,6 +52,16 @@ public interface Processor extends Stage<Processor.Context> {
     public Record createRecord(Record originatorRecord);
 
     /**
+     * Creates an empty record indicating another record as its source.
+     *
+     * @param originatorRecord the original record.
+     * @param sourceIdPostfix the sourceId postfix
+     * @return an empty record with the specified ID and raw data.
+     * The sourceIdPostFix will be appended to the sourceId of originator record.
+     */
+    public Record createRecord(Record originatorRecord, String sourceIdPostfix);
+
+    /**
      * Creates an empty record indicating another record as its source, including the original raw data of the record.
      *
      * @param originatorRecord the original record.
@@ -69,6 +79,16 @@ public interface Processor extends Stage<Processor.Context> {
      */
     public Record cloneRecord(Record record);
 
+
+    /**
+     * Clones a record.
+     *
+     * @param record the record to clone.
+     * @param sourceIdPostfix the sourceId postfix
+     * @return the cloned record. The cloned record is a share-nothing deep-copy of the original record.
+     * The sourceIdPostFix will be appended to the sourceId of original record being cloned.
+     */
+    public Record cloneRecord(Record record, String sourceIdPostfix);
   }
 
   /**
