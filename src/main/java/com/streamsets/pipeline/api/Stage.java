@@ -337,9 +337,11 @@ public interface Stage<C extends Stage.Context> {
      *
      * @param type Type of the event (value is up to the generating stage)
      * @param version Version of the event type (to support event evolution)
+     * @param recordSourceId the ID to identify the record. It should include enough information to track down
+     * the record source.
      * @return New record.
      */
-    public EventRecord createEventRecord(String type, int version);
+    public EventRecord createEventRecord(String type, int version, String recordSourceId);
 
     /**
      * Sends given event record to event lane.
