@@ -19,8 +19,6 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.util.List;
-
 /**
  * A <code>Source</code> is Data Collector origin stage. Origin stages consume data from an external system
  * creating records that can be processed by processor ({@link Processor}) or destination ({@link Target}) stages.
@@ -28,20 +26,12 @@ import java.util.List;
  * @see Processor
  * @see Target
  */
-public interface Source extends Stage<Source.Context> {
+public interface Source extends ProtoSource<Source.Context> {
 
   /**
    * <code>Source</code> stage context.
    */
-  public interface Context extends Stage.Context {
-
-    /**
-     * Returns the output lane names (stream names) of the <code>Source</code>.
-     *
-     * @return the output lane names (stream names) of the <code>Source</code>.
-     */
-    public List<String> getOutputLanes();
-
+  public interface Context extends ProtoSource.Context {
   }
 
   /**
