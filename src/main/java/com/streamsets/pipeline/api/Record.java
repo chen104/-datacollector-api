@@ -19,6 +19,7 @@
  */
 package com.streamsets.pipeline.api;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -205,6 +206,21 @@ public interface Record {
      * @return Stack trace from exception in String format.
      */
     public String getErrorStackTrace();
+
+    /**
+     * Get all attributes including system attributes for this record header
+     * @return All attributes of this record header
+     */
+    public Map<String, Object> getAllAttributes();
+
+    /**
+     * Replace all old attributes by new ones, including system attributes. Use with caution, as this can remove/
+     * replace system attributes and any attributes inserted by previous stages.
+     * @param newAttributes The new attributes to set in the header
+     * @return Map containing the old attributes in the header
+     */
+    public Map<String, Object> setAllAttributes(Map<String, Object> newAttributes);
+
   }
 
   /**
