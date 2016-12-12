@@ -34,6 +34,6 @@ To begin you first need to sign our [Contributor License Agreement](http://strea
 
 # Useful resources
 
-* [Building StreamSets Data Collector API](build.md)
+* [Building StreamSets Data Collector API](BUILD.md)
 * [Source tree layout](http://streamsets.com/docs)
 * [StreamSets Data Collector Documentation](http://streamsets.com/docs)
