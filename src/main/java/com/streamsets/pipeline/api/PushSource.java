@@ -23,6 +23,9 @@ package com.streamsets.pipeline.api;
  * A <code>PushSource</code> is a type of Data Collector origin stage that consumes or listen for incoming data and
  * pushes them down to({@link Processor}) or destination ({@link Target}) stages.
  *
+ * Certain methods in Context that deals with records such as toError() or toEvent() will work only in thread that is
+ * currently in batch context - e.g. after startBatch() call and before processBatch() is finished.
+ *
  * @see Source
  * @see ProtoSource
  */
@@ -34,13 +37,14 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
   public interface Context extends ProtoSource.Context {
 
     /**
-     * Create BatchMaker for creating new batch.
+     * Start new batch and return it's context that allows source to create batch maker that can further be used
+     * to pass records for the rest of the pipeline to process.
      *
      * This method is thread safe.
      *
-     * @return New instance of BatchMaker
+     * @return Context object representing new batch
      */
-    public BatchMaker createBatchmaker();
+    public BatchContext startBatch();
 
     /**
      * Process given batch - run it through rest of the pipeline. The method returns true
@@ -51,10 +55,10 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
      *
      * This method is thread safe.
      *
-     * @param batchMaker Batch to be passed to the pipeline.
+     * @param batchContext Batch to be passed to the pipeline.
      * @return true if and only if the batch has reached all destinations
      */
-    public boolean processBatch(BatchMaker batchMaker);
+    public boolean processBatch(BatchContext batchContext);
 
     /**
      * Register offset in the external system from which the source can resume operation after
