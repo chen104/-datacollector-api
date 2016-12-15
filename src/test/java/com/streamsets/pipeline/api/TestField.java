@@ -688,4 +688,33 @@ public class TestField {
     Assert.assertFalse(Type.DATE.isOneOf(Type.STRING, Type.LONG));
   }
 
+  @Test
+  public void testAttributes() {
+    Map<String, String> attributes = new HashMap<>();
+    attributes.put("attr1", "value1");
+    attributes.put("attr2", "value2");
+
+    Field f = Field.create(Type.BOOLEAN, true, attributes);
+
+    Assert.assertTrue(f.getAttributeNames().contains("attr1"));
+    Assert.assertTrue(f.getAttributeNames().contains("attr2"));
+
+    Assert.assertEquals(2, f.getAttributeNames().size());
+    Assert.assertEquals(2, f.getAttributes().size());
+
+    Assert.assertEquals("value1", f.getAttribute("attr1"));
+    Assert.assertEquals("value2", f.getAttribute("attr2"));
+
+    Assert.assertNull(f.getAttribute("nonAttr"));
+
+    Field f2 = Field.create(Type.INTEGER, 2);
+    Assert.assertEquals(0, f2.getAttributeNames().size());
+    Assert.assertNull(f2.getAttributes());
+    Assert.assertNull(f2.getAttribute("attr3"));
+
+    f2.setAttribute("attr3", "value3");
+    Assert.assertEquals(1, f2.getAttributeNames().size());
+    Assert.assertEquals(1, f2.getAttributes().size());
+    Assert.assertEquals("value3", f2.getAttribute("attr3"));
+  }
 }

@@ -40,10 +40,12 @@ import com.streamsets.pipeline.api.impl.TypeSupport;
 import com.streamsets.pipeline.api.impl.Utils;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A <code>Field</code> is the basic building block to represent data within Data Collector stages. Stages receive and
@@ -71,8 +73,10 @@ import java.util.Map;
  * @see Record
  */
 public class Field implements Cloneable {
+
   private Type type;
   private Object value;
+  private Map<String, String> attributes;
 
   /**
    * Enum defining all <code>Field</code> types.
@@ -146,8 +150,15 @@ public class Field implements Cloneable {
   }
 
   private Field(Type type, Object value) {
+    this(type, value, null);
+  }
+
+  private Field(Type type, Object value, Map<String, String> attributes) {
     this.type = type;
     this.value = CreateByRef.isByRef() ? value : type.constructorCopy(value);
+    if (attributes != null) {
+      this.attributes = new LinkedHashMap<>(attributes);
+    }
   }
 
   /**
@@ -373,7 +384,7 @@ public class Field implements Cloneable {
   }
 
   /**
-   * Creates a field of a given type, the value is converted to the specified type.
+   * Creates a field of a given type, the value is converted to the specified type.  The attributes are set to null.
    * <p/>
    * If the type is <code>MAP</code>, <code>LIST</code> or <code>LIST_MAP</code> this method performs a deep copy of
    * the value.
@@ -384,7 +395,23 @@ public class Field implements Cloneable {
    * @throws IllegalArgumentException if the value cannot be converted to the specified type.
    */
   public static <T> Field create(Type type, T value) {
-    return new Field(Utils.checkNotNull(type, "type"), type.convert(value));
+    return create(type, value, null);
+  }
+
+  /**
+   * Creates a field of a given type, the value is converted to the specified type.
+   * <p/>
+   * If the type is <code>MAP</code>, <code>LIST</code> or <code>LIST_MAP</code> this method performs a deep copy of
+   * the value.
+   *
+   * @param type the type of the field to create.
+   * @param value the value to set in the field.
+   * @param attributes the field-level attributes (can be null)
+   * @return the created Field.
+   * @throws IllegalArgumentException if the value cannot be converted to the specified type.
+   */
+  public static <T> Field create(Type type, T value, Map<String, String> attributes) {
+    return new Field(Utils.checkNotNull(type, "type"), type.convert(value), attributes);
   }
 
   /**
@@ -599,6 +626,73 @@ public class Field implements Cloneable {
     return (FileRef) type.convert(getValue(), Type.FILE_REF);
   }
 
+
+  /**
+   * Returns the list of user defined attribute names.
+   *
+   * @return the list of user defined attribute names, if there are none it returns an empty set.
+   */
+  public Set<String> getAttributeNames() {
+    if (attributes == null) {
+      return Collections.emptySet();
+    } else {
+      return Collections.unmodifiableSet(attributes.keySet());
+    }
+  }
+
+  /**
+   * Returns the value of the specified attribute.
+   *
+   * @param name attribute name.
+   * @return the value of the specified attribute, or <code>NULL</code> if the attribute does not exist.
+   */
+  public String getAttribute(String name) {
+    if (attributes == null) {
+      return null;
+    } else {
+      return attributes.get(name);
+    }
+  }
+
+  /**
+   * Sets an attribute.
+   *
+   * @param name attribute name.
+   * @param value attribute value, it cannot be <code>NULL</code>.
+   */
+  public void setAttribute(String name, String value) {
+    if (attributes == null) {
+      attributes = new LinkedHashMap<>();
+    }
+    attributes.put(name, value);
+  }
+
+  /**
+   * Deletes an attribute.
+   *
+   * @param name the attribute to delete.
+   */
+  public void deleteAttribute(String name) {
+    if (attributes == null) {
+      return;
+    } else {
+      attributes.remove(name);
+    }
+  }
+
+  /**
+   * Get all field attributes in an unmodifiable Map, or null if no attributes have been added
+   *
+   * @return all field attributes, or <code>NULL</code> if none exist
+   */
+  public Map<String, String> getAttributes() {
+    if (attributes == null) {
+      return null;
+    } else {
+      return Collections.unmodifiableMap(attributes);
+    }
+  }
+
   /**
    * Returns the string representation of the field.
    *
@@ -634,6 +728,11 @@ public class Field implements Cloneable {
       if (type == other.type) {
         eq = (value == other.value) || type.equals(value, other.value);
       }
+      if (attributes == null) {
+        eq &= other.attributes == null;
+      } else {
+        eq &= attributes.equals(other.attributes);
+      }
     }
     return eq;
   }
@@ -643,17 +742,24 @@ public class Field implements Cloneable {
    * Returns a clone of the field.
    * </p>
    * <p>
-   * For <code>Field</code> instances  of non-Collection based types it returns the same instance as the are immutable
-   * (this deviates from the expected behavior documented in the  <code>Object.clone()</code>.
+   * For <code>Field</code> instances of non-Collection based types, where there are no attributes, it returns the same
+   * instance as the are immutable (this deviates from the expected behavior documented in <code>Object.clone()</code>).
    * </p>
-   * * For <code>Field</code> instances of Collection based types it returns the deep copy of the <code>Field</code>
-   * instance.
+   * <p>
+   * If any attributes are defined, or if the <code>Field</code> instance is of a Collection based type, it
+   * returns a deep copy of the <code>Field</code> instance.
+   * </p>
    *
-   * @return a clone of the field.
+   * @return a clone of the field (either a deep copy or same instance as described above).
    */
   @Override
   public Field clone() {
-    return (!type.isOneOf(Type.LIST, Type.MAP, Type.LIST_MAP)) ? this : new Field(type, value);
+    if (!type.isOneOf(Type.LIST, Type.MAP, Type.LIST_MAP) && attributes == null) {
+      // simple value type and no attributes; can just return same instance
+      return this;
+    } else {
+      return new Field(type, value, attributes);
+    }
   }
 
 }
