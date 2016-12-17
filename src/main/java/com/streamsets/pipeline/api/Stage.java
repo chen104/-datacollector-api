@@ -120,7 +120,7 @@ public interface Stage<C extends Stage.Context> {
   /**
    * Stage Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ELContext {
+  public interface Context extends ELContext, ToErrorContext, ToEventContext {
 
     /**
      * Returns the current execution mode of the pipeline.
@@ -266,31 +266,6 @@ public interface Stage<C extends Stage.Context> {
     public OnRecordError getOnErrorRecord();
 
     /**
-     * Sends a record to the pipeline error stream with an associated <code>Exception</code>
-     *
-     * @param record the record to send to the error stream.
-     * @param exception the associated <code>Exception</code>.
-     */
-    public void toError(Record record, Exception exception);
-
-    /**
-     * Sends a record to the pipeline error stream with an associated non-localizable error message.
-     *
-     * @param record the record to send to the error stream.
-     * @param errorMessage the non-localizable error message.
-     */
-    public void toError(Record record, String errorMessage);
-
-    /**
-     * Sends a record to the pipeline error stream with an associated error code.
-     *
-     * @param record the record to send to the error stream.
-     * @param errorCode the error code to for the record.
-     * @param args the arguments for the <code>ErrorCode</code> message template.
-     */
-    public void toError(Record record, ErrorCode errorCode, Object... args);
-
-    /**
      * Creates an empty record.
      *
      * @param recordSourceId the ID to identify the record. It should include enough information to track down
@@ -342,13 +317,6 @@ public interface Stage<C extends Stage.Context> {
      * @return New record.
      */
     public EventRecord createEventRecord(String type, int version, String recordSourceId);
-
-    /**
-     * Sends given event record to event lane.
-     *
-     * @param record Record that should be send on event lane
-     */
-    public void toEvent(EventRecord record);
   }
 
   /**

@@ -20,15 +20,14 @@
 package com.streamsets.pipeline.api;
 
 /**
- * Context for a batch, primarily used in PushSource to start and finish execution of a batch.
+ * Describes methods for various context classes that deals with error handling.
  */
-public interface BatchContext extends ToErrorContext, ToEventContext {
+public interface ToEventContext {
 
   /**
-   * Return batch maker associated with this batch context.
+   * Sends given event record to event lane.
    *
-   * @return Instance of BatchMaker, multiple calls returns the same object
+   * @param record Record that should be send on event lane
    */
-  public BatchMaker getBatchMaker();
-
+  public void toEvent(EventRecord record);
 }
