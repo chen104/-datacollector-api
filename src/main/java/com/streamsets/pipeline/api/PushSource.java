@@ -19,12 +19,19 @@
  */
 package com.streamsets.pipeline.api;
 
+import java.util.Map;
+
 /**
  * A <code>PushSource</code> is a type of Data Collector origin stage that consumes or listen for incoming data and
  * pushes them down to({@link Processor}) or destination ({@link Target}) stages.
  *
  * Certain methods in Context that deals with records such as toError() or toEvent() will work only in thread that is
  * currently in batch context - e.g. after startBatch() call and before processBatch() is finished.
+ *
+ * Unlike Source that keeps one single dimensional offset, the framework is keeping a two dimensional offset for
+ * PushSource. Internally the offset is represented as a map where key is origin driven entity name (table name, file
+ * name, topic+offset, ...) and value is offset within the given entity (offset in given table, offset in given
+ * file, ...).
  *
  * @see Source
  * @see ProtoSource
@@ -55,20 +62,47 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
      *
      * This method is thread safe.
      *
+     * This method will not commit any offsets. If used, it's origin's responsibility to call method
+     * commitOffset() to commit offsets when appropriate. If you need to commit offset after every batch
+     * consider using processBatch(BatchContext, String, String) instead.
+     *
      * @param batchContext Batch to be passed to the pipeline.
      * @return true if and only if the batch has reached all destinations
      */
     public boolean processBatch(BatchContext batchContext);
 
     /**
-     * Register offset in the external system from which the source can resume operation after
-     * pipeline restart.
+     * Process given batch - run it through rest of the pipeline. The method returns true
+     * if and only if the data reached all destinations properly, otherwise it returns false.
+     * Source can use this to for example properly respond to HTTP call with error status.
+     *
+     * This is a blocking call, the execution will wait until a pipeline runner is available.
+     *
+     * Upon execution it will automatically commit given entityOffset for given entityName.
      *
      * This method is thread safe.
      *
-     * @param offset String representation of the source offset
+     * @param batchContext Batch to be passed to the pipeline.
+     * @param entityName Name of the origin driven entity (file name, topic name, ...). Can't be NULL.
+     * @param entityOffset String representation of the offset for given entity. Null value will remove the entity
+     *                     from tracking structures.
+     * @return true if and only if the batch has reached all destinations
      */
-    public void commitOffset(String offset);
+    public boolean processBatch(BatchContext batchContext, String entityName, String entityOffset);
+
+    /**
+     * Registers offset for given origin driven entity.
+     *
+     * The offset is persisted between pipeline executions. This methods works well with processBatch(BatchContext)
+     * for origins that have advanced use cases for keeping non-trivial offsets. Considering using method
+     * processBatch(BatchContext, String, String) if you need to commit offset after every batch.
+     *
+     * This method is thread safe.
+     *
+     * @param entityName Name of the origin driven entity (file name, topic name, ...)
+     * @param entityOffset String representation of the offset for given entity
+     */
+    public void commitOffset(String entityName, String entityOffset);
   }
 
   /**
@@ -85,8 +119,9 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
    * When this method returns the pipeline transitions to stopped state. Use methods in the Context to create batches
    * of data and propagate them to Data Collector.
    *
+   * @param lastOffsets Immutable Map with all committed entities and their representative offsets.
    * @param maxBatchSize the requested maximum batch size that a single call to Context.processBatch should produce
    * @throws StageException if the <code>PushSource</code> had an error while consuming data or creating records.
    */
-  void produce(int maxBatchSize) throws StageException;
+  void produce(Map<String, String> lastOffsets, int maxBatchSize) throws StageException;
 }
