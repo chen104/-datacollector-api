@@ -741,25 +741,12 @@ public class Field implements Cloneable {
    * <p>
    * Returns a clone of the field.
    * </p>
-   * <p>
-   * For <code>Field</code> instances of non-Collection based types, where there are no attributes, it returns the same
-   * instance as the are immutable (this deviates from the expected behavior documented in <code>Object.clone()</code>).
-   * </p>
-   * <p>
-   * If any attributes are defined, or if the <code>Field</code> instance is of a Collection based type, it
-   * returns a deep copy of the <code>Field</code> instance.
-   * </p>
    *
-   * @return a clone of the field (either a deep copy or same instance as described above).
+   * @return a clone of the field (deep copy).
    */
   @Override
   public Field clone() {
-    if (!type.isOneOf(Type.LIST, Type.MAP, Type.LIST_MAP) && attributes == null) {
-      // simple value type and no attributes; can just return same instance
-      return this;
-    } else {
-      return new Field(type, value, attributes);
-    }
+    return new Field(type, value, attributes);
   }
 
 }

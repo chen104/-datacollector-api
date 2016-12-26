@@ -40,7 +40,7 @@ public class TestFieldDeepCopy {
     List<Field> cList = (List) ts.clone(list);
     Assert.assertEquals(list, cList);
     Assert.assertNotSame(list, cList);
-    Assert.assertSame(list.get(0), cList.get(0));
+    Assert.assertNotSame(list.get(0), cList.get(0));
     List<Field> listX = new ArrayList<>();
     listX.add(Field.create(list));
 
