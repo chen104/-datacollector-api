@@ -22,7 +22,8 @@ package com.streamsets.pipeline.api;
 /**
  * {@link Source}s that keep track of the data offset on their own should implement this interface.
  * <p/>
- * The Data Collector will not keep track of the offset.
+ * The Data Collector will not keep track of the offset. This interface is applicable only to {@link Source} and not
+ * to the {@link PushSource}.
  */
 public interface OffsetCommitter {
 
