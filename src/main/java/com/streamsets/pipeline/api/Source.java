@@ -29,6 +29,14 @@ package com.streamsets.pipeline.api;
 public interface Source extends ProtoSource<Source.Context> {
 
   /**
+   * Data collector is using a Map<String, String> to keep track of offsets. As this Source uses only one
+   * dimensional String instead, the offset is kept in the map with given key. This constant is particularly
+   * useful when you switched source from Source to PushSource and you need to get back the Source's version of
+   * the offset.
+   */
+  public static final String POLL_SOURCE_OFFSET_KEY = "$com.streamsets.datacollector.pollsource.offset$";
+
+  /**
    * <code>Source</code> stage context.
    */
   public interface Context extends ProtoSource.Context {
