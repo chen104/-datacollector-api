@@ -225,14 +225,23 @@ public interface Stage<C extends Stage.Context> {
      */
    public <T> Gauge<T> createGauge(String name, Gauge<T> gauge);
 
-      /**
-       * Gets the already created {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
-       *
-       * @param name the <code>Gauge</code> name.
-       * @param <T> Gauge Object Type.
-       * @return the already created <code>Gauge</code> namespaced with the pipeline name and the stage instance name plus the given name.
-       */
+    /**
+     * Gets the already created {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Gauge</code> name.
+     * @param <T> Gauge Object Type.
+     * @return the already created <code>Gauge</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
     public <T> Gauge<T> getGauge(String name);
+
+    /**
+     * Get integer representing runner id - a value that doesn't change for given stage as it's executed in different
+     * threads. This value can be used to create temporary resources on remote system to make sure that different
+     * instances of the same stage in multi threaded pipeline won't step on each other's toes.
+     *
+     * @return Returns 0..N representing the runner id.  0 is used for inherent singletons (Error stage, Origin, ...)
+     */
+    public int getRunnerId();
 
     /**
      * Reports an <code>Exception</code> as an error.
