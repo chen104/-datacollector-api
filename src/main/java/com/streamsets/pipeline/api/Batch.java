@@ -28,6 +28,15 @@ import java.util.Iterator;
 public interface Batch {
 
   /**
+   * Returns source's entity that was used to generate data for this batch.
+   * <p/>
+   * This return value should be treated as an opaque value as it is source dependent.
+   *
+   * @return the entity name
+   */
+  public String getSourceEntity();
+
+  /**
    * Returns the initial offset of the current batch.
    * <p/>
    * This return value should be treated as an opaque value as it is source dependent.
