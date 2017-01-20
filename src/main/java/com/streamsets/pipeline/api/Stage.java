@@ -120,7 +120,7 @@ public interface Stage<C extends Stage.Context> {
   /**
    * Stage Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ELContext, ToErrorContext, ToEventContext {
+  public interface Context extends ELContext {
 
     /**
      * Returns the current execution mode of the pipeline.
