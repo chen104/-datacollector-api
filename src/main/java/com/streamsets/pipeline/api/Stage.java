@@ -359,6 +359,13 @@ public interface Stage<C extends Stage.Context> {
      * @return unique id that identifies this data collector.
      */
     public String getSdcId();
+
+    /**
+     * Return unique id that identifies this pipeline.
+     *
+     * @return unique id that identifies this pipeline.
+     */
+    public String getPipelineId();
   }
 
   /**
