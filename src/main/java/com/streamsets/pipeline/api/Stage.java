@@ -156,6 +156,13 @@ public interface Stage<C extends Stage.Context> {
     public ConfigIssue createConfigIssue(String configGroup, String configName, ErrorCode errorCode, Object... args);
 
     /**
+     * Returns a {@link Info} of this stage.
+     *
+     * @return a {@link Info} of this stage.
+     */
+    public Info getStageInfo();
+
+    /**
      * Returns a list with the {@link Info} of all stages in the pipeline.
      *
      * @return a list with the {@link Info} of all stages in the pipeline.
