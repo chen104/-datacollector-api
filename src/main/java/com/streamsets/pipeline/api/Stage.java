@@ -352,6 +352,13 @@ public interface Stage<C extends Stage.Context> {
      * @return New record.
      */
     public EventRecord createEventRecord(String type, int version, String recordSourceId);
+
+    /**
+     * Return unique id that identifies this data collector.
+     *
+     * @return unique id that identifies this data collector.
+     */
+    public String getSdcId();
   }
 
   /**
