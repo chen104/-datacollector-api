@@ -21,6 +21,7 @@ package com.streamsets.pipeline.api;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
+import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -215,6 +216,24 @@ public interface Stage<C extends Stage.Context> {
      * @return the already created <code>Counter</code> namespaced with the pipeline name and the stage instance name plus the given name.
      */
     public Counter getCounter(String name);
+
+    /**
+     * Creates a {@link Histogram} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * Creates exponentially decaying histogram that biases the reservoir to the past 5 minutes of measurements.
+     *
+     * @param name the <code>Histogram</code> name.
+     * @return a <code>Histogram</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
+    public Histogram createHistogram(String name);
+
+    /**
+     * Gets the already created {@link Histogram} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * @param name the <code>Histogram</code> name.
+     * @return the already created <code>Histogram</code> namespaced with the pipeline name and the stage instance name plus the given name.
+     */
+    public Histogram getHistogram(String name);
 
     /**
      * Creates a {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
