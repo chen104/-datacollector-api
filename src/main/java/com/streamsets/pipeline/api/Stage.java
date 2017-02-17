@@ -30,6 +30,7 @@ import com.streamsets.pipeline.api.el.ELEvalException;
 import com.streamsets.pipeline.api.el.ELVars;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Base interface for Data Collector stages implementations defining their common context and lifecycle.
@@ -366,6 +367,20 @@ public interface Stage<C extends Stage.Context> {
      * @return unique id that identifies this pipeline.
      */
     public String getPipelineId();
+
+    /**
+     * Returns concurrent hash map that is shared by all instances of this particular stage across all pipeline
+     * runners. E.g. all instances of "dedup 1" stage will share the same map whereas all instances of "Trash 1" will
+     * also share the same map, but that will be different then the first map.
+     *
+     * The return map is thread safe.. It's up to the stage implementation to ensure that the content of the
+     * map is not corrupted by concurrent access.
+     *
+     * The state is not persisted and the map will always be empty on pipeline start.
+     *
+     * @return
+     */
+    public Map<String, Object> getStageRunnerSharedMap();
   }
 
   /**
