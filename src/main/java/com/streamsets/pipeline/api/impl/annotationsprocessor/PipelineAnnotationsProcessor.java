@@ -48,7 +48,7 @@ import java.util.Set;
         "com.streamsets.pipeline.api.GenerateResourceBundle",
         "com.streamsets.pipeline.api.ElDef"
     })
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(PipelineAnnotationsProcessor.SKIP_PROCESSOR)
 public class PipelineAnnotationsProcessor extends AbstractProcessor {
   public static final String SKIP_PROCESSOR = "streamsets.datacollector.annotationsprocessor.skip";
