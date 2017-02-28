@@ -103,6 +103,18 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
      * @param entityOffset String representation of the offset for given entity
      */
     public void commitOffset(String entityName, String entityOffset);
+
+    /**
+     * Returns configured delivery guarantee for this pipeline.
+     *
+     * If the origin is doing commit of data on it's own - e.g. using the method processBatch(BatchContext), then this
+     * helps origin make decision whether to commit when the function returned false. Push origins that are using
+     * framework to keep offsets, e.g. method processBatch(BatchContext, String, String) does not need to use this method
+     * as the framework will commit offset automatically per the configuration.
+     *
+     * @return DeliveryGuarantee for this pipeline.
+     */
+    public DeliveryGuarantee getDeliveryGuarantee();
   }
 
   /**
