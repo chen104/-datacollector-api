@@ -29,8 +29,10 @@ import com.streamsets.pipeline.api.el.ELEval;
 import com.streamsets.pipeline.api.el.ELEvalException;
 import com.streamsets.pipeline.api.el.ELVars;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Base interface for Data Collector stages implementations defining their common context and lifecycle.
@@ -247,19 +249,25 @@ public interface Stage<C extends Stage.Context> {
      * Creates a {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
      *
      * @param name the <code>Gauge</code> name.
-     * @param gauge Gauge
-     * @param <T> Gauge Object Type.
      */
-   public <T> Gauge<T> createGauge(String name, Gauge<T> gauge);
+   public Gauge<Map<String, Object>> createGauge(String name);
+
+    /**
+     * Creates a {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
+     *
+     * This Gauge's underlying map will be sorted based on the comparator.
+     *
+     * @param name the <code>Gauge</code> name.
+     */
+   public Gauge<Map<String, Object>> createGauge(String name, Comparator<String> comparator);
 
     /**
      * Gets the already created {@link Gauge} namespaced with the pipeline name and the stage instance name plus the given name.
      *
      * @param name the <code>Gauge</code> name.
-     * @param <T> Gauge Object Type.
      * @return the already created <code>Gauge</code> namespaced with the pipeline name and the stage instance name plus the given name.
      */
-    public <T> Gauge<T> getGauge(String name);
+    public Gauge<Map<String, Object>> getGauge(String name);
 
     /**
      * Get integer representing runner id - a value that doesn't change for given stage as it's executed in different
