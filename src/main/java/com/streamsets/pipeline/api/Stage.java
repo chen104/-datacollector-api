@@ -122,6 +122,20 @@ public interface Stage<C extends Stage.Context> {
   }
 
   /**
+   * Context to get information about user that started the pipeline or job.
+   */
+  public interface UserContext {
+
+    /**
+     * Return username of the user who started this pipeline or job.
+     *
+     * @return Human readable user name
+     */
+    public String getUser();
+
+  }
+
+  /**
    * Stage Context that provides runtime information and services to the stage.
    */
   public interface Context extends ELContext {
@@ -156,6 +170,13 @@ public interface Stage<C extends Stage.Context> {
      * @return if the pipeline is running in preview mode or not.
      */
     public boolean isPreview();
+
+    /**
+     * Return user context associated with currently running pipeline.
+     *
+     * @return UserContext for the current pipeline
+     */
+    public UserContext getUserContext();
 
     /**
      * Creates a configuration issue for the stage (at initialization time).
