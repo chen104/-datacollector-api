@@ -36,7 +36,9 @@ public interface ClusterSource extends Source {
    * @param batch
    * @throws InterruptedException
    */
-  void put(List<Map.Entry> batch) throws InterruptedException;
+  Object put(List<Map.Entry> batch) throws InterruptedException;
+
+  void completeBatch() throws InterruptedException;
 
   /**
    * Return the no of records produced by this source
