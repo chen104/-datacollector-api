@@ -32,7 +32,6 @@ import com.streamsets.pipeline.api.el.ELVars;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Base interface for Data Collector stages implementations defining their common context and lifecycle.
@@ -399,6 +398,11 @@ public interface Stage<C extends Stage.Context> {
      * @return unique id that identifies this data collector.
      */
     public String getSdcId();
+
+    /**
+     * After current batch, transition pipeline state to FINISHED.
+     */
+    void finishPipeline();
 
     /**
      * Return unique id that identifies this pipeline.
