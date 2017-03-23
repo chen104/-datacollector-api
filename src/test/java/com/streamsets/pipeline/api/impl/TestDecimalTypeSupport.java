@@ -23,41 +23,44 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class TestDecimalTypeSupport {
 
   @Test
   public void testCreate() {
     DecimalTypeSupport ts = new DecimalTypeSupport();
-    BigDecimal o = new BigDecimal(1);
+    BigDecimal o = BigDecimal.ONE;
     Assert.assertSame(o, ts.create(o));
   }
 
   @Test
   public void testGet() {
     DecimalTypeSupport ts = new DecimalTypeSupport();
-    BigDecimal o = new BigDecimal(1);
+    BigDecimal o = BigDecimal.ONE;
     Assert.assertSame(o, ts.get(o));
   }
 
   @Test
   public void testClone() {
     DecimalTypeSupport ts = new DecimalTypeSupport();
-    BigDecimal o = new BigDecimal(1);
+    BigDecimal o = BigDecimal.ONE;
     Assert.assertSame(o, ts.clone(o));
   }
 
   @Test
   public void testConvertValid() {
     DecimalTypeSupport support = new DecimalTypeSupport();
-    Assert.assertEquals(new BigDecimal(1), support.convert("1"));
-    Assert.assertEquals(new BigDecimal(1), support.convert((byte)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert((short)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert((int)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert((long)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert((float)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert((double)1));
-    Assert.assertEquals(new BigDecimal(1), support.convert(new BigDecimal(1)));
+    Assert.assertEquals(BigDecimal.ONE, support.convert("1"));
+    Assert.assertEquals(BigDecimal.ONE, support.convert((byte)1));
+    Assert.assertEquals(BigDecimal.ONE, support.convert((short)1));
+    Assert.assertEquals(BigDecimal.ONE, support.convert(1));
+    Assert.assertEquals(BigDecimal.ONE, support.convert((long)1));
+    // Should not convert to 1 since 1 is less precise than 1.0
+    Assert.assertEquals(new BigDecimal("1.0"), support.convert(1.0f));
+    Assert.assertEquals(new BigDecimal("1.0"), support.convert(1.0d));
+    Assert.assertEquals(BigDecimal.ONE, support.convert(BigInteger.ONE));
+    Assert.assertEquals(BigDecimal.ONE, support.convert(BigDecimal.ONE));
   }
 
   @Test(expected = IllegalArgumentException.class)
