@@ -19,16 +19,15 @@
  */
 package com.streamsets.pipeline.api.ext;
 
-import com.streamsets.pipeline.api.Record;
-
 import java.io.Closeable;
 import java.io.IOException;
 
-public interface RecordWriter extends Closeable {
+public interface JsonObjectReader extends Closeable {
+  Object read() throws IOException;
 
-  String getEncoding();
+  long getReaderPosition();
 
-  void write(Record record) throws IOException;
-
-  void flush() throws IOException;
+  default Class<?> getExpectedClass() {
+    return Object.class;
+  }
 }

@@ -26,13 +26,10 @@ import java.io.IOException;
 
 public interface RecordReader extends Closeable {
 
-  public String getEncoding();
+  String getEncoding();
 
-  public long getPosition();
+  long getPosition();
 
-  public Record readRecord() throws IOException;
-
-  @Override
-  public void close() throws IOException;
+  Record readRecord() throws IOException;
 
 }

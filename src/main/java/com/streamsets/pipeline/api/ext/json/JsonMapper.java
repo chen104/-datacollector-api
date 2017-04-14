@@ -1,7 +1,7 @@
-/**
- * Copyright 2016 StreamSets Inc.
+/*
+ * Copyright 2017 StreamSets Inc.
  *
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed under the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -17,18 +17,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.streamsets.pipeline.api.ext;
 
-import com.streamsets.pipeline.api.Record;
+package com.streamsets.pipeline.api.ext.json;
 
-import java.io.Closeable;
 import java.io.IOException;
 
-public interface RecordWriter extends Closeable {
+/**
+ * Facade for a Jackson ObjectMapper
+ */
+public interface JsonMapper {
+  String SERVICE_KEY = "com.streamsets.pipeline.api.ext.json.JsonMapper";
 
-  String getEncoding();
-
-  void write(Record record) throws IOException;
-
-  void flush() throws IOException;
+  String writeValueAsString(Object value) throws IOException;
+  byte[] writeValueAsBytes(Object value) throws IOException;
+  <T>T readValue(byte[] src, Class<T> valueType) throws IOException;
+  <T>T readValue(String src, Class<T> valueType) throws IOException;
+  boolean isValidJson(String json);
 }

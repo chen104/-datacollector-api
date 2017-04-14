@@ -24,11 +24,7 @@ import com.streamsets.pipeline.api.Record;
 import java.io.Closeable;
 import java.io.IOException;
 
-public interface RecordWriter extends Closeable {
-
-  String getEncoding();
-
+public interface JsonRecordWriter extends Closeable {
   void write(Record record) throws IOException;
-
   void flush() throws IOException;
 }

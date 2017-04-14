@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 StreamSets Inc.
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,21 +20,28 @@
 package com.streamsets.pipeline.api.ext;
 
 import com.streamsets.pipeline.api.StageException;
+import com.streamsets.pipeline.api.ext.json.Mode;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.List;
 
 public interface ContextExtensions {
 
-  public RecordReader createRecordReader(InputStream inputStream, long initialPosition, int maxObjectLen)
+  RecordReader createRecordReader(InputStream inputStream, long initialPosition, int maxObjectLen)
       throws IOException;
 
-  public  RecordWriter createRecordWriter(OutputStream outputStream) throws IOException;
+  RecordWriter createRecordWriter(OutputStream outputStream) throws IOException;
 
-  public void notify(List<String> addresses, String subject, String body) throws StageException;
+  void notify(List<String> addresses, String subject, String body) throws StageException;
 
-  public Sampler getSampler();
+  Sampler getSampler();
 
+  /* JSON Parser / Generator Abstractions */
+  JsonObjectReader createJsonObjectReader(Reader reader, long initialPosition, int maxObjectLen, Mode mode, Class<?> objectClass) throws IOException;
+  JsonObjectReader createJsonObjectReader(Reader reader, long initialPosition, Mode mode, Class<?> objectClass) throws IOException;
+  JsonRecordWriter createJsonRecordWriter(Writer writer, Mode mode) throws IOException;
 }

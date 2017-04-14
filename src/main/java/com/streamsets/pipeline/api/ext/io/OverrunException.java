@@ -1,7 +1,7 @@
-/**
- * Copyright 2016 StreamSets Inc.
+/*
+ * Copyright 2017 StreamSets Inc.
  *
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed under the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -17,18 +17,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.streamsets.pipeline.api.ext;
 
-import com.streamsets.pipeline.api.Record;
+package com.streamsets.pipeline.api.ext.io;
 
-import java.io.Closeable;
 import java.io.IOException;
 
-public interface RecordWriter extends Closeable {
+public class OverrunException extends IOException {
+  final private long offset;
 
-  String getEncoding();
+  public OverrunException(String message, long offset) {
+    this(message, offset, null);
+  }
 
-  void write(Record record) throws IOException;
+  public OverrunException(String message, long offset, Throwable parent) {
+    super(message, parent);
+    this.offset = offset;
+  }
 
-  void flush() throws IOException;
+  public long getStreamOffset() {
+    return offset;
+  }
+
 }
