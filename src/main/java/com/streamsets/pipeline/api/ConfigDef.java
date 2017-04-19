@@ -93,7 +93,7 @@ public @interface ConfigDef {
    *
    * @see #mode()
    */
-  public enum Mode {JAVA, JAVASCRIPT, JSON, PLAIN_TEXT, PYTHON, RUBY, SCALA, SQL, GROOVY}
+  public enum Mode {JAVA, JAVASCRIPT, JSON, PLAIN_TEXT, PYTHON, RUBY, SCALA, SQL, GROOVY, SHELL}
 
   /**
    * Enum defining the possible EL evaluation modes for configuration variables.
