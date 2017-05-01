@@ -173,7 +173,7 @@ public final class Utils {
       result = number / 1000.0;
       suffix = " KB";
     } else if (absNumber < 1000.0 * 1000.0 * 1000.0) {
-      result = number / (1000 * 1000);
+      result = number / (1000.0 * 1000.0);
       suffix = " MB";
     } else {
       result = number / (1000.0 * 1000.0 * 1000.0);
