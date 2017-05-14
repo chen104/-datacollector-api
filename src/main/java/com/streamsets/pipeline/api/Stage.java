@@ -150,6 +150,13 @@ public interface Stage<C extends Stage.Context> {
     public String getConfig(String configName);
 
     /**
+     * Return pipeline constants.
+     *
+     * @return Immutable Map with pipeline constants.
+     */
+    public Map<String, Object> getPipelineConstants();
+
+    /**
      * Returns the current execution mode of the pipeline.
      *
      * @return the current execution mode of the pipeline.
