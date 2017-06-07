@@ -21,6 +21,8 @@ import com.streamsets.pipeline.api.ElDef;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
 import com.streamsets.pipeline.api.StageDef;
 import com.streamsets.pipeline.api.impl.Utils;
+import com.streamsets.pipeline.api.lineage.LineagePublisher;
+import com.streamsets.pipeline.api.lineage.LineagePublisherDef;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -46,7 +48,8 @@ import java.util.Set;
     {
         "com.streamsets.pipeline.api.StageDef",
         "com.streamsets.pipeline.api.GenerateResourceBundle",
-        "com.streamsets.pipeline.api.ElDef"
+        "com.streamsets.pipeline.api.ElDef",
+        "com.streamsets.pipeline.api.lineage.LineagePublisherDef",
     })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(PipelineAnnotationsProcessor.SKIP_PROCESSOR)
@@ -54,11 +57,13 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
   public static final String SKIP_PROCESSOR = "streamsets.datacollector.annotationsprocessor.skip";
 
   public static final String STAGES_FILE = "PipelineStages.json";
+  public static final String LINEAGE_PUBLISHERS_FILE = "LineagePublishers.json";
   public static final String ELDEFS_FILE = "ElDefinitions.json";
   public static final String BUNDLES_FILE = "datacollector-resource-bundles.json";
 
   private boolean skipProcessor;
   private final List<String> stagesClasses;
+  private final List<String> lineagePublishersClasses;
   private final List<String> elDefClasses;
   private final List<String> bundleClasses;
   private boolean error;
@@ -68,6 +73,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     stagesClasses = new ArrayList<>();
     elDefClasses = new ArrayList<>();
     bundleClasses = new ArrayList<>();
+    lineagePublishersClasses = new ArrayList<>();
   }
 
   @Override
@@ -88,6 +94,16 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
         stagesClasses.add(((TypeElement)e).getQualifiedName().toString());
       } else {
         printError("'{}' is not a class, cannot be @StageDef annotated", e);
+        error = true;
+      }
+    }
+
+    // Collect @LineagePublisherDef classes
+    for(Element e : roundEnv.getElementsAnnotatedWith(LineagePublisherDef.class)) {
+      if(e.getKind().isClass()) {
+        lineagePublishersClasses.add(((TypeElement)e).getQualifiedName().toString());
+      } else {
+        printError("'{}' is not a class, cannot be @LineagePublisherDef annotated", e);
         error = true;
       }
     }
@@ -127,6 +143,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     generateFile(STAGES_FILE, stagesClasses);
     generateFile(ELDEFS_FILE, elDefClasses);
     generateFile(BUNDLES_FILE, bundleClasses);
+    generateFile(LINEAGE_PUBLISHERS_FILE, lineagePublishersClasses);
   }
 
   static String toJson(List<String> elements) {
