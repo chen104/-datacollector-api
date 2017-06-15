@@ -180,12 +180,23 @@ public interface Record {
     public String getErrorMessage();
 
     /**
-     * If the record has been sent to error, it returns the stage instance name that sent the message to error.
+     * If the record has been sent to error, it returns the stage instance internal unique
+     * name that sent the message to error.
      *
-     * @return the stage instance name that sent the message to error, <code>NULL</code> if the record has not been
-     * sent to error.
+     * @return the stage internal unique instance name that sent the message to error,
+     * <code>NULL</code> if the record has not been sent to error.
      */
     public String getErrorStage();
+
+    /**
+     * If the record has been sent to error, it returns the stage label that sent the message
+     * to error. Label is user filled value that does not have to be unique and can change
+     * between pipeline invocations.
+     *
+     * @return the stage label that sent the message to error, <code>NULL</code> if the record
+     * has not been sent to error.
+     */
+    public String getErrorStageLabel();
 
     /**
      * If the record has been sent to error, it returns the timestamp (UNIX Epoch time) when the record was sent to
