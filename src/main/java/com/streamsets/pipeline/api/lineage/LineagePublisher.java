@@ -20,6 +20,11 @@ import com.streamsets.pipeline.api.ErrorCode;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Data collectors collects various lineage metadata for all pipelines while they are running. One can implement
+ * subclass of LineagePublisher and configure Data Collector to use in order to propagate this data to a third
+ * party system (such as Cloudera Navigator or Oracle Metadata Manager).
+ */
 public interface LineagePublisher {
 
   /**
@@ -31,7 +36,7 @@ public interface LineagePublisher {
   }
 
   /**
-   * Stage Context that provides runtime information and services to the stage.
+   * LineagePublisher Context that provides runtime information and services to the plugin.
    */
   public interface Context {
 
@@ -75,18 +80,19 @@ public interface LineagePublisher {
    * called in separate thread and hence the plugin can block on the queue without affecting other processes
    * in data collector.
    *
-   * @param queue Blocking queue with lineage events
-   * @param context the publisher context.
+   * @param events List of lineage events that needs to be published
    */
-  public void run(BlockingQueue<LineageEvent> queue, Context context);
+  public void run(List<LineageEvent> events);
 
   /**
-   * Stops the publisher.
+   * Destroys the plugin. It should be used to release any resources held by the plugin after initialization or
+   * processing.
    *
-   * This method is called once when the data collector is being shutdown.
+   * This method is called once when the data collector is being shutdown. After this method is called, the plugin
+   * will not be called any more.
    *
    * This method is also called after a failed initialization to allow releasing resources created before the
    * initialization failed.
    */
-  public void stop();
+  public void destroy();
 }

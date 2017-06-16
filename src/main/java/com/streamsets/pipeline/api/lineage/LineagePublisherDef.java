@@ -25,13 +25,6 @@ import java.lang.annotation.Target;
 public @interface LineagePublisherDef {
 
   /**
-   * Indicates the version of the publisher.
-   * <p/>
-   * The version is currently used only to properly track which plugin at what version is loaded.
-   */
-  int version();
-
-  /**
    * Indicates the UI default label for the publisher.
    */
   String label();
@@ -40,5 +33,10 @@ public @interface LineagePublisherDef {
    * Indicates the UI default description for the publisher.
    */
   String description() default "";
+
+  /**
+   * Unique configuration prefix for plugin's own configuration namespace.
+   */
+  String configurationPrefix();
 
 }
