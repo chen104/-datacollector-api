@@ -24,6 +24,7 @@ import com.codahale.metrics.Timer;
 import com.streamsets.pipeline.api.el.ELEval;
 import com.streamsets.pipeline.api.el.ELEvalException;
 import com.streamsets.pipeline.api.el.ELVars;
+import com.streamsets.pipeline.api.lineage.LineageEvent;
 
 import java.util.Comparator;
 import java.util.List;
@@ -404,6 +405,13 @@ public interface Stage<C extends Stage.Context> {
      * @return New record.
      */
     public EventRecord createEventRecord(String type, int version, String recordSourceId);
+
+    /**
+     * Publish given lineage event to configured lineage store.
+     *
+     * @param event Lineage event that needs to be propagated to the configured lineage store.
+     */
+    public void publishLineageEvent(LineageEvent event);
 
     /**
      * Return unique id that identifies this data collector.
