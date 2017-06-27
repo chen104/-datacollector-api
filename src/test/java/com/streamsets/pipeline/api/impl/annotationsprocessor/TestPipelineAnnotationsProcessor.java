@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2017 StreamSets Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,7 @@ public class TestPipelineAnnotationsProcessor {
   }
 
   @Test
-  public void testBundlesResources() throws Exception {
+  public void testBundlesResource() throws Exception {
     String resource = readResource(PipelineAnnotationsProcessor.BUNDLES_FILE);
     Assert.assertTrue(resource.contains(DummyELs.class.getName()));
     Assert.assertTrue(resource.contains(DummyTarget.class.getName()));
@@ -74,6 +74,12 @@ public class TestPipelineAnnotationsProcessor {
   public void testLineagePublisherResource() throws Exception {
     String resource = readResource(PipelineAnnotationsProcessor.LINEAGE_PUBLISHERS_FILE);
     Assert.assertTrue(resource.contains(DummyLineagePublisher.class.getName()));
+  }
+
+  @Test
+  public void testCredentialStoreResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.CREDENTIAL_STORE_FILE);
+    Assert.assertTrue(resource.contains(DummyCredentialStore.class.getName()));
   }
 
 }
