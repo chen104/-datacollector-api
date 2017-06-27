@@ -70,4 +70,10 @@ public class TestPipelineAnnotationsProcessor {
     Assert.assertTrue(resource.contains(DummyTarget.class.getName()));
   }
 
+  @Test
+  public void testLineagePublisherResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.LINEAGE_PUBLISHERS_FILE);
+    Assert.assertTrue(resource.contains(DummyLineagePublisher.class.getName()));
+  }
+
 }
