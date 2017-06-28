@@ -32,7 +32,7 @@ public interface LineagePublisher {
    *
    * @see Context#createConfigIssue(ErrorCode, Object...)
    */
-  public interface ConfigIssue {
+  interface ConfigIssue {
   }
 
   /**
@@ -41,13 +41,20 @@ public interface LineagePublisher {
   public interface Context {
 
     /**
+     * Returns the ID of the publisher, this ID is defined by configuration.
+     *
+     * @return the ID of the publisher.
+     */
+    String getId();
+
+    /**
      * Creates a configuration issue for the publisher (at initialization time).
      *
      * @param errorCode the <code>ErrorCode</code> for the issue.
      * @param args the arguments for the <code>ErrorCode</code> message.
      * @return the configuration issue to report back.
      */
-    public ConfigIssue createConfigIssue(ErrorCode errorCode, Object... args);
+    ConfigIssue createConfigIssue(ErrorCode errorCode, Object... args);
 
     /**
      * Return value for given configuration option from data collector main configuration.
@@ -57,7 +64,7 @@ public interface LineagePublisher {
      * @param configName Configuration option name
      * @return String representation of the value or null if it's not defined.
      */
-    public String getConfig(String configName);
+    String getConfig(String configName);
 
   }
 
@@ -73,7 +80,7 @@ public interface LineagePublisher {
    *
    * @param context the publisher context.
    */
-  public List<ConfigIssue> init(Context context);
+  List<ConfigIssue> init(Context context);
 
   /**
    * Start processing given blocking queue of events and push them to the lineage collector. This method will be
@@ -82,7 +89,7 @@ public interface LineagePublisher {
    *
    * @param events List of lineage events that needs to be published
    */
-  public void run(List<LineageEvent> events);
+  void run(List<LineageEvent> events);
 
   /**
    * Destroys the plugin. It should be used to release any resources held by the plugin after initialization or
@@ -94,5 +101,5 @@ public interface LineagePublisher {
    * This method is also called after a failed initialization to allow releasing resources created before the
    * initialization failed.
    */
-  public void destroy();
+  void destroy();
 }

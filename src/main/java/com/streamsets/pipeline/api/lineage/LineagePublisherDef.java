@@ -34,9 +34,4 @@ public @interface LineagePublisherDef {
    */
   String description() default "";
 
-  /**
-   * Unique configuration prefix for plugin's own configuration namespace.
-   */
-  String configurationPrefix();
-
 }
