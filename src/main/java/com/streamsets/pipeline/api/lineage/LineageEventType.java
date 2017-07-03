@@ -15,18 +15,22 @@
  */
 package com.streamsets.pipeline.api.lineage;
 
-import com.streamsets.pipeline.api.Field;
+import com.streamsets.pipeline.api.Label;
 
-import java.util.Map;
+public enum LineageEventType implements Label {
+  START("START"),
+  STOP("STOP"),
+  ENTITY_CREATED("ENTITY_CREATED"),
+  ENTITY_ACCESSED("ENTITY_ACCESSED"),
+  ;
+  private String label;
 
-public class LineageEvent {
-  private Map<String, Field> rootMap;
-
-  public LineageEvent(Map<String, Field> rootMap) {
-    this.rootMap = rootMap;
+  LineageEventType(String label){
+    this.label = label;
   }
 
-  public Map<String,Field> getRootMap() {
-    return rootMap;
+  @Override
+  public String getLabel() {
+    return label;
   }
 }

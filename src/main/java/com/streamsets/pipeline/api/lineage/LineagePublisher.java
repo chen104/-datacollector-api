@@ -18,7 +18,6 @@ package com.streamsets.pipeline.api.lineage;
 import com.streamsets.pipeline.api.ErrorCode;
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 /**
  * Data collectors collects various lineage metadata for all pipelines while they are running. One can implement
