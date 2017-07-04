@@ -82,13 +82,12 @@ public interface LineagePublisher {
   List<ConfigIssue> init(Context context);
 
   /**
-   * Start processing given blocking queue of events and push them to the lineage collector. This method will be
-   * called in separate thread and hence the plugin can block on the queue without affecting other processes
-   * in data collector.
+   * Process given list of events and push them to the lineage collector. Return true if and only if all events
+   * were successfully written to the remote system.
    *
    * @param events List of lineage events that needs to be published
    */
-  void run(List<LineageEvent> events);
+  boolean publishEvents(List<LineageEvent> events);
 
   /**
    * Destroys the plugin. It should be used to release any resources held by the plugin after initialization or

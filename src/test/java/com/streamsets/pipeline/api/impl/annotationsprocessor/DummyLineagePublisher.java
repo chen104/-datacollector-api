@@ -30,8 +30,8 @@ public class DummyLineagePublisher implements LineagePublisher {
   }
 
   @Override
-  public void run(List<LineageEvent> events) {
-
+  public boolean publishEvents(List<LineageEvent> events) {
+    return false;
   }
 
   @Override
