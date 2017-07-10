@@ -15,18 +15,96 @@
  */
 package com.streamsets.pipeline.api.lineage;
 
-import com.streamsets.pipeline.api.Field;
-
+import java.util.List;
 import java.util.Map;
 
-public class LineageEvent {
-  private Map<String, Field> rootMap;
+public interface LineageEvent {
 
-  public LineageEvent(Map<String, Field> rootMap) {
-    this.rootMap = rootMap;
-  }
+  /**
+   * fetch general parameter - EventType
+   * @return EventType
+   */
+  String getEventType();
 
-  public Map<String,Field> getRootMap() {
-    return rootMap;
-  }
+  /**
+   * fetch general parameter - PipelineVersion
+   * @return PipelineVersion
+   */
+  String getPipelineVersion();
+
+  /**
+   * fetch general parameter - PipelineUuid
+   * @return PipelineUuid
+   */
+  String getPipelineUuid();
+
+  /**
+   * fetch general parameter -  PipelineUser
+   * @return PipelineUser
+   */
+  String getPipelineUser();
+
+  /**
+   * fetch general parameter -  PipelineStartTime
+   * @return pipelineStartTime
+   */
+  String getPipelineStartTime();
+
+  /**
+   * fetch general parameter - PipelineName
+   * @return PipelineName
+   */
+  String getPipelineName();
+
+  /**
+   * fetch general parameter - DataCollectorId
+   * @return DataCollectorId
+   */
+  String getPipelineDataCollectorId();
+
+  /**
+   * Setter to add a specific attribute to the LineageEvent.
+   * @param name - Attribute's name.
+   * @param value - Attribute's value.
+   */
+  void setSpecificAttribute(String name, String value);
+
+  /**
+   * Getter for a specific attribute.
+   * @return attribute
+   */
+  String getSpecificAttribute(String name);
+
+  /**
+   * Sets the tag array.
+   * @param tags
+   */
+  void setTags(List<String> tags);
+
+  /**
+   * Retrieves the tags array.
+   * @return
+   */
+  List<String> getTags();
+
+  /**
+   * Set the properties map.
+   *
+   * @param properties
+   */
+  void setProperties(Map<String, String> properties);
+
+  /**
+   * Gets the properties map.
+   *
+   * @return properties map.
+   */
+  Map<String, String> getProperties();
+
+  /**
+   * Provides a list of all the specific attributes associated with this Lineage Event type which are not set.
+   * @return list of all specific attributes which are not set.
+   */
+  List<String> missingSpecificAttributes();
+
 }

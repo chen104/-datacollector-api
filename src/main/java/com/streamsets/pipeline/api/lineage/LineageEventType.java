@@ -17,20 +17,94 @@ package com.streamsets.pipeline.api.lineage;
 
 import com.streamsets.pipeline.api.Label;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.DESCRIPTION;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.ENTITY_MODE;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.LOGICAL_ENDPOINT_TYPE;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.LOGICAL_ENTITY_NAME;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PERMALINK;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENDPOINT_TYPE;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENTITY_LOCATION;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENTITY_NAME;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PROPERTIES;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.TAGS;
+import static com.streamsets.pipeline.api.lineage.LineageEventConstants.TIME_STAMP;
+
 public enum LineageEventType implements Label {
-  START("START"),
-  STOP("STOP"),
-  ENTITY_CREATED("ENTITY_CREATED"),
-  ENTITY_ACCESSED("ENTITY_ACCESSED"),
+  START(
+      "START",
+      true,
+      Arrays.asList(
+          TAGS,
+          PROPERTIES,
+          PERMALINK,
+          DESCRIPTION
+      )),
+  STOP(
+      "STOP",
+      true,
+      Arrays.asList(
+          TIME_STAMP,
+          TAGS,
+          PROPERTIES,
+          PERMALINK,
+          DESCRIPTION
+      )),
+  ENTITY_CREATED(
+      "ENTITY_CREATED",
+      false,
+      Arrays.asList(
+          LOGICAL_ENDPOINT_TYPE,
+          PHYSICAL_ENDPOINT_TYPE,
+          PHYSICAL_ENTITY_NAME,
+          LOGICAL_ENTITY_NAME,
+          PHYSICAL_ENTITY_LOCATION,
+          ENTITY_MODE,
+          TAGS,
+          PROPERTIES,
+          PERMALINK,
+          DESCRIPTION
+      )),
+  ENTITY_READ_OR_WRITTEN(
+      "ENTITY_READ_OR_WRITTEN",
+      false,
+      Arrays.asList(
+          LOGICAL_ENDPOINT_TYPE,
+          PHYSICAL_ENDPOINT_TYPE,
+          PHYSICAL_ENTITY_NAME,
+          LOGICAL_ENTITY_NAME,
+          PHYSICAL_ENTITY_LOCATION,
+          ENTITY_MODE,
+          TAGS,
+          PROPERTIES,
+          PERMALINK,
+          DESCRIPTION,
+          ENTITY_MODE
+      )),
   ;
   private String label;
+  private boolean frameworkOnly;
+  private List<String> specificAttributeNames;
 
-  LineageEventType(String label){
+  LineageEventType(String label, boolean frameworkOnly, List<String> specificAttributes){
     this.label = label;
+    this.frameworkOnly = frameworkOnly;
+    this.specificAttributeNames = specificAttributes;
   }
 
   @Override
   public String getLabel() {
     return label;
+  }
+
+  public boolean isFrameworkOnly() {
+    return frameworkOnly;
+
+  }
+
+  public List<String> getSpecificAttributeNames() {
+    return specificAttributeNames;
   }
 }

@@ -25,6 +25,7 @@ import com.streamsets.pipeline.api.el.ELEval;
 import com.streamsets.pipeline.api.el.ELEvalException;
 import com.streamsets.pipeline.api.el.ELVars;
 import com.streamsets.pipeline.api.lineage.LineageEvent;
+import com.streamsets.pipeline.api.lineage.LineageEventType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -405,6 +406,14 @@ public interface Stage<C extends Stage.Context> {
      * @return New record.
      */
     public EventRecord createEventRecord(String type, int version, String recordSourceId);
+
+    /**
+     * Creates a LineageEvent and initializes the general fields.
+     *
+     * @param type LineageEventType
+     * @return initialized LineageEvent
+     */
+    LineageEvent createLineageEvent(LineageEventType type);
 
     /**
      * Publish given lineage event to configured lineage store.
