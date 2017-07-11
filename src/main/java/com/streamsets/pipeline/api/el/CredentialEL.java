@@ -47,7 +47,8 @@ public class CredentialEL {
       name = "get",
       description =
           "Retrieves the credential of the specified key frmn the specified store. " +
-          "The user must belong the specified group"
+          "The user must belong the specified group",
+      implicitOnly = true
   )
   public static String get(
       @ElParam("storeId") String storeId,
@@ -79,7 +80,8 @@ public class CredentialEL {
       name = "getWithOptions",
       description =
           "Retrieves the credential of the specified key from the specified store with store specific options. " +
-          "The user must belong the specified group."
+          "The user must belong the specified group.",
+      implicitOnly = true
   )
   public static String getWithOptions(
       @ElParam("storeId") String storeId,

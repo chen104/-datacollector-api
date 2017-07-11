@@ -45,4 +45,10 @@ public @interface ElFunction {
    * Description of the constant, for the UI help.
    */
   String description() default "";
+
+  /**
+   * Defines the EL function can only be used in implicit configurations.
+   */
+  boolean implicitOnly() default false;
+
 }
