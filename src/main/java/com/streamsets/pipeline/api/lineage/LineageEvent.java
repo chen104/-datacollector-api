@@ -27,16 +27,16 @@ public interface LineageEvent {
   String getEventType();
 
   /**
-   * fetch general parameter - PipelineVersion
-   * @return PipelineVersion
+   * fetch general parameter - PipelineId
+   * @return PipelineId
    */
-  String getPipelineVersion();
+  String getPipelineId();
 
   /**
-   * fetch general parameter - PipelineUuid
-   * @return PipelineUuid
+   * fetch general parameter - Permalink
+   * @return Permalink
    */
-  String getPipelineUuid();
+  String getPermalink();
 
   /**
    * fetch general parameter -  PipelineUser
@@ -51,10 +51,22 @@ public interface LineageEvent {
   String getPipelineStartTime();
 
   /**
-   * fetch general parameter - PipelineName
-   * @return PipelineName
+   * fetch general parameter - PipelineTitle
+   * @return PipelineTitle
    */
-  String getPipelineName();
+  String getPipelineTitle();
+
+  /**
+   * fetch general parameter - StageName
+   * @return StageName
+   */
+  String getStageName();
+
+  /**
+   * fetch general parameter - event timestamp
+   * @return event timestamp
+   */
+  long getTimeStamp();
 
   /**
    * fetch general parameter - DataCollectorId
@@ -63,17 +75,17 @@ public interface LineageEvent {
   String getPipelineDataCollectorId();
 
   /**
-   * Setter to add a specific attribute to the LineageEvent.
+   * Add a specificAttribute to the LineageEvent.
    * @param name - Attribute's name.
    * @param value - Attribute's value.
    */
-  void setSpecificAttribute(String name, String value);
+  void setSpecificAttribute(LineageSpecificAttribute name, String value);
 
   /**
-   * Getter for a specific attribute.
+   * Getter for a specificAttribute.
    * @return attribute
    */
-  String getSpecificAttribute(String name);
+  String getSpecificAttribute(LineageSpecificAttribute name);
 
   /**
    * Sets the tag array.
@@ -82,13 +94,13 @@ public interface LineageEvent {
   void setTags(List<String> tags);
 
   /**
-   * Retrieves the tags array.
+   * Retrieves the tags.
    * @return
    */
   List<String> getTags();
 
   /**
-   * Set the properties map.
+   * Sets the properties.
    *
    * @param properties
    */
@@ -105,6 +117,13 @@ public interface LineageEvent {
    * Provides a list of all the specific attributes associated with this Lineage Event type which are not set.
    * @return list of all specific attributes which are not set.
    */
-  List<String> missingSpecificAttributes();
+  List<LineageSpecificAttribute> missingSpecificAttributes();
+
+  /**
+   * return formatted String containing LineageEvent data.
+   *
+   * @return printable LineageEvent
+   */
+  String toString();
 
 }

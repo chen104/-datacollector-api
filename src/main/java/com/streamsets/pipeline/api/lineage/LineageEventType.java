@@ -20,17 +20,11 @@ import com.streamsets.pipeline.api.Label;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.DESCRIPTION;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.ENTITY_MODE;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.LOGICAL_ENDPOINT_TYPE;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.LOGICAL_ENTITY_NAME;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PERMALINK;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENDPOINT_TYPE;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENTITY_LOCATION;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PHYSICAL_ENTITY_NAME;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.PROPERTIES;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.TAGS;
-import static com.streamsets.pipeline.api.lineage.LineageEventConstants.TIME_STAMP;
+import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.DESCRIPTION;
+import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.ENDPOINT_TYPE;
+import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.ENTITY_NAME;
+import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.PROPERTIES;
+import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.TAGS;
 
 public enum LineageEventType implements Label {
   START(
@@ -39,59 +33,55 @@ public enum LineageEventType implements Label {
       Arrays.asList(
           TAGS,
           PROPERTIES,
-          PERMALINK,
           DESCRIPTION
       )),
   STOP(
       "STOP",
       true,
       Arrays.asList(
-          TIME_STAMP,
           TAGS,
           PROPERTIES,
-          PERMALINK,
           DESCRIPTION
       )),
   ENTITY_CREATED(
       "ENTITY_CREATED",
       false,
       Arrays.asList(
-          LOGICAL_ENDPOINT_TYPE,
-          PHYSICAL_ENDPOINT_TYPE,
-          PHYSICAL_ENTITY_NAME,
-          LOGICAL_ENTITY_NAME,
-          PHYSICAL_ENTITY_LOCATION,
-          ENTITY_MODE,
+          ENDPOINT_TYPE,
+          ENTITY_NAME,
           TAGS,
           PROPERTIES,
-          PERMALINK,
           DESCRIPTION
       )),
-  ENTITY_READ_OR_WRITTEN(
-      "ENTITY_READ_OR_WRITTEN",
+  ENTITY_READ(
+      "ENTITY_READ",
       false,
       Arrays.asList(
-          LOGICAL_ENDPOINT_TYPE,
-          PHYSICAL_ENDPOINT_TYPE,
-          PHYSICAL_ENTITY_NAME,
-          LOGICAL_ENTITY_NAME,
-          PHYSICAL_ENTITY_LOCATION,
-          ENTITY_MODE,
+          ENDPOINT_TYPE,
+          ENTITY_NAME,
           TAGS,
           PROPERTIES,
-          PERMALINK,
-          DESCRIPTION,
-          ENTITY_MODE
+          DESCRIPTION
+      )),
+  ENTITY_WRITTEN(
+      "ENTITY_WRITTEN",
+      false,
+      Arrays.asList(
+          ENDPOINT_TYPE,
+          ENTITY_NAME,
+          TAGS,
+          PROPERTIES,
+          DESCRIPTION
       )),
   ;
   private String label;
   private boolean frameworkOnly;
-  private List<String> specificAttributeNames;
+  private List<LineageSpecificAttribute> specificAttributes;
 
-  LineageEventType(String label, boolean frameworkOnly, List<String> specificAttributes){
+  LineageEventType(String label, boolean frameworkOnly, List<LineageSpecificAttribute> specificAttributes){
     this.label = label;
     this.frameworkOnly = frameworkOnly;
-    this.specificAttributeNames = specificAttributes;
+    this.specificAttributes = specificAttributes;
   }
 
   @Override
@@ -104,7 +94,7 @@ public enum LineageEventType implements Label {
 
   }
 
-  public List<String> getSpecificAttributeNames() {
-    return specificAttributeNames;
+  public List<LineageSpecificAttribute> getSpecificAttributes() {
+    return specificAttributes;
   }
 }
