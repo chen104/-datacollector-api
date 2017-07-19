@@ -48,7 +48,7 @@ public interface LineageEvent {
    * fetch general parameter -  PipelineStartTime
    * @return pipelineStartTime
    */
-  String getPipelineStartTime();
+  long getPipelineStartTime();
 
   /**
    * fetch general parameter - PipelineTitle
