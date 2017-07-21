@@ -19,6 +19,7 @@ import com.streamsets.pipeline.api.ElFunction;
 import com.streamsets.pipeline.api.ElParam;
 import com.streamsets.pipeline.api.StageException;
 import com.streamsets.pipeline.api.credential.CredentialStore;
+import com.streamsets.pipeline.api.credential.CredentialValue;
 import com.streamsets.pipeline.api.impl.Utils;
 
 /**
@@ -36,11 +37,13 @@ public class CredentialEL {
 
   /**
    * Retrieves a credential from a credential store with default options.
+   *
    * @param storeId credential store ID.
    * @param userGroup user group the user must belong to have access to the credential.
    * @param name reference name for the credential.
-   * @return The credential or NULL if the credential does not exists.
-   * @throws StageException thrown if user is not authorized to retrieve the credential.
+   * @return The credential value or throws an exception if the credential does not exists.
+   * @throws StageException thrown if the credential value does not exist or if user is not authorized to retrieve
+   * the credential.
    */
   @ElFunction(
       prefix = PREFIX,
@@ -50,7 +53,7 @@ public class CredentialEL {
           "The user must belong the specified group",
       implicitOnly = true
   )
-  public static String get(
+  public static CredentialValue get(
       @ElParam("storeId") String storeId,
       @ElParam("userGroup") String userGroup,
       @ElParam("name") String name
@@ -68,12 +71,14 @@ public class CredentialEL {
 
   /**
    * Retrieves a credential from a credential store with default options.
+   *
    * @param storeId credential store ID.
    * @param userGroup user group the user must belong to have access to the credential.
    * @param name reference name for the credential.
    * @param options options specific to the credential store implementation.
-   * @return The credential or NULL if the credential does not exists.
-   * @throws StageException thrown if user is not authorized to retrieve the credential.
+   * @return The credential value or throws an exception if the credential does not exists.
+   * @throws StageException thrown if the credential value does not exist or if user is not authorized to retrieve
+   * the credential.
    */
   @ElFunction(
       prefix = PREFIX,
@@ -83,7 +88,7 @@ public class CredentialEL {
           "The user must belong the specified group.",
       implicitOnly = true
   )
-  public static String getWithOptions(
+  public static CredentialValue getWithOptions(
       @ElParam("storeId") String storeId,
       @ElParam("userGroup") String userGroup,
       @ElParam("name") String name,

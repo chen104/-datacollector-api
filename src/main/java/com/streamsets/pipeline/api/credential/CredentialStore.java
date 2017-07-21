@@ -17,6 +17,7 @@ package com.streamsets.pipeline.api.credential;
 
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.StageException;
+import com.streamsets.pipeline.api.el.CredentialEL;
 
 import java.util.List;
 
@@ -79,15 +80,15 @@ public interface CredentialStore {
   List<ConfigIssue> init(Context context);
 
   /**
-   * Returns a credential associated to the given name.
+   * Returns a credential value associated to the given name.
    * @param group group the user must belong to retrieve the credential.
    * @param name reference name for the credential.
    * @param credentialStoreOptions options specific to the credential store implementation. Implementations must work
    * with NULL and empty options.
-   * @return the credential, or NULL if not found.
+   * @return the credential value, or NULL if not found.
    * @throws StageException thrown if the credential could not be retrieved because of permissions or other reason.
    */
-  String get(String group, String name, String credentialStoreOptions) throws StageException;
+  CredentialValue get(String group, String name, String credentialStoreOptions) throws StageException;
 
   /**
    * Destroys the credential store.

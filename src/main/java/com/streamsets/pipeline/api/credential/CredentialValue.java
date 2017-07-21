@@ -13,32 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.streamsets.pipeline.api.impl.annotationsprocessor;
+package com.streamsets.pipeline.api.credential;
 
 import com.streamsets.pipeline.api.StageException;
-import com.streamsets.pipeline.api.credential.CredentialStore;
-import com.streamsets.pipeline.api.credential.CredentialStoreDef;
-import com.streamsets.pipeline.api.credential.CredentialValue;
 
-import java.util.List;
+/**
+ * Type for Stage configuration variables using <code>${credential:get(...)}</code> EL functions.
+ * <p/>
+ * A CredentialValue instance encapsulate the retrieval of credential allowing lazy and refresh retrievals.
+ */
+public interface CredentialValue {
 
-@CredentialStoreDef(
-    label = "dummy"
-)
-public class DummyCredentialStore implements CredentialStore {
-
-  @Override
-  public List<ConfigIssue> init(Context context) {
-    return null;
-  }
-
-  @Override
-  public CredentialValue get(String group, String name, String options) throws StageException {
-    return null;
-  }
-
-  @Override
-  public void destroy() {
-  }
+  /**
+   * Returns the credential value.
+   *
+   * @return the credential value.
+   * @throws StageException thrown if the credential value does not exist or if user is not authorized to retrieve
+   * the credential.
+   */
+  String get() throws StageException;
 
 }

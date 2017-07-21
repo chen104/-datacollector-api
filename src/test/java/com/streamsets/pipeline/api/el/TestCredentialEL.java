@@ -18,6 +18,7 @@ package com.streamsets.pipeline.api.el;
 import com.google.common.collect.ImmutableMap;
 import com.streamsets.pipeline.api.StageException;
 import com.streamsets.pipeline.api.credential.CredentialStore;
+import com.streamsets.pipeline.api.credential.CredentialValue;
 import com.streamsets.pipeline.api.impl.Utils;
 import org.junit.After;
 import org.junit.Assert;
@@ -42,20 +43,20 @@ public class TestCredentialEL {
   @Test
   public void testCredentialELGet() throws Exception {
     CredentialStore store = Mockito.mock(CredentialStore.class);
-    Mockito.when(store.get(Mockito.eq("group"), Mockito.eq("name"), Mockito.eq(""))).thenReturn("foo");
+    Mockito.when(store.get(Mockito.eq("group"), Mockito.eq("name"), Mockito.eq(""))).thenReturn(() -> "foo");
     Utils.setCredentialStores(ImmutableMap.of("id", store));
 
-    Assert.assertEquals("foo", CredentialEL.get("id", "group", "name"));
+    Assert.assertEquals("foo", CredentialEL.get("id", "group", "name").get());
     Assert.assertNull(CredentialEL.get("id", "group", "nothere"));
   }
 
   @Test
   public void testCredentialELGetWithOptions() throws Exception {
     CredentialStore store = Mockito.mock(CredentialStore.class);
-    Mockito.when(store.get(Mockito.eq("group"), Mockito.eq("name"), Mockito.eq("options"))).thenReturn("foo");
+    Mockito.when(store.get(Mockito.eq("group"), Mockito.eq("name"), Mockito.eq("options"))).thenReturn(() -> "foo");
     Utils.setCredentialStores(ImmutableMap.of("id", store));
 
-    Assert.assertEquals("foo", CredentialEL.getWithOptions("id", "group", "name", "options"));
+    Assert.assertEquals("foo", CredentialEL.getWithOptions("id", "group", "name", "options").get());
     Assert.assertNull(CredentialEL.getWithOptions("id", "group", "nothere", "options"));
   }
 
