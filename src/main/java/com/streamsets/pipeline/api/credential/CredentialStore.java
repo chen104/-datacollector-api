@@ -17,7 +17,6 @@ package com.streamsets.pipeline.api.credential;
 
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.StageException;
-import com.streamsets.pipeline.api.el.CredentialEL;
 
 import java.util.List;
 

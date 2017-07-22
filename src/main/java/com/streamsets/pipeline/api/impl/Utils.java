@@ -15,7 +15,6 @@
  */
 package com.streamsets.pipeline.api.impl;
 
-import com.streamsets.pipeline.api.credential.CredentialStore;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DateFormat;
@@ -39,7 +38,6 @@ public final class Utils {
   private static final String ISO8601_UTC_MASK = "yyyy-MM-dd'T'HH:mm'Z'";
 
   private static Callable<String> sdcIdCallable;
-  private static Map<String, CredentialStore> credentialStores;
 
   Utils() {
   }
@@ -191,15 +189,6 @@ public final class Utils {
     } catch (Exception ex) {
       throw new RuntimeException(Utils.format("SDC ID Callable threw an unexpected exception: {}", ex.toString(), ex));
     }
-  }
-
-  public static void setCredentialStores(Map<String, CredentialStore> stores) {
-    credentialStores = stores;
-  }
-
-  public static Map<String, CredentialStore> getCredentialStores() {
-    Utils.checkState(credentialStores != null, "credentialStores not set");
-    return credentialStores;
   }
 
 }
