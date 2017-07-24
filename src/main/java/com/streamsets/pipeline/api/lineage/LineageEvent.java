@@ -24,7 +24,7 @@ public interface LineageEvent {
    * fetch general parameter - EventType
    * @return EventType
    */
-  String getEventType();
+  LineageEventType getEventType();
 
   /**
    * fetch general parameter - PipelineId

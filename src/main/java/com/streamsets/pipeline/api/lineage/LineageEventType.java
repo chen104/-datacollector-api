@@ -97,4 +97,18 @@ public enum LineageEventType implements Label {
   public List<LineageSpecificAttribute> getSpecificAttributes() {
     return specificAttributes;
   }
+
+  public boolean isOneOf(LineageEventType... types) {
+    if (types == null) {
+      return false;
+    }
+
+    for (LineageEventType t : types) {
+      if (this == t) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
