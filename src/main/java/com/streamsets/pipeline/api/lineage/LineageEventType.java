@@ -23,24 +23,18 @@ import java.util.List;
 import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.DESCRIPTION;
 import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.ENDPOINT_TYPE;
 import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.ENTITY_NAME;
-import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.PROPERTIES;
-import static com.streamsets.pipeline.api.lineage.LineageSpecificAttribute.TAGS;
 
 public enum LineageEventType implements Label {
   START(
       "START",
       true,
       Arrays.asList(
-          TAGS,
-          PROPERTIES,
           DESCRIPTION
       )),
   STOP(
       "STOP",
       true,
       Arrays.asList(
-          TAGS,
-          PROPERTIES,
           DESCRIPTION
       )),
   ENTITY_CREATED(
@@ -49,8 +43,6 @@ public enum LineageEventType implements Label {
       Arrays.asList(
           ENDPOINT_TYPE,
           ENTITY_NAME,
-          TAGS,
-          PROPERTIES,
           DESCRIPTION
       )),
   ENTITY_READ(
@@ -59,8 +51,6 @@ public enum LineageEventType implements Label {
       Arrays.asList(
           ENDPOINT_TYPE,
           ENTITY_NAME,
-          TAGS,
-          PROPERTIES,
           DESCRIPTION
       )),
   ENTITY_WRITTEN(
@@ -69,8 +59,6 @@ public enum LineageEventType implements Label {
       Arrays.asList(
           ENDPOINT_TYPE,
           ENTITY_NAME,
-          TAGS,
-          PROPERTIES,
           DESCRIPTION
       )),
   ;
