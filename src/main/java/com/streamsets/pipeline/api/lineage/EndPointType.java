@@ -24,6 +24,7 @@ public enum EndPointType implements Label {
   HIVE("HIVE"),
   KUDU("KUDU"),
   HBASE("HBASE"),
+  LOCAL_FS("LOCAL_FS"),
   DEVDATA("DEVDATA"),
   OTHER("OTHER"),
   ;
