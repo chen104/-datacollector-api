@@ -53,7 +53,7 @@ public @interface ConfigDef {
     MODEL(""),
     CHARACTER(' '),
     TEXT(""),
-    CREDENTIAL(null)
+    CREDENTIAL("")
     ;
 
     private final transient Object defaultValue;
