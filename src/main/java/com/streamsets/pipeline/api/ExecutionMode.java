@@ -32,8 +32,10 @@ public enum ExecutionMode implements Label {
   CLUSTER_BATCH("Cluster Batch"),
   CLUSTER_YARN_STREAMING("Cluster Yarn Streaming"),
   CLUSTER_MESOS_STREAMING("Cluster Mesos Streaming"),
-  SLAVE("Slave")
+  SLAVE("Slave"),
+  EDGE("Edge"),
   ;
+
   private final String label;
 
   ExecutionMode(String label) {
