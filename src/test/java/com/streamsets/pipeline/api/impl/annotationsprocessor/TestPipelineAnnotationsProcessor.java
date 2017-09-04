@@ -82,4 +82,10 @@ public class TestPipelineAnnotationsProcessor {
     Assert.assertTrue(resource.contains(DummyCredentialStore.class.getName()));
   }
 
+  @Test
+  public void testStageDefListResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.STAGE_DEF_LIST_FILE);
+    Assert.assertTrue(resource.contains(DummySource.class.getSimpleName()));
+  }
+
 }

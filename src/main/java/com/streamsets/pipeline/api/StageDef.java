@@ -144,4 +144,9 @@ public @interface StageDef {
    * Indicates if this stage can produce events.
    */
   boolean producesEvents() default false;
+
+  /**
+   * Indicates if this stage implementation is beta.
+   */
+  boolean beta() default false;
 }

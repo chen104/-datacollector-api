@@ -15,23 +15,18 @@
  */
 package com.streamsets.pipeline.api.impl.annotationsprocessor;
 
-import com.streamsets.pipeline.api.BatchMaker;
+import com.streamsets.pipeline.api.Batch;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
-import com.streamsets.pipeline.api.Source;
 import com.streamsets.pipeline.api.StageDef;
 import com.streamsets.pipeline.api.StageException;
+import com.streamsets.pipeline.api.Target;
 
-import java.io.IOException;
 import java.util.List;
 
 @StageDef(label = "T", version = 1, onlineHelpRefUrl = "")
 @GenerateResourceBundle
-public class DummyTarget implements Source {
+public class DummyTarget implements Target {
 
-  @Override
-  public String produce(String lastSourceOffset, int maxBatchSize, BatchMaker batchMaker) throws StageException {
-    return null;
-  }
 
   @Override
   public List<ConfigIssue> init(Info info, Context context) {
@@ -40,6 +35,11 @@ public class DummyTarget implements Source {
 
   @Override
   public void destroy() {
+
+  }
+
+  @Override
+  public void write(Batch batch) throws StageException {
 
   }
 }

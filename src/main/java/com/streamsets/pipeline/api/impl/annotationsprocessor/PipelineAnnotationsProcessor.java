@@ -16,11 +16,18 @@
 package com.streamsets.pipeline.api.impl.annotationsprocessor;
 
 import com.streamsets.pipeline.api.ElDef;
+import com.streamsets.pipeline.api.ErrorStage;
+import com.streamsets.pipeline.api.Executor;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
+import com.streamsets.pipeline.api.Processor;
+import com.streamsets.pipeline.api.PushSource;
+import com.streamsets.pipeline.api.Source;
 import com.streamsets.pipeline.api.StageDef;
+import com.streamsets.pipeline.api.StageType;
+import com.streamsets.pipeline.api.StatsAggregatorStage;
+import com.streamsets.pipeline.api.Target;
 import com.streamsets.pipeline.api.credential.CredentialStoreDef;
 import com.streamsets.pipeline.api.impl.Utils;
-import com.streamsets.pipeline.api.lineage.LineagePublisher;
 import com.streamsets.pipeline.api.lineage.LineagePublisherDef;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -32,43 +39,55 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
 
-@SupportedAnnotationTypes(
-    {
-        "com.streamsets.pipeline.api.StageDef",
-        "com.streamsets.pipeline.api.GenerateResourceBundle",
-        "com.streamsets.pipeline.api.ElDef",
-        "com.streamsets.pipeline.api.lineage.LineagePublisherDef",
-        "com.streamsets.pipeline.api.credential.CredentialStoreDef",
-    })
+@SupportedAnnotationTypes({
+    "com.streamsets.pipeline.api.StageDef",
+    "com.streamsets.pipeline.api.GenerateResourceBundle",
+    "com.streamsets.pipeline.api.ElDef",
+    "com.streamsets.pipeline.api.lineage.LineagePublisherDef",
+    "com.streamsets.pipeline.api.credential.CredentialStoreDef",
+})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(PipelineAnnotationsProcessor.SKIP_PROCESSOR)
 public class PipelineAnnotationsProcessor extends AbstractProcessor {
-  public static final String SKIP_PROCESSOR = "streamsets.datacollector.annotationsprocessor.skip";
+  static final String SKIP_PROCESSOR = "streamsets.datacollector.annotationsprocessor.skip";
 
   public static final String STAGES_FILE = "PipelineStages.json";
   public static final String LINEAGE_PUBLISHERS_FILE = "LineagePublishers.json";
   public static final String ELDEFS_FILE = "ElDefinitions.json";
   public static final String BUNDLES_FILE = "datacollector-resource-bundles.json";
   public static final String CREDENTIAL_STORE_FILE = "CredentialStores.json";
+  public static final String STAGE_DEF_LIST_FILE = "StageDefList.json";
 
   private boolean skipProcessor;
+  private ProcessingEnvironment processingEnv;
   private final List<String> stagesClasses;
   private final List<String> lineagePublishersClasses;
   private final List<String> elDefClasses;
   private final List<String> bundleClasses;
   private final List<String> credentialStoreClasses;
+  private final List<String> stageDefJsonList;
   private boolean error;
+  private TypeMirror typeOfSource;
+  private TypeMirror typeOfPushSource;
+  private TypeMirror typeOfProcessor;
+  private TypeMirror typeOfExecutor;
+  private TypeMirror typeOfTarget;
 
   public PipelineAnnotationsProcessor() {
     super();
@@ -77,12 +96,19 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     bundleClasses = new ArrayList<>();
     lineagePublishersClasses = new ArrayList<>();
     credentialStoreClasses = new ArrayList<>();
+    stageDefJsonList = new ArrayList<>();
   }
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
     skipProcessor = processingEnv.getOptions().containsKey(SKIP_PROCESSOR);
+    this.processingEnv = processingEnv;
+    typeOfSource = processingEnv.getElementUtils().getTypeElement(Source.class.getName()).asType();
+    typeOfPushSource = processingEnv.getElementUtils().getTypeElement(PushSource.class.getName()).asType();
+    typeOfProcessor = processingEnv.getElementUtils().getTypeElement(Processor.class.getName()).asType();
+    typeOfExecutor = processingEnv.getElementUtils().getTypeElement(Executor.class.getName()).asType();
+    typeOfTarget = processingEnv.getElementUtils().getTypeElement(Target.class.getName()).asType();
   }
 
   @Override
@@ -93,8 +119,21 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     }
     // Collect @StageDef classes
     for(Element e : roundEnv.getElementsAnnotatedWith(StageDef.class)) {
+      StageDef stageDef = e.getAnnotation(StageDef.class);
+
       if(e.getKind().isClass()) {
-        stagesClasses.add(((TypeElement)e).getQualifiedName().toString());
+        String className = ((TypeElement)e).getQualifiedName().toString();
+        stagesClasses.add(className);
+
+        boolean statsAggregatorStage = e.getAnnotation(StatsAggregatorStage.class) != null;
+        boolean errorStage = e.getAnnotation(ErrorStage.class) != null;
+        stageDefJsonList.add(stageDefToJson(
+            stageDef,
+            getStageName(className),
+            extractStageType(e.asType()),
+            statsAggregatorStage,
+            errorStage
+        ));
       } else {
         printError("'{}' is not a class, cannot be @StageDef annotated", e);
         error = true;
@@ -153,34 +192,133 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
   }
 
   private void generateFiles() {
-    generateFile(STAGES_FILE, stagesClasses);
-    generateFile(ELDEFS_FILE, elDefClasses);
-    generateFile(BUNDLES_FILE, bundleClasses);
-    generateFile(LINEAGE_PUBLISHERS_FILE, lineagePublishersClasses);
-    generateFile(CREDENTIAL_STORE_FILE, credentialStoreClasses);
+    generateFile(STAGES_FILE, stagesClasses,"  \"", "\"");
+    generateFile(ELDEFS_FILE, elDefClasses,"  \"", "\"");
+    generateFile(BUNDLES_FILE, bundleClasses,"  \"", "\"");
+    generateFile(LINEAGE_PUBLISHERS_FILE, lineagePublishersClasses,"  \"", "\"");
+    generateFile(CREDENTIAL_STORE_FILE, credentialStoreClasses,"  \"", "\"");
+    generateFile(STAGE_DEF_LIST_FILE, stageDefJsonList," ", "");
   }
 
   static String toJson(List<String> elements) {
+    return toJson(elements,"  \"", "\"");
+  }
+
+  private static String toJson(List<String> elements, String prefix, String postfix) {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
     String separator = "\n";
     for (String e : elements) {
-      sb.append(separator).append("  \"").append(e).append('"');
+      sb.append(separator).append(prefix).append(e).append(postfix);
       separator = ",\n";
     }
     sb.append("\n]\n");
     return sb.toString();
   }
 
-  private void generateFile(String fileName, List<String> elements) {
+  private void generateFile(String fileName, List<String> elements, String prefix, String postfix) {
     try {
       FileObject resource = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", fileName);
       try (Writer writer = new OutputStreamWriter(resource.openOutputStream())) {
-        writer.write(toJson(elements));
+        writer.write(toJson(elements, prefix, postfix));
       }
     } catch (IOException e) {
       printError("Could not create/write '{}' file: {}", e.toString());
     }
+  }
+
+  private String stageDefToJson(
+      StageDef stageDef,
+      String stageName,
+      StageType stageType,
+      boolean statsAggregatorStage,
+      boolean errorStage
+  ) {
+
+    String base64Image = getBase64Image(stageDef);
+
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("{\n");
+
+    sb.append("\t\"").append("name").append("\"").append(": \"")
+        .append(stageName).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("type").append("\"").append(": \"")
+        .append(stageType).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("label").append("\"").append(": \"")
+        .append(stageDef.label()).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("description").append("\"").append(": \"")
+        .append(stageDef.description()).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("version").append("\"").append(": \"")
+        .append(stageDef.version()).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("statsAggregatorStage").append("\"").append(": ")
+        .append(statsAggregatorStage);
+    sb.append(",\n");
+
+    sb.append("\t\"").append("errorStage").append("\"").append(": ")
+        .append(errorStage);
+    sb.append(",\n");
+
+    sb.append("\t\"").append("beta").append("\"").append(": \"")
+        .append(stageDef.beta()).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("icon").append("\"").append(": \"")
+        .append(base64Image).append("\"");
+    sb.append("\n }");
+
+    return sb.toString();
+  }
+
+  private StageType extractStageType(TypeMirror stageType) {
+    Types typeUtils = processingEnv.getTypeUtils();
+    StageType type;
+    if (typeUtils.isAssignable(stageType, typeOfSource) || typeUtils.isAssignable(stageType, typeOfPushSource)) {
+      type = StageType.SOURCE;
+    } else if (typeUtils.isSubtype(stageType, typeOfProcessor)) {
+      type = StageType.PROCESSOR;
+    } else if (typeUtils.isSubtype(stageType, typeOfExecutor)) {
+      type = StageType.EXECUTOR;
+    } else if (typeUtils.isSubtype(stageType, typeOfTarget)) {
+      type = StageType.TARGET;
+    } else {
+      type = null;
+    }
+    return type;
+  }
+
+  private static String getStageName(String className) {
+    return className.replace(".", "_").replace("$", "_");
+  }
+
+  private String getBase64Image(StageDef stageDef) {
+    String base64Image = null;
+    if (stageDef.icon().length() > 0) {
+      try(InputStream inputStream = processingEnv.getFiler()
+          .getResource( StandardLocation.CLASS_OUTPUT, "", stageDef.icon()).openInputStream()) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = inputStream.read(buffer, 0, buffer.length)) != -1) {
+          byteArrayOutputStream.write(buffer, 0, read);
+        }
+        byteArrayOutputStream.flush();
+        base64Image = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+      } catch (Exception e) {
+        printError("Failed to convert stage icons to Base64 - " + e.getLocalizedMessage());
+      }
+    }
+    return base64Image;
   }
 
 }
