@@ -21,6 +21,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -147,6 +149,14 @@ public final class Utils {
 
   public static Date parse(String str) throws ParseException {
     return getISO8601DateFormat().parse(str);
+  }
+
+  public static ZonedDateTime parseZoned(String str) {
+    return ZonedDateTime.parse(str, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+  }
+
+  public static String format(ZonedDateTime zonedDateTime) {
+    return zonedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
   }
 
   /**

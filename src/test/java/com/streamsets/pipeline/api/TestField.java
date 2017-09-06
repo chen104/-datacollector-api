@@ -32,10 +32,14 @@ import com.streamsets.pipeline.api.impl.LongTypeSupport;
 import com.streamsets.pipeline.api.impl.ShortTypeSupport;
 import com.streamsets.pipeline.api.impl.StringTypeSupport;
 import com.streamsets.pipeline.api.impl.Utils;
+import com.streamsets.pipeline.api.impl.ZonedDateTimeTypeSupport;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,6 +66,7 @@ public class TestField {
     Assert.assertEquals(StringTypeSupport.class, Type.STRING.supporter.getClass());
     Assert.assertEquals(ByteArrayTypeSupport.class, Type.BYTE_ARRAY.supporter.getClass());
     Assert.assertEquals(FileRefTypeSupport.class, Type.FILE_REF.supporter.getClass());
+    Assert.assertEquals(ZonedDateTimeTypeSupport.class, Type.ZONED_DATETIME.supporter.getClass());
   }
 
   @Test
@@ -131,6 +136,15 @@ public class TestField {
     Assert.assertEquals(d, f.getValue());
     Assert.assertNotSame(d, f.getValue());
     Assert.assertNotNull(f.toString());
+
+    ZonedDateTime zd = ZonedDateTime.now();
+    f = Field.createZonedDateTime(zd);
+    Assert.assertEquals(Type.ZONED_DATETIME, f.getType());
+    Assert.assertEquals(zd, f.getValue());
+    Assert.assertNotNull(f.toString());
+    Assert.assertEquals(
+        Utils.format("Field[{}:{}]", Type.ZONED_DATETIME, zd.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)),
+        f.toString());
 
     String s = "s";
     f = Field.create(s);
@@ -222,6 +236,9 @@ public class TestField {
   private static final Date DATETIME_VALUE = new Date(System.currentTimeMillis() - 100);
   private static final Date TIME_VALUE = new Date(System.currentTimeMillis() - 1000);
 
+  private static final ZonedDateTime ZONED_DATETIME_VALUE =
+      ZonedDateTime.of(2014, 10, 22, 12,
+          30, 0, 0, ZoneId.of("Europe/Paris"));
   private static final List<Field> FIELDS = ImmutableList.of(
       Field.create(true),
       Field.create('c'),
@@ -234,6 +251,7 @@ public class TestField {
       Field.createDate(DATE_VALUE),
       Field.createDatetime(DATETIME_VALUE),
       Field.createTime(TIME_VALUE),
+      Field.createZonedDateTime(ZONED_DATETIME_VALUE),
       Field.create(new BigDecimal(7.3)),
       Field.create("s"),
       Field.create(new byte[]{1, 2}),
@@ -272,6 +290,8 @@ public class TestField {
       .put(Type.DATETIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
       .put(Type.TIME, ImmutableList.of(Type.DATE, Type.DATETIME, Type.TIME, Type.STRING, Type.LONG))
       .put(Type.FILE_REF, ImmutableList.of(Type.FILE_REF))
+      .put(Type.ZONED_DATETIME, ImmutableList.of(Type.ZONED_DATETIME, Type.STRING))
+
       .build();
 
   @Test
@@ -500,6 +520,12 @@ public class TestField {
                   Assert.assertEquals(TIME_VALUE, f.getValueAsTime());
                   break;
               }
+            case ZONED_DATETIME:
+              switch (f.getType()) {
+                case ZONED_DATETIME:
+                  Assert.assertEquals(ZONED_DATETIME_VALUE, f.getValueAsZonedDateTime());
+                  break;
+              }
             case DECIMAL:
               switch (f.getType()) {
                 case BOOLEAN:
@@ -529,7 +555,11 @@ public class TestField {
               }
               break;
             case STRING:
-              Assert.assertEquals(f.getValue().toString(), f.getValueAsString());
+              if (f.getValue() instanceof ZonedDateTime) {
+                Assert.assertEquals(((ZonedDateTime) f.getValue()).format(DateTimeFormatter.ISO_ZONED_DATE_TIME), f.getValueAsString());
+              } else {
+                Assert.assertEquals(f.getValue().toString(), f.getValueAsString());
+              }
               break;
             case BYTE_ARRAY:
               Assert.assertArrayEquals(new byte[]{1, 2}, f.getValueAsByteArray());
@@ -600,6 +630,9 @@ public class TestField {
                 break;
               case FILE_REF:
                 f.getValueAsFileRef();
+                break;
+              case ZONED_DATETIME:
+                f.getValueAsZonedDateTime();
                 break;
             }
             Assert.fail(Utils.format("Failed asserting that type '{}' cannot be get as a '{}'", f.getType(), t));

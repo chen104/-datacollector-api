@@ -34,8 +34,10 @@ import com.streamsets.pipeline.api.impl.ShortTypeSupport;
 import com.streamsets.pipeline.api.impl.StringTypeSupport;
 import com.streamsets.pipeline.api.impl.TypeSupport;
 import com.streamsets.pipeline.api.impl.Utils;
+import com.streamsets.pipeline.api.impl.ZonedDateTimeTypeSupport;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -95,7 +97,10 @@ public class Field implements Cloneable {
     BYTE_ARRAY(new ByteArrayTypeSupport()),
     MAP(new MapTypeSupport()),
     LIST(new ListTypeSupport()),
-    LIST_MAP(new ListMapTypeSupport());
+    LIST_MAP(new ListMapTypeSupport()),
+    ZONED_DATETIME(new ZonedDateTimeTypeSupport()),
+
+    ;
 
     final transient TypeSupport<?> supporter;
 
@@ -126,7 +131,14 @@ public class Field implements Cloneable {
     }
 
     private String toString(Object value) {
-      return Utils.format("Field[{}:{}]", this, value);
+      // ZonedDateTime.toString() should not be used as it requires offset and zone id to match (which does not during
+      // DST changes. So make sure we use the same mechanism as converting it to a STRING field, which is always
+      // deterministic.
+      return Utils.format(
+          "Field[{}:{}]",
+          this,
+          this.supporter.getClass().equals(ZonedDateTimeTypeSupport.class) ? Utils.format((ZonedDateTime) value) : value
+      );
     }
 
     public boolean isOneOf(Type ...types) {
@@ -323,6 +335,17 @@ public class Field implements Cloneable {
    */
   public static Field createTime(Date v) {
     return new Field(Type.TIME, v);
+  }
+
+  /**
+   * Creates a <code>ZONED_DATETIME</code> field.
+   *
+   * @param v value.
+   *
+   * @return a <code>Zoned Datetime Field</code> with the given value.
+   */
+  public static Field createZonedDateTime(ZonedDateTime v) {
+    return new Field(Type.ZONED_DATETIME, v);
   }
 
   /**
@@ -544,6 +567,16 @@ public class Field implements Cloneable {
    */
   public Date getValueAsTime() {
     return (Date) type.convert(getValue(), Type.TIME);
+  }
+
+  /**
+   * Returns value of the Field as a {@linkplain ZonedDateTime}.
+   *
+   * @return Value of the field as a {@linkplain ZonedDateTime}.
+   * @throws IllegalArgumentException if the value cannot be converted to ZonedDateTime.
+   */
+  public ZonedDateTime getValueAsZonedDateTime() {
+    return (ZonedDateTime) type.convert(getValue(), Type.ZONED_DATETIME);
   }
 
   /**

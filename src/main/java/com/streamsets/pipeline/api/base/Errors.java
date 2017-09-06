@@ -53,6 +53,10 @@ public enum Errors implements ErrorCode {
   API_22("Cannot convert ListMap to {}"),
   API_23("Cannot convert {} to File Ref Object"),
   API_24("Cannot convert FileRef Object to {}"),
+  API_25("Cannot convert {} field '{}' to ZonedDateTime"),
+  API_26("Cannot parse '{}' to a ZonedDateTime. " +
+      "Use ISO 8601 format with offset and zone, such as '2011-12-03T10:15:30+01:00[Europe/Paris]'"),
+
   ;
 
   private final String msg;

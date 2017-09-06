@@ -18,6 +18,7 @@ package com.streamsets.pipeline.api.impl;
 import com.streamsets.pipeline.api.FileRef;
 import com.streamsets.pipeline.api.base.Errors;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,11 @@ public class StringTypeSupport extends TypeSupport<String> {
     if(value instanceof Map || value instanceof List || value instanceof byte[]|| value instanceof FileRef) {
       throw new IllegalArgumentException(Utils.format(Errors.API_18.getMessage()));
     }
+    // ZoneDatetime.toString() does not use a standard format which can be parsed.
+    if (value instanceof ZonedDateTime) {
+      return Utils.format((ZonedDateTime) value);
+    }
+
     return value.toString();
   }
 
