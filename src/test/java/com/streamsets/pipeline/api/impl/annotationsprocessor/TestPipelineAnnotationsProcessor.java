@@ -77,6 +77,12 @@ public class TestPipelineAnnotationsProcessor {
   }
 
   @Test
+  public void testServiceResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.SERVICES_FILE);
+    Assert.assertTrue(resource.contains(DummyService.class.getName()));
+  }
+
+  @Test
   public void testCredentialStoreResource() throws Exception {
     String resource = readResource(PipelineAnnotationsProcessor.CREDENTIAL_STORE_FILE);
     Assert.assertTrue(resource.contains(DummyCredentialStore.class.getName()));
