@@ -222,4 +222,10 @@ public @interface ConfigDef {
    */
   Evaluation evaluation() default Evaluation.IMPLICIT;
 
+  /**
+   * Set to true if the stage is able to generate custom suggestions for this field.
+   *
+   * @return
+   */
+  boolean stageSuggestions() default false;
 }
