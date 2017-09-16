@@ -53,7 +53,12 @@ public @interface ConfigDef {
     MODEL(""),
     CHARACTER(' '),
     TEXT(""),
-    CREDENTIAL("")
+    CREDENTIAL(""),
+    /*
+     * Runtime type is never displayed in UI nor serialized in the pipeline configuration. Rather it's provided
+     * during runtime by other means.
+     */
+    RUNTIME(null),
     ;
 
     private final transient Object defaultValue;
