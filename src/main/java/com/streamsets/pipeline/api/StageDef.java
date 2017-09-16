@@ -16,6 +16,8 @@
 package com.streamsets.pipeline.api;
 
 
+import com.streamsets.pipeline.api.service.ServiceDependency;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -149,4 +151,9 @@ public @interface StageDef {
    * Indicates if this stage implementation is beta.
    */
   boolean beta() default false;
+
+  /**
+   * List of services that this stage require for it's proper working.
+   */
+  ServiceDependency[] services() default {};
 }
