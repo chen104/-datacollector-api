@@ -22,6 +22,7 @@ public enum EndPointType implements Label {
   JDBC("JDBC"),
   HDFS("HDFS"),
   HIVE("HIVE"),
+  KAFKA("KAFKA"),
   KUDU("KUDU"),
   HBASE("HBASE"),
   LOCAL_FS("LOCAL_FS"),
