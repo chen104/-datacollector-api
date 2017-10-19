@@ -28,7 +28,7 @@ public interface Service {
   /**
    * Interface for configuration issues.
    *
-   * @see Context#createConfigIssue(ErrorCode, Object...)
+   * @see Context#createConfigIssue(String, String, ErrorCode, Object...)
    */
   interface ConfigIssue {
   }
@@ -39,13 +39,16 @@ public interface Service {
   public interface Context {
 
     /**
-     * Creates a configuration issue for the publisher (at initialization time).
+     * Creates a configuration issue for the service (at initialization time).
      *
-     * @param errorCode the <code>ErrorCode</code> for the issue.
-     * @param args the arguments for the <code>ErrorCode</code> message.
-     * @return the configuration issue to report back.
+     * @param configGroup Configuration group of the service configuration, if applicable.
+     * @param configName Configuration name of the service configuration, if applicable.
+     * @param errorCode <code>ErrorCode</code> for the issue.
+     * @param args Arguments for the <code>ErrorCode</code> message.
+     * @return Configuration issue to report back.
      */
-    ConfigIssue createConfigIssue(ErrorCode errorCode, Object... args);
+    public ConfigIssue createConfigIssue(String configGroup, String configName, ErrorCode errorCode, Object... args);
+
   }
 
   /**
