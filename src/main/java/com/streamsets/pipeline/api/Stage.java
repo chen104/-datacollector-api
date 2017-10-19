@@ -454,6 +454,16 @@ public interface Stage<C extends Stage.Context> {
      * @return
      */
     public Map<String, Object> getStageRunnerSharedMap();
+
+    /**
+     * Returns singleton instance of given service configured especially for this stage instance. Different stage instances
+     * (even of the same Stage implementation) will have their own singleton instance. Multiple calls to this method
+     * will return the same object.
+     *
+     * @param serviceInterface Interface describing required service
+     * @return Stage's own singleton instance
+     */
+    public<T> T getService(Class<? extends T> serviceInterface);
   }
 
   /**
