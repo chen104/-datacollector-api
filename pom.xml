@@ -366,6 +366,9 @@
             <exclude>.git/**</exclude>
             <exclude>.gitignore</exclude>
             <exclude>.gitreview</exclude>
+	    
+	    <!-- Jenkins -->
+            <exclude>**/buildInfo*.properties</exclude>
 
             <exclude>**/target/**</exclude>
 
