@@ -15,6 +15,7 @@
  */
 package com.streamsets.pipeline.api.base;
 
+import com.streamsets.pipeline.api.ConfigIssue;
 import com.streamsets.pipeline.api.service.Service;
 
 import java.util.ArrayList;

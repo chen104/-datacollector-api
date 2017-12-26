@@ -13,32 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.streamsets.pipeline.api.impl.annotationsprocessor;
+package com.streamsets.pipeline.api;
 
-import com.streamsets.pipeline.api.ConfigIssue;
-import com.streamsets.pipeline.api.service.Service;
-import com.streamsets.pipeline.api.service.ServiceDef;
-
-import java.util.List;
-
-@ServiceDef(
-  provides = Runnable.class,
-  version = 1,
-  label = "Dummy service"
-)
-public class DummyService implements Service, Runnable {
-  @Override
-  public List<ConfigIssue> init(Context context) {
-    return null;
-  }
-
-  @Override
-  public void destroy() {
-
-  }
-
-  @Override
-  public void run() {
-
-  }
+/**
+ * Standalone class representing configuration issue.
+ *
+ * E.g. validation error that is connected to exactly one {@link ConfigDef}.
+ */
+public interface ConfigIssue extends Stage.ConfigIssue {
 }

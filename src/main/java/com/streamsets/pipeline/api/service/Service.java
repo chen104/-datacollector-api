@@ -15,7 +15,8 @@
  */
 package com.streamsets.pipeline.api.service;
 
-import com.streamsets.pipeline.api.ErrorCode;
+import com.streamsets.pipeline.api.ConfigIssue;
+import com.streamsets.pipeline.api.ConfigIssueContext;
 
 import java.util.List;
 
@@ -26,29 +27,9 @@ import java.util.List;
 public interface Service {
 
   /**
-   * Interface for configuration issues.
-   *
-   * @see Context#createConfigIssue(String, String, ErrorCode, Object...)
-   */
-  interface ConfigIssue {
-  }
-
-  /**
    * LineagePublisher Context that provides runtime information and services to the plugin.
    */
-  public interface Context {
-
-    /**
-     * Creates a configuration issue for the service (at initialization time).
-     *
-     * @param configGroup Configuration group of the service configuration, if applicable.
-     * @param configName Configuration name of the service configuration, if applicable.
-     * @param errorCode <code>ErrorCode</code> for the issue.
-     * @param args Arguments for the <code>ErrorCode</code> message.
-     * @return Configuration issue to report back.
-     */
-    public ConfigIssue createConfigIssue(String configGroup, String configName, ErrorCode errorCode, Object... args);
-
+  public interface Context extends ConfigIssueContext {
   }
 
   /**

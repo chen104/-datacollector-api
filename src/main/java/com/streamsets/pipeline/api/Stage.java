@@ -145,7 +145,7 @@ public interface Stage<C extends Stage.Context> {
   /**
    * Stage Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ELContext {
+  public interface Context extends ELContext, ConfigIssueContext {
 
     /**
      * Return value for given configuration option from data collector main configuration.
@@ -191,17 +191,6 @@ public interface Stage<C extends Stage.Context> {
      * @return UserContext for the current pipeline
      */
     public UserContext getUserContext();
-
-    /**
-     * Creates a configuration issue for the stage (at initialization time).
-     *
-     * @param configGroup the configuration group of the stage configuration, if applicable.
-     * @param configName the configuration name of the stage configuration, if applicable.
-     * @param errorCode the <code>ErrorCode</code> for the issue.
-     * @param args the arguments for the <code>ErrorCode</code> message.
-     * @return the configuration issue to report back.
-     */
-    public ConfigIssue createConfigIssue(String configGroup, String configName, ErrorCode errorCode, Object... args);
 
     /**
      * Returns a {@link Info} of this stage.
@@ -469,8 +458,12 @@ public interface Stage<C extends Stage.Context> {
   /**
    * Interface for configuration issues.
    *
+   * Kept for backward compatibility.
+   *
    * @see Context#createConfigIssue(String, String, ErrorCode, Object...)
+   * @see com.streamsets.pipeline.api.ConfigIssue
    */
+  @Deprecated
   public interface ConfigIssue {
   }
 
