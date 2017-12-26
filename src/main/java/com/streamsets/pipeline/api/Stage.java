@@ -38,7 +38,7 @@ import java.util.Map;
  * @see Processor
  * @see Target
  */
-public interface Stage<C extends Stage.Context> {
+public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity {
 
   /**
    * It provides information about the stage.
@@ -145,7 +145,7 @@ public interface Stage<C extends Stage.Context> {
   /**
    * Stage Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ELContext, ConfigIssueContext {
+  public interface Context extends ELContext, ProtoConfigurableEntity.Context {
 
     /**
      * Return value for given configuration option from data collector main configuration.
@@ -344,39 +344,12 @@ public interface Stage<C extends Stage.Context> {
     public OnRecordError getOnErrorRecord();
 
     /**
-     * Creates an empty record.
-     *
-     * @param recordSourceId the ID to identify the record. It should include enough information to track down
-     * the record source.
-     * @return an empty record with the specified ID.
-     */
-    Record createRecord(String recordSourceId);
-
-    /**
-     * Creates an empty record including the original raw data of the record.
-     *
-     * @param recordSourceId the ID to identify the record. It should include enough information to track down
-     * the record source.
-     * @param raw the record raw data.
-     * @param rawMime the MIME type of the raw data.
-     * @return an empty record with the specified ID and raw data.
-     */
-    Record createRecord(String recordSourceId, byte[] raw, String rawMime);
-
-    /**
      * Returns the time of completion of the previous batch.
      * <p/>
      * @return the time of completion of the previous batch or zero if it is the previous batch processing time is not
      * known.
      */
     public long getLastBatchTime();
-
-    /**
-     * Returns the absolute path to the SDC resources directory.
-     *
-     * @return  the absolute path to the SDC resources directory.
-     */
-    public String getResourcesDirectory();
 
     /**
      * Indicates if the pipeline has been stopped while the stage is processing a batch of records.

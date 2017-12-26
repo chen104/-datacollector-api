@@ -16,7 +16,7 @@
 package com.streamsets.pipeline.api.service;
 
 import com.streamsets.pipeline.api.ConfigIssue;
-import com.streamsets.pipeline.api.ConfigIssueContext;
+import com.streamsets.pipeline.api.ProtoConfigurableEntity;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ import java.util.List;
  * Base interface for Data Collector services, a reusable and configurable code that stages can depend on to
  * outsource and share common functionality.
  */
-public interface Service {
+public interface Service extends ProtoConfigurableEntity {
 
   /**
    * LineagePublisher Context that provides runtime information and services to the plugin.
    */
-  public interface Context extends ConfigIssueContext {
+  public interface Context extends ProtoConfigurableEntity.Context {
   }
 
   /**
