@@ -46,7 +46,7 @@ public abstract class FileRef {
    * @throws IOException if there are issues in creating the stream.
    */
   public abstract <T extends AutoCloseable> T createInputStream(
-      Stage.Context context,
+      ProtoConfigurableEntity.Context context,
       Class<T> streamClassType
   ) throws IOException;
 

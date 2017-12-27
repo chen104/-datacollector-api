@@ -78,7 +78,7 @@ public class TestFileRef {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AutoCloseable> T createInputStream(Stage.Context context, Class<T> streamClassType) throws IOException {
+    public <T extends AutoCloseable> T createInputStream(ProtoConfigurableEntity.Context context, Class<T> streamClassType) throws IOException {
       InputStream stream = new ByteArrayInputStream(byteData);
       if (streamClassType.equals(ReadableByteChannel.class)) {
         return (T)new MockReadableByteChannel(stream);
