@@ -21,6 +21,9 @@ import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.streamsets.pipeline.api.el.ELEval;
+import com.streamsets.pipeline.api.el.ELEvalException;
+import com.streamsets.pipeline.api.el.ELVars;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -33,15 +36,66 @@ import java.util.Map;
 public interface ProtoConfigurableEntity {
 
   /**
+   * Context to create and use Java Expression Language (EL) evaluators.
+   */
+  public interface ELContext {
+
+    /**
+     * Validates an EL is syntactically correct.
+     *
+     * @param el EL to validate.
+     * @throws ELEvalException if the EL is not syntactically valid.
+     */
+    public void parseEL(String el) throws ELEvalException;
+
+    /**
+     * Creates an {@link ELVars} instance to provide variables to {@link ELEval} when evaluating ELs.
+     *
+     * @return an empty <code>ELVar</code> instance.
+     */
+    public ELVars createELVars();
+
+    /**
+     * Creates an {@link ELEval} configured with the EL functions and constants defined by the indicated stage
+     * configuration.
+     *
+     * @param configName stage configuration name.
+     * @return the configured <code>ELEval</code> instance.
+     * @see ConfigDef#elDefs()
+     */
+    public ELEval createELEval(String configName);
+
+    /**
+     * Creates an {@link ELEval} configured with the EL functions and constants defined by the indicated stage
+     * configuration plus the additional EL functions and constants specified.
+     *
+     * @param configName stage configuration name.
+     * @param elDefClasses class defining additional EL functions and constants to configure the <code>ELEval</code>
+     * instance with.
+     * @return the configured <code>ELEval</code> instance.
+     * @see ConfigDef#elDefs()
+     */
+    public ELEval createELEval(String configName, Class<?>... elDefClasses);
+
+  }
+
+  /**
    * Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ConfigIssueContext {
+  public interface Context extends ConfigIssueContext, ELContext {
     /**
      * Returns the absolute path to the SDC resources directory.
      *
      * @return  the absolute path to the SDC resources directory.
      */
     public String getResourcesDirectory();
+
+    /**
+     * Return pipeline constants.
+     *
+     * @return Immutable Map with pipeline constants.
+     */
+    public Map<String, Object> getPipelineConstants();
 
     /**
      * Creates an empty record.

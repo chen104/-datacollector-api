@@ -15,9 +15,6 @@
  */
 package com.streamsets.pipeline.api;
 
-import com.streamsets.pipeline.api.el.ELEval;
-import com.streamsets.pipeline.api.el.ELEvalException;
-import com.streamsets.pipeline.api.el.ELVars;
 import com.streamsets.pipeline.api.lineage.LineageEvent;
 import com.streamsets.pipeline.api.lineage.LineageEventType;
 
@@ -78,50 +75,6 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
   }
 
   /**
-   * Context to create and use Java Expression Language (EL) evaluators.
-   */
-  public interface ELContext {
-
-    /**
-     * Validates an EL is syntactically correct.
-     *
-     * @param el EL to validate.
-     * @throws ELEvalException if the EL is not syntactically valid.
-     */
-    public void parseEL(String el) throws ELEvalException;
-
-    /**
-     * Creates an {@link ELVars} instance to provide variables to {@link ELEval} when evaluating ELs.
-     *
-     * @return an empty <code>ELVar</code> instance.
-     */
-    public ELVars createELVars();
-
-    /**
-     * Creates an {@link ELEval} configured with the EL functions and constants defined by the indicated stage
-     * configuration.
-     *
-     * @param configName stage configuration name.
-     * @return the configured <code>ELEval</code> instance.
-     * @see ConfigDef#elDefs()
-     */
-    public ELEval createELEval(String configName);
-
-    /**
-     * Creates an {@link ELEval} configured with the EL functions and constants defined by the indicated stage
-     * configuration plus the additional EL functions and constants specified.
-     *
-     * @param configName stage configuration name.
-     * @param elDefClasses class defining additional EL functions and constants to configure the <code>ELEval</code>
-     * instance with.
-     * @return the configured <code>ELEval</code> instance.
-     * @see ConfigDef#elDefs()
-     */
-    public ELEval createELEval(String configName, Class<?>... elDefClasses);
-
-  }
-
-  /**
    * Context to get information about user that started the pipeline or job.
    */
   public interface UserContext {
@@ -138,7 +91,7 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
   /**
    * Stage Context that provides runtime information and services to the stage.
    */
-  public interface Context extends ELContext, ProtoConfigurableEntity.Context {
+  public interface Context extends ProtoConfigurableEntity.Context {
 
     /**
      * Return value for given configuration option from data collector main configuration.
@@ -149,13 +102,6 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
      * @return String representation of the value or null if it's not defined.
      */
     public String getConfig(String configName);
-
-    /**
-     * Return pipeline constants.
-     *
-     * @return Immutable Map with pipeline constants.
-     */
-    public Map<String, Object> getPipelineConstants();
 
     /**
      * Returns the current execution mode of the pipeline.
