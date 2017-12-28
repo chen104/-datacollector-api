@@ -33,9 +33,7 @@ public interface StageUpgrader {
   public enum Error implements ErrorCode {
     UPGRADER_00("Upgrader not implemented for stage '{}:{}' instance '{}'"),
     UPGRADER_01("Cannot upgrade stage '{}:{}' instance '{}' from version '{}' to version '{}'"),
-
     ;
-
 
     private final String message;
 
@@ -63,15 +61,77 @@ public interface StageUpgrader {
      * This implementation always throws an exception.
      */
     @Override
-    public List<Config> upgrade(String library, String stageName, String stageInstance, int fromVersion, int toVersion,
-        List<Config> configs) throws
-        StageException {
-      throw new StageException(Error.UPGRADER_00, library, stageName, stageInstance);
+    public List<Config> upgrade(List<Config> configs, Context context) throws StageException {
+      throw new StageException(
+        Error.UPGRADER_00,
+        context.getLibrary(),
+        context.getStageName(),
+        context.getStageInstance()
+      );
     }
   }
 
   /**
-   * Upgrades the stage cofiguration from a previous version to current version.
+   * Upgrade context with various upgrade metadata.
+   */
+  public static interface Context {
+
+    /**
+     * Stage Library name
+     */
+    public String getLibrary();
+
+    /**
+     * Stage name (identifies this stage uniquely in SDC)
+     */
+    public String getStageName();
+
+    /**
+     * Stage instance name (identifies instance of this stage in particular pipeline).
+     */
+    public String getStageInstance();
+
+    /**
+     * Current version of the stored configuration.
+     */
+    public int getFromVersion();
+
+    /**
+     * Desired target version after upgrade.
+     */
+    public int getToVersion();
+
+    /**
+     * Register given service with provided configuration.
+     *
+     * @param service Service interface that needs to be registered.
+     * @param configs Initial configuration for the service.
+     */
+    public void registerService(Class service, List<Config> configs);
+  }
+
+  /**
+   * Upgrades the stage configuration from a previous version to current version.
+   *
+   * @param configs Current configuration that needs to be upgraded.
+   * @param context Upgrade context with various metadata.
+   * @return The upgraded configuration.
+   * @throws StageException if the configurations could not be upgraded.
+   * @return
+   */
+  default public List<Config> upgrade(List<Config> configs, Context context) throws StageException {
+    return upgrade(
+      context.getLibrary(),
+      context.getStageName(),
+      context.getStageInstance(),
+      context.getFromVersion(),
+      context.getToVersion(),
+      configs
+    );
+  }
+
+  /**
+   * Upgrades the stage configuration from a previous version to current version.
    *
    * @param library stage library name.
    * @param stageName stage name.
@@ -82,7 +142,17 @@ public interface StageUpgrader {
    * @return The upgraded configuration.
    * @throws StageException if the configurations could not be upgraded.
    */
-  public List<Config> upgrade(String library, String stageName, String stageInstance, int fromVersion, int toVersion,
-      List<Config> configs) throws StageException;
+  @Deprecated
+  default public List<Config> upgrade(
+    String library,
+    String stageName,
+    String stageInstance,
+    int fromVersion,
+    int toVersion,
+    List<Config> configs
+  ) throws StageException {
+    // Default behavior is no-op
+    return configs;
+  }
 
 }
