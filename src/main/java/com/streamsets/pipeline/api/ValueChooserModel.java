@@ -35,4 +35,10 @@ public @interface ValueChooserModel {
    */
   Class<? extends ChooserValues> value();
 
+  /**
+   * Name of a List configuration that contains a filter of what entities from given chooser should be indeed
+   * displayed.
+   */
+  String filteringConfig() default "";
+
 }
