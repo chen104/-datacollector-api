@@ -30,7 +30,7 @@ public interface Processor extends Stage<Processor.Context> {
   /**
    * <code>Processor</code> stage context.
    */
-  public interface Context extends Stage.Context, ToErrorContext, ToEventContext {
+  public interface Context extends Stage.Context, ToErrorContext, ToEventContext, ProcessedContext {
 
     /**
      * Returns the output lane names (stream names) of the <code>Source</code>.

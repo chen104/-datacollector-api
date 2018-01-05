@@ -15,16 +15,26 @@
  */
 package com.streamsets.pipeline.api;
 
+import java.util.Collection;
+
 /**
- * Context for a batch, primarily used in PushSource to start and finish execution of a batch.
+ * Describes methods for various context classes that deals with error handling.
  */
-public interface BatchContext extends ToErrorContext, ToEventContext, ProcessedContext {
+public interface ProcessedContext {
 
   /**
-   * Return batch maker associated with this batch context.
+   * Signals that the record has been fully processed for output metrics calculation.
+   * Calling this method is currently optional.
    *
-   * @return Instance of BatchMaker, multiple calls returns the same object
+   * @param record Record which has completed processing.
    */
-  public BatchMaker getBatchMaker();
+  void complete(Record record);
 
+  /**
+   * Signals that this list of records has been fully processed for output metrics calculation.
+   * Calling this method is currently optional.
+   *
+   * @param records Records which have completed processing.
+   */
+  void complete(Collection<Record> records);
 }
