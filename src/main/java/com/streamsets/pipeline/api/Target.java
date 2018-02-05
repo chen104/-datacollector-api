@@ -27,7 +27,7 @@ public interface Target extends Stage<Target.Context> {
   /**
    * <code>Target</code> stage context.
    */
-  public interface Context extends Stage.Context, ToErrorContext, ToEventContext, ProcessedContext {
+  public interface Context extends Stage.Context, ToErrorContext, ToEventContext {
 
   }
 

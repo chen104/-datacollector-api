@@ -18,7 +18,7 @@ package com.streamsets.pipeline.api;
 /**
  * Context for a batch, primarily used in PushSource to start and finish execution of a batch.
  */
-public interface BatchContext extends ToErrorContext, ToEventContext, ProcessedContext {
+public interface BatchContext extends ToErrorContext, ToEventContext {
 
   /**
    * Return batch maker associated with this batch context.
