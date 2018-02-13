@@ -35,7 +35,7 @@ public interface Source extends ProtoSource<Source.Context> {
   /**
    * <code>Source</code> stage context.
    */
-  public interface Context extends ProtoSource.Context, ToErrorContext, ToEventContext {
+  public interface Context extends ProtoSource.Context, ToErrorContext, ToEventContext, ProcessedContext {
   }
 
   /**
