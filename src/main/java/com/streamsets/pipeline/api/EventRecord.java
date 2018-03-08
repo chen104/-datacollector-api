@@ -36,4 +36,24 @@ public interface EventRecord extends Record {
    */
   public static final String CREATION_TIMESTAMP = "sdc.event.creation_timestamp";
 
+  /**
+   * Gets the type of this event, which is set by the event creator.
+   *
+   * @return the type of the event
+   */
+  public String getEventType();
+
+  /**
+   * Gets the version of this event, which is set by the event creator.
+   *
+   * @return the version of the event
+   */
+  public String getEventVersion();
+
+  /**
+   * Gets the timestamp associated with this event's creation.
+   *
+   * @return this event's creation timestamp
+   */
+  public String getEventCreationTimestamp();
 }
