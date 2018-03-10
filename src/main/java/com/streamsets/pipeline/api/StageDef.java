@@ -94,6 +94,11 @@ public @interface StageDef {
   String icon() default "";
 
   /**
+   * Indicates whether the UI should show this stage in the palette or not.
+   */
+  boolean hidden() default false;
+
+  /**
    * If the number of output streams is driven a stage configuration (it must be a {@link java.util.List}), the name
    * of the configuration must be indicated here.
    */
