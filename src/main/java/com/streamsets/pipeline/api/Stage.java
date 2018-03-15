@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Base interface for Data Collector stages implementations defining their common context and lifecycle.
+ * Internal Base interface for Data Collector stages implementations defining their common context and lifecycle.
  *
  * @see Source
  * @see Processor
@@ -85,6 +85,13 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
      * @return Human readable user name
      */
     public String getUser();
+
+
+    /**
+     * Returns the alias name of the user who started this pipeline or job.
+     * @return Alias name
+     */
+    String getAliasName();
 
   }
 
