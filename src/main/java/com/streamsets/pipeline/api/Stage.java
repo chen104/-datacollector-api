@@ -101,16 +101,6 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
   public interface Context extends ProtoConfigurableEntity.Context {
 
     /**
-     * Return value for given configuration option from data collector main configuration.
-     *
-     * Stages have their own namespace, so method won't be able to return generic SDC configuration.
-     *
-     * @param configName Configuration option name
-     * @return String representation of the value or null if it's not defined.
-     */
-    public String getConfig(String configName);
-
-    /**
      * Returns the current execution mode of the pipeline.
      *
      * @return the current execution mode of the pipeline.

@@ -84,6 +84,17 @@ public interface ProtoConfigurableEntity {
    */
   public interface Context extends ConfigIssueContext, ELContext {
     /**
+     * Return value for given configuration option from data collector main configuration.
+     *
+     * Stages have their own namespace, so method won't be able to return generic SDC configuration.
+     *
+     * @param configName Configuration option name
+     * @return String representation of the value or null if it's not defined.
+     */
+    public String getConfig(String configName);
+
+
+    /**
      * Returns the absolute path to the SDC resources directory.
      *
      * @return  the absolute path to the SDC resources directory.
