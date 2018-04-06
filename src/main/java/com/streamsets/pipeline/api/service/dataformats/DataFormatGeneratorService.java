@@ -31,4 +31,18 @@ public interface DataFormatGeneratorService {
    * @throws IOException Thrown when IO error is encountered
    */
   public DataGenerator getGenerator(OutputStream os) throws IOException;
+
+  /**
+   * Returns true if the generated data are plain text (e.g. formats like CSV or JSON and not Avro or Protobuf). Usable
+   * if the stage wants to behave differently for text formats (better user exceptions, ...).
+   */
+  public boolean isPlainTextCompatible();
+
+  /**
+   * Charset that is used by the service when writing text data.
+   *
+   * Particularly useful when the output of the service is a text and charset needs to be passed down to the target
+   * system. This method does not make sense when using a binary format (e.g. when isPlainTextCompatible returns false).
+   */
+  public String getCharset();
 }
