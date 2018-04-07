@@ -61,4 +61,8 @@ public interface DataFormatParserService {
 
   public DataParser getParser(String id, Map<String, Object> metadata, FileRef fileRef) throws DataParserException;
 
+  /**
+   * Charset that is used by the service when reading text data.
+   */
+  public String getCharset();
 }
