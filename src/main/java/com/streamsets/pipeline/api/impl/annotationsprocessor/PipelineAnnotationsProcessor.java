@@ -28,6 +28,7 @@ import com.streamsets.pipeline.api.StatsAggregatorStage;
 import com.streamsets.pipeline.api.Target;
 import com.streamsets.pipeline.api.credential.CredentialStoreDef;
 import com.streamsets.pipeline.api.impl.Utils;
+import com.streamsets.pipeline.api.interceptor.InterceptorDef;
 import com.streamsets.pipeline.api.lineage.LineagePublisherDef;
 import com.streamsets.pipeline.api.service.ServiceDef;
 
@@ -62,7 +63,8 @@ import java.util.Set;
     "com.streamsets.pipeline.api.ElDef",
     "com.streamsets.pipeline.api.lineage.LineagePublisherDef",
     "com.streamsets.pipeline.api.credential.CredentialStoreDef",
-    "com.streamsets.pipeline.api.service.ServiceDef"
+    "com.streamsets.pipeline.api.service.ServiceDef",
+    "com.streamsets.pipeline.api.interceptor.InterceptorDef"
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(PipelineAnnotationsProcessor.SKIP_PROCESSOR)
@@ -75,6 +77,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
   public static final String ELDEFS_FILE = "ElDefinitions.json";
   public static final String BUNDLES_FILE = "datacollector-resource-bundles.json";
   public static final String CREDENTIAL_STORE_FILE = "CredentialStores.json";
+  public static final String INTERCEPTORS_FILE = "Interceptors.json";
   public static final String STAGE_DEF_LIST_FILE = "StageDefList.json";
 
   private boolean skipProcessor;
@@ -85,6 +88,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
   private final List<String> elDefClasses;
   private final List<String> bundleClasses;
   private final List<String> credentialStoreClasses;
+  private final List<String> interceptorClasses;
   private final List<String> stageDefJsonList;
   private boolean error;
   private TypeMirror typeOfSource;
@@ -101,6 +105,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     elDefClasses = new ArrayList<>();
     bundleClasses = new ArrayList<>();
     credentialStoreClasses = new ArrayList<>();
+    interceptorClasses = new ArrayList<>();
     stageDefJsonList = new ArrayList<>();
   }
 
@@ -175,6 +180,16 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
       }
     }
 
+    // Collect @InterceptorDef classes
+    for(Element e : roundEnv.getElementsAnnotatedWith(InterceptorDef.class)) {
+      if(e.getKind().isClass()) {
+        interceptorClasses.add(((TypeElement)e).getQualifiedName().toString());
+      } else {
+        printError("'{}' is not a class, cannot be @InterceptorDef annotated", e);
+        error = true;
+      }
+    }
+
     // Collect @ElDef classes
     for(Element e : roundEnv.getElementsAnnotatedWith(ElDef.class)) {
       if(e.getKind().isClass()) {
@@ -213,6 +228,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     generateFile(ELDEFS_FILE, elDefClasses,"  \"", "\"");
     generateFile(BUNDLES_FILE, bundleClasses,"  \"", "\"");
     generateFile(CREDENTIAL_STORE_FILE, credentialStoreClasses,"  \"", "\"");
+    generateFile(INTERCEPTORS_FILE, interceptorClasses,"  \"", "\"");
     generateFile(STAGE_DEF_LIST_FILE, stageDefJsonList," ", "");
   }
 
