@@ -15,6 +15,10 @@
  */
 package com.streamsets.pipeline.api.interceptor;
 
+import com.streamsets.pipeline.api.ConfigIssue;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public abstract class BaseInterceptor implements Interceptor {
@@ -36,7 +40,7 @@ public abstract class BaseInterceptor implements Interceptor {
    * init(Map<String,String>) should be used (overridden)
    */
   @Override
-  public boolean init(Map<String, String> parameters, Context context) {
+  public List<ConfigIssue> init(Map<String, String> parameters, Context context) {
     this.context = context;
     return init(parameters);
   }
@@ -46,8 +50,8 @@ public abstract class BaseInterceptor implements Interceptor {
    *
    * This implementation is a no-operation.
    */
-  protected boolean init(Map<String, String> parameters) {
-    return true;
+  protected List<ConfigIssue> init(Map<String, String> parameters) {
+    return Collections.emptyList();
   }
 
   /**

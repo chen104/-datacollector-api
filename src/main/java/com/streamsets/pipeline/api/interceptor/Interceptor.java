@@ -16,6 +16,8 @@
 package com.streamsets.pipeline.api.interceptor;
 
 import com.streamsets.pipeline.api.BlobStore;
+import com.streamsets.pipeline.api.ConfigIssue;
+import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.Record;
 
 import java.util.List;
@@ -32,6 +34,16 @@ public interface Interceptor {
    * Context that provides runtime information and services to the interceptor.
    */
   public interface Context {
+
+    /**
+     * Creates a configuration issue for the interceptor (at initialization time).
+     *
+     * @param errorCode the <code>ErrorCode</code> for the issue.
+     * @param args the arguments for the <code>ErrorCode</code> message.
+     * @return the configuration issue to report back.
+     */
+    ConfigIssue createConfigIssue(ErrorCode errorCode, Object... args);
+
     /**
      * Return value for given configuration option from data collector main configuration.
      *
@@ -57,7 +69,7 @@ public interface Interceptor {
    * @param parameters the interceptor configuration.
    * @param context the stage context.
    */
-  public boolean init(Map<String, String> parameters, Context context);
+  public List<ConfigIssue> init(Map<String, String> parameters, Context context);
 
   /**
    * Intercept records and perform operations that need to be performed.
