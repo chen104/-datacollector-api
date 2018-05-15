@@ -25,6 +25,16 @@ import com.streamsets.pipeline.api.StageType;
 public interface DefaultInterceptorCreator {
 
   /**
+   * Type of the interceptor represents where exactly is the interceptor going to be executed.
+   */
+  public enum InterceptorType {
+    // Interceptor will be called directly before passing data down to stage
+    PRE_STAGE,
+    // Interceptor will be called directly after receiving data from the stage
+    POST_STAGE,
+  }
+
+  /**
    * Context that provides runtime information and services to the creator.
    */
   public interface Context {
@@ -40,23 +50,32 @@ public interface DefaultInterceptorCreator {
      * Returns SDC singleton instance for the BLOB store
      */
     public BlobStore getBlobStore();
+
+    /**
+     * Returns type of the stage for which the create() method is called.
+     */
+    public StageType getStageType();
+
+    /**
+     * Return type of the interceptor (where exactly it will be called).
+     */
+    public InterceptorType getInterceptorType();
   }
 
   /**
    * Create interceptor if needed for given stage.
    *
-   * @param stageType Stage type
    * @param context Creator context
    * @return Interceptor that should be used for given stage or null if no interceptor is needed.
    */
-  public Interceptor create(StageType stageType, Context context);
+  public Interceptor create(Context context);
 
   /**
    * Default interceptor creator that will never create any interceptors.
    */
   public static class Default implements DefaultInterceptorCreator {
     @Override
-    public Interceptor create(StageType stageType, Context context) {
+    public Interceptor create(Context context) {
       return null;
     }
   }
