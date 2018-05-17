@@ -215,6 +215,13 @@ public interface Record {
     public String getErrorStackTrace();
 
     /**
+     * Job ID is set when the pipeline has an associated SCH Job ID
+     *
+     * @return Job ID in String format, <code>NULL</code> if Job ID does not exists.
+     */
+    public String getErrorJobId();
+
+    /**
      * Get all attributes including system attributes for this record header
      * @return All attributes of this record header
      */
