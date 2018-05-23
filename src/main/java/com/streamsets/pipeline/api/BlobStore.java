@@ -41,7 +41,7 @@ public interface BlobStore {
   /**
    * Validation pattern for id.
    */
-  public static Pattern VALID_ID_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
+  public static Pattern VALID_ID_PATTERN = Pattern.compile("[A-Za-z0-9_.:-]+");
 
   /**
    * Store a new object inside the blob store.
