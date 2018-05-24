@@ -17,6 +17,7 @@ package com.streamsets.pipeline.api;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 /**
  * A <code>Record</code> represents the unit of data Data Collector pipelines process. A record has a {@link Field}
@@ -306,6 +307,16 @@ public interface Record {
    * @since 1.2.2.0
    */
   public Set<String> getEscapedFieldPaths();
+
+  /**
+   * Returns all available field-paths in the record. Field-paths that contain any non-word characters are escaped by
+   * single quotes.
+   *
+   * @return all available field-paths in the record. The returned List will be ordered such that list fields
+   * are in order (and can be deleted by iterating in the reverse order). No other ordering guarantees are made.
+   * Uniqueness of the list is also not guaranteed.
+   */
+  public List<String> getEscapedFieldPathsOrdered();
 
   /**
    * Sets a <code>Field</code> in the specified field-path.
