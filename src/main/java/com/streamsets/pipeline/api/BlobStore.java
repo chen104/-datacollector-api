@@ -52,7 +52,7 @@ public interface BlobStore {
    * @param content The actual content.
    * @throws StageException
    */
-  public void store(String namespace, String id, int version, String content) throws StageException;
+  public void store(String namespace, String id, long version, String content) throws StageException;
 
   /**
    * Return latest version for given object.
@@ -62,7 +62,7 @@ public interface BlobStore {
    * @return Latest version (usual integer comparison)
    * @throws StageException
    */
-  public int latestVersion(String namespace, String id) throws StageException;
+  public long latestVersion(String namespace, String id) throws StageException;
 
   /**
    * Return latest version for given object.
@@ -82,7 +82,7 @@ public interface BlobStore {
    * @return Set of all stored versions.
    * @throws StageException
    */
-  public Set<Integer> allVersions(String namespace, String id);
+  public Set<Long> allVersions(String namespace, String id);
 
   /**
    * Retrieve given object.
@@ -93,7 +93,7 @@ public interface BlobStore {
    * @return Object itself
    * @throws StageException
    */
-  public String retrieve(String namespace, String id, int version) throws StageException;
+  public String retrieve(String namespace, String id, long version) throws StageException;
 
   /**
    * Convenience method to return latest version for given object.
@@ -115,7 +115,7 @@ public interface BlobStore {
    * @param version Version of the object.
    * @throws StageException
    */
-  public void delete(String namespace, String id, int version) throws StageException;
+  public void delete(String namespace, String id, long version) throws StageException;
 
   /**
    * Delete all versions of given object.
@@ -125,7 +125,7 @@ public interface BlobStore {
    * @throws StageException
    */
   public default void deleteAllVersions(String namespace, String id) throws StageException {
-    for(int version : allVersions(namespace, id)) {
+    for(long version : allVersions(namespace, id)) {
       delete(namespace, id, version);
     }
   }
