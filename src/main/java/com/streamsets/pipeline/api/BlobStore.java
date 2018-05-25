@@ -65,14 +65,25 @@ public interface BlobStore {
   public long latestVersion(String namespace, String id) throws StageException;
 
   /**
-   * Return latest version for given object.
+   * Validates if given object exists on at least one version.
    *
    * @param namespace Namespace of the object.
    * @param id Id of the object.
    * @return If given object in given namespace exists
-   * @throws StageException
    */
   public boolean exists(String namespace, String id);
+
+  /**
+   * Validates if given object exists on given version.
+   *
+   * @param namespace Namespace of the object.
+   * @param id Id of the object.
+   * @param version Version of the object.
+   * @return If given object on given in given namespace exists
+   */
+  public default boolean exists(String namespace, String id, long version) {
+    return exists(namespace, id) && allVersions(namespace, id).contains(version);
+  }
 
   /**
    * Return all versions associated with given object.
