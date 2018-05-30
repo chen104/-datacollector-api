@@ -65,4 +65,19 @@ public interface DataFormatParserService {
    * Charset that is used by the service when reading text data.
    */
   public String getCharset();
+
+  /**
+   * Set the size of the string builder pool size. This should be equivalent to the number of threads that will use
+   * the service in parallel. Otherwise various threads might be stalled until a StringBuilder will become available.
+   *
+   * @param poolSize Pool size for StringBuilder
+   */
+  public void setStringBuilderPoolSize(int poolSize);
+
+  /**
+   * Internal StringBuilder pool size.
+   *
+   * @return Pool size
+   */
+  public int getStringBuilderPoolSize();
 }
