@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 StreamSets Inc.
+ * Copyright 2018 StreamSets Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,15 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.util.List;
-
 /**
- * Context for a batch, primarily used in PushSource to start and finish execution of a batch.
+ * Describes methods for various context classes that deals with source response handling.
  */
-public interface BatchContext extends ToErrorContext, ToEventContext, ProcessedContext {
+public interface ToSourceResponseContext {
 
   /**
-   * Return batch maker associated with this batch context.
+   * Sends given record to source response list.
    *
-   * @return Instance of BatchMaker, multiple calls returns the same object
+   * @param record Record that should be send as response
    */
-  public BatchMaker getBatchMaker();
-
-  /**
-   * Returns list of records marked as Source Response
-   *
-   * @return List of Source Response Records
-   */
-  List<Record> getSourceResponseRecords();
-
+  void toSourceResponse(Record record);
 }
