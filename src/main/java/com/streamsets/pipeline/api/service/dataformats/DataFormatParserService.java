@@ -16,6 +16,7 @@
 package com.streamsets.pipeline.api.service.dataformats;
 
 import com.streamsets.pipeline.api.FileRef;
+import com.streamsets.pipeline.api.StageException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -80,4 +81,40 @@ public interface DataFormatParserService {
    * @return Pool size
    */
   public int getStringBuilderPoolSize();
+
+  /**
+   * Return true if and only if this service is configured to output whole file record rather then normally parsed records.
+   *
+   * @return True if and only if the whole file format is enabled
+   */
+  public boolean isWholeFileFormat();
+
+  /**
+   * Size of the buffer that the service suggest caller to use when transmitting whole files.
+   *
+   * Make sense only if isWholeFileFormat() returns true.
+   *
+   * @return Size of the buffer in bytes
+   */
+  public long suggestedWholeFileBufferSize();
+
+  /**
+   * Rate limiting that the caller should apply when reading whole file format.
+   *
+   * Make sense only if isWholeFileFormat() returns true.
+   *
+   * TODO: Once all stages will be converted to services, this should no longer throw StageException.
+   *
+   * @return Rate limit in bytes per second or -1 if no rate limiting is required
+   */
+  public Double wholeFileRateLimit() throws StageException;
+
+  /**
+   * Returns true if the caller should generate checksum information for the whole file transfer.
+   *
+   * Make sense only if isWholeFileFormat() returns true.
+   *
+   * @return True if the checksum info should be required.
+   */
+  public boolean isWholeFileChecksumRequired();
 }
