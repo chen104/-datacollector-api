@@ -28,6 +28,7 @@ public enum EndPointType implements Label {
   LOCAL_FS("LOCAL_FS"),
   DEVDATA("DEVDATA"),
   OTHER("OTHER"),
+  HTTP("HTTP"),
   ;
 
   private String label;
