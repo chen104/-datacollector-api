@@ -15,6 +15,9 @@
  */
 package com.streamsets.pipeline.api.service.dataformats;
 
+import com.streamsets.pipeline.api.Record;
+import com.streamsets.pipeline.api.StageException;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -45,4 +48,51 @@ public interface DataFormatGeneratorService {
    * system. This method does not make sense when using a binary format (e.g. when isPlainTextCompatible returns false).
    */
   public String getCharset();
+
+  /**
+   * Return true if and only if this service is configured to work with whole file record rather then normal records.
+   *
+   * @return True if and only if the whole file format is enabled
+   */
+  public boolean isWholeFileFormat();
+
+  /**
+   * Return filename of given whole file format record.
+   *
+   * This method does not make sense if isWholeFileFormat() return false.
+   *
+   * @param record Whole file format record.
+   *
+   * @return Desired filename
+   */
+  public String wholeFileFilename(Record record) throws StageException;
+
+  /**
+   * What should the stage return in case that destination file already exists.
+   *
+   * This method does not make sense if isWholeFileFormat() return false.
+   *
+   * @return Action that should be performed.
+   */
+  public WholeFileExistsAction wholeFileExistsAction();
+
+  /**
+   * Whether the generated event should contain checksum or not.
+   *
+   * This method does not make sense if isWholeFileFormat() return false.
+   *
+   * @return Whether checksum should be part of event
+   */
+  public boolean wholeFileIncludeChecksumInTheEvents();
+
+  /**
+   * Return algorithm that should be used to calculate the checksum.
+   *
+   * This method does not make sense if isWholeFileFormat() return false and when wholeFileIncludeChecksumInTheEvents()
+   * return false.
+   *
+   * @return Checksum algorithm
+   */
+  public WholeFileChecksumAlgorithm wholeFileChecksumAlgorithm();
+
 }
