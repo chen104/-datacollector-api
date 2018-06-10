@@ -18,11 +18,12 @@ package com.streamsets.pipeline.api.interceptor;
 import com.streamsets.pipeline.api.BlobStore;
 import com.streamsets.pipeline.api.StageType;
 
+import java.util.Map;
+
 /**
- * Default interceptor creator is used to create instance of interceptor in case that no interceptors were specified
- * by the runtime framework (Control Hub in this case).
+ * Interceptor creator is used to create instance of interceptor for stages where they are required.
  */
-public interface DefaultInterceptorCreator {
+public interface InterceptorCreator {
 
   /**
    * Type of the interceptor represents where exactly is the interceptor going to be executed.
@@ -60,6 +61,13 @@ public interface DefaultInterceptorCreator {
      * Return type of the interceptor (where exactly it will be called).
      */
     public InterceptorType getInterceptorType();
+
+    /**
+     * Parameters that were generated for this pipeline.
+     *
+     * @return Map with parameters or null if there are no parameters available (such as in preview).
+     */
+    public Map<String, String> getParameters();
   }
 
   /**
@@ -70,13 +78,4 @@ public interface DefaultInterceptorCreator {
    */
   public Interceptor create(Context context);
 
-  /**
-   * Default interceptor creator that will never create any interceptors.
-   */
-  public static class Default implements DefaultInterceptorCreator {
-    @Override
-    public Interceptor create(Context context) {
-      return null;
-    }
-  }
 }

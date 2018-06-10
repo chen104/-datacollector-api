@@ -40,9 +40,9 @@ public abstract class BaseInterceptor implements Interceptor {
    * init(Map<String,String>) should be used (overridden)
    */
   @Override
-  public List<ConfigIssue> init(Map<String, String> parameters, Context context) {
+  public List<ConfigIssue> init(Context context) {
     this.context = context;
-    return init(parameters);
+    return init();
   }
 
   /**
@@ -50,7 +50,7 @@ public abstract class BaseInterceptor implements Interceptor {
    *
    * This implementation is a no-operation.
    */
-  protected List<ConfigIssue> init(Map<String, String> parameters) {
+  protected List<ConfigIssue> init() {
     return Collections.emptyList();
   }
 

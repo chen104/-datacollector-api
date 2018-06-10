@@ -77,13 +77,12 @@ public interface Interceptor {
    *
    * This method is called once when the pipeline is being initialized before the processing any data.
    *
-   * If the method returns true then it is considered ready to process data. Else it is considered mis-configured or
+   * If the method returns empty list then it is considered ready to process data. Else it is considered mis-configured or
    * that there is a problem and the interceptor is not ready to process data, thus aborting the pipeline initialization.
    *
-   * @param parameters the interceptor configuration.
    * @param context the stage context.
    */
-  public List<ConfigIssue> init(Map<String, String> parameters, Context context);
+  public List<ConfigIssue> init(Context context);
 
   /**
    * Intercept records and perform operations that need to be performed.

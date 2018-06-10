@@ -31,7 +31,7 @@ public @interface InterceptorDef {
   int version();
 
   /**
-   * Default creator that will be used in case that the framework wasn't given list of interceptors that should be used.
+   * Creator that will be used for the instantiation.
    */
-  Class<? extends DefaultInterceptorCreator> defaultCreator() default DefaultInterceptorCreator.Default.class;
+  Class<? extends InterceptorCreator> creator();
 }
