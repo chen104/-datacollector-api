@@ -58,9 +58,9 @@ public class TestStageException {
   @Test
   public void testStacktrace() {
     Exception cause = new Exception();
-    StageException ex = new StageException(Errors.API_00, "a", 1, cause);
+    StageException ex = new StageException(Errors.API_00, "a", 1, 2, cause);
     Assert.assertEquals(
-        "API_00 - " + Utils.format(Errors.API_00.getMessage(), "a", 1),
+        "API_00 - " + Utils.format(Errors.API_00.getMessage(), "a", 1, 2),
         ex.getMessage());
 
     LocaleInContext.set(Locale.forLanguageTag("xyz"));

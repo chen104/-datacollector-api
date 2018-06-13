@@ -26,7 +26,7 @@ import com.streamsets.pipeline.api.GenerateResourceBundle;
 // we have a hardcoded 'datacollector-resource-bundles.json' file in resources
 @GenerateResourceBundle
 public enum Errors implements ErrorCode {
-  API_00("Stage '{}' requires at least one output stream. There are '{}'."),
+  API_00("Stage '{}' requires exactly {} output streams. There are '{}'."),
   API_01("Cannot convert {} field '{}' to Boolean"),
   API_02("Cannot convert {} field '{}' to Byte[]"),
   API_03("Cannot convert Byte[] to {}"),

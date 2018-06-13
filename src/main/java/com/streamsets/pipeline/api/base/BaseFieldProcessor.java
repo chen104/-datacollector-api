@@ -15,6 +15,8 @@
  */
 package com.streamsets.pipeline.api.base;
 
+import com.streamsets.pipeline.api.Batch;
+import com.streamsets.pipeline.api.BatchMaker;
 import com.streamsets.pipeline.api.FieldProcessor;
 import com.streamsets.pipeline.api.Record;
 import com.streamsets.pipeline.api.StageException;
@@ -23,11 +25,9 @@ import com.streamsets.pipeline.api.impl.RecordBasedFieldBatch;
 /**
  * Field processor implementation providing empty Data Collector lifecycle methods and convenience methods for subclasses.
  */
-public abstract class BaseFieldProcessor extends SingleLaneRecordProcessor implements FieldProcessor  {
+public abstract class BaseFieldProcessor extends BaseProcessor implements FieldProcessor  {
   @Override
-  protected void process(Record record, SingleLaneBatchMaker batchMaker) throws StageException {
-    process(new RecordBasedFieldBatch(record));
-    batchMaker.addRecord(record);
+  public void process(Batch batch, BatchMaker batchMaker) throws StageException {
+    throw new UnsupportedOperationException();
   }
-
 }

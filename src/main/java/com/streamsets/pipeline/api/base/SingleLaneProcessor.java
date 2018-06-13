@@ -61,8 +61,13 @@ public abstract class SingleLaneProcessor extends BaseProcessor {
   protected List<ConfigIssue> init() {
     List<ConfigIssue> issues = super.init();
     if (getContext().getOutputLanes().size() != 1) {
-      issues.add(getContext().createConfigIssue(null, null, Errors.API_00, getInfo().getInstanceName(),
-                                                getContext().getOutputLanes().size()));
+      issues.add(getContext().createConfigIssue(
+        null,
+        null,
+        Errors.API_00,
+        getInfo().getInstanceName(),
+        1,
+        getContext().getOutputLanes().size()));
     } else {
       outputLane = getContext().getOutputLanes().iterator().next();
     }
