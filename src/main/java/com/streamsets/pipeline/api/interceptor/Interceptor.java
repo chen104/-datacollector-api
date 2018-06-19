@@ -18,6 +18,7 @@ package com.streamsets.pipeline.api.interceptor;
 import com.streamsets.pipeline.api.BlobStore;
 import com.streamsets.pipeline.api.ConfigIssue;
 import com.streamsets.pipeline.api.ErrorCode;
+import com.streamsets.pipeline.api.MetricContext;
 import com.streamsets.pipeline.api.Record;
 import com.streamsets.pipeline.api.Stage;
 
@@ -34,7 +35,7 @@ public interface Interceptor {
   /**
    * Context that provides runtime information and services to the interceptor.
    */
-  public interface Context {
+  public interface Context extends MetricContext {
 
     /**
      * Creates a configuration issue for the interceptor (at initialization time).
