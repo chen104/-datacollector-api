@@ -198,6 +198,13 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
     public boolean isStopped();
 
     /**
+     * Indicates if this stage is used to handle errors in the pipeline.
+     *
+     * @return true if the stage is error stage, false otherwise.
+     */
+    public boolean isErrorStage();
+
+    /**
      * Creates standard event record with pre-filled required header attributes.
      *
      * @param type Type of the event (value is up to the generating stage)
