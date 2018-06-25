@@ -221,12 +221,27 @@ public interface Record {
     public Map<String, Object> getAllAttributes();
 
     /**
+     * Get all non-system attributes for this record header
+     * @return All attributes of this record header
+     */
+    public Map<String, Object> getUserAttributes();
+
+    /**
      * Replace all old attributes by new ones, including system attributes. Use with caution, as this can remove/
      * replace system attributes and any attributes inserted by previous stages.
+     *
      * @param newAttributes The new attributes to set in the header
      * @return Map containing the old attributes in the header
      */
-    public Map<String, Object> setAllAttributes(Map<String, Object> newAttributes);
+    public Map<String, Object> overrideUserAndSystemAttributes(Map<String, Object> newAttributes);
+
+    /**
+     * Replace all non-system attributes. Note that all existing system attributes will be maintained.
+     *
+     * @param newAttributes The new attributes to set in the header
+     * @return Map containing the old attributes in the header
+     */
+    public Map<String, Object> setUserAttributes(Map<String, Object> newAttributes);
 
   }
 
