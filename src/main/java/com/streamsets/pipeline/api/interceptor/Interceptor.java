@@ -21,6 +21,7 @@ import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.MetricContext;
 import com.streamsets.pipeline.api.Record;
 import com.streamsets.pipeline.api.Stage;
+import com.streamsets.pipeline.api.StageException;
 
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,7 @@ public interface Interceptor {
    * @param records List of input records
    * @return List of records that should be passed down to the processing.
    */
-  public List<Record> intercept(List<Record> records);
+  public List<Record> intercept(List<Record> records) throws StageException;
 
   /**
    * Destroys the interceptor. It should be used to release any resources held by the interceptor after initialization or
