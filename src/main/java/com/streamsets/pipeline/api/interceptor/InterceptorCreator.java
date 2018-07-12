@@ -16,6 +16,8 @@
 package com.streamsets.pipeline.api.interceptor;
 
 import com.streamsets.pipeline.api.BlobStore;
+import com.streamsets.pipeline.api.DeliveryGuarantee;
+import com.streamsets.pipeline.api.ExecutionMode;
 import com.streamsets.pipeline.api.StageType;
 
 import java.util.Map;
@@ -68,6 +70,16 @@ public interface InterceptorCreator {
      * @return Map with parameters or null if there are no parameters available (such as in preview).
      */
     public Map<String, String> getParameters();
+
+    /**
+     * Return execution mode of the pipeline.
+     */
+    public ExecutionMode getExecutionMode();
+
+    /**
+     * Return configured delivery guarantee of the pipeline.
+     */
+    public DeliveryGuarantee getDeliveryGuarantee();
   }
 
   /**
