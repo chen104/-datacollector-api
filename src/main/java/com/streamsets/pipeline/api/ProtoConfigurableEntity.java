@@ -86,6 +86,14 @@ public interface ProtoConfigurableEntity {
      */
     public String getConfig(String configName);
 
+    /**
+     * Get integer representing runner id - a value that doesn't change for given stage as it's executed in different
+     * threads. This value can be used to create temporary resources on remote system to make sure that different
+     * instances of the same stage in multi threaded pipeline won't step on each other's toes.
+     *
+     * @return Returns 0..N representing the runner id.  0 is used for inherent singletons (Error stage, Origin, ...)
+     */
+    public int getRunnerId();
 
     /**
      * Returns the absolute path to the SDC resources directory.
