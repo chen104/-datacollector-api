@@ -16,12 +16,12 @@
 package com.streamsets.pipeline.api;
 
 /**
- * Field batch is used by {@FieldProcesor} to transform individual fields rather then whole records.
+ * Field batch is used by {@FieldProcessor} to transform individual fields rather than whole records.
  *
  * Unlike {@Batch} the API uses cursor style API so that the caller can immediately specify what action should happen
  * for each field inside the iteration.
  */
-public interface FieldBatch {
+public interface FieldBatch extends FieldOperator {
 
   /**
    * Move the cursor to next field.
@@ -30,36 +30,4 @@ public interface FieldBatch {
    */
   public boolean next();
 
-  /**
-   * Field path of the filed that the cursor is currently pointing to.
-   *
-   * @return Path string or null if the cursor is invalid.
-   */
-  public String getFieldPath();
-
-  /**
-   * Field that the cursor is currently pointing to.
-   *
-   * @return Field or null if the cursor is invalid.
-   */
-  public Field getField();
-
-  /**
-   * Return record associated with the field.
-   *
-   * @return Record where the field is from.
-   */
-  public Record getRecord();
-
-  /**
-   * Replace the field the cursor is currently pointing to with the replacement.
-   *
-   * @param replacement Replacement field.
-   */
-  public void replace(Field replacement);
-
-  /**
-   * Drop the field that the cursor is pointing to.
-   */
-  public void drop();
 }
