@@ -29,6 +29,9 @@ public enum EndPointType implements Label {
   DEVDATA("DEVDATA"),
   OTHER("OTHER"),
   HTTP("HTTP"),
+  S3("S3"),
+  FTP("FTP"),
+  SQS("SQS"),
   ;
 
   private String label;
