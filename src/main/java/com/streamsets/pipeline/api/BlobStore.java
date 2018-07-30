@@ -81,9 +81,7 @@ public interface BlobStore {
    * @param version Version of the object.
    * @return If given object on given in given namespace exists
    */
-  public default boolean exists(String namespace, String id, long version) {
-    return exists(namespace, id) && allVersions(namespace, id).contains(version);
-  }
+  public boolean exists(String namespace, String id, long version);
 
   /**
    * Return all versions associated with given object.
@@ -107,6 +105,21 @@ public interface BlobStore {
   public String retrieve(String namespace, String id, long version) throws StageException;
 
   /**
+   * Sub-interface to encapsulate tuple of content with it's version.
+   */
+  public interface VersionedContent {
+    /**
+     * Version of the content.
+     */
+    long version();
+
+    /**
+     * Actual content
+     */
+    String content();
+  }
+
+  /**
    * Convenience method to return latest version for given object.
    *
    * @param namespace Namespace of the object.
@@ -114,9 +127,7 @@ public interface BlobStore {
    * @return Object itself
    * @throws StageException
    */
-  public default String retrieveLatest(String namespace, String id) throws StageException {
-    return retrieve(namespace, id, latestVersion(namespace, id));
-  }
+  public VersionedContent retrieveLatest(String namespace, String id) throws StageException;
 
   /**
    * Delete given object from the store.
@@ -135,9 +146,5 @@ public interface BlobStore {
    * @param id Id of the object.
    * @throws StageException
    */
-  public default void deleteAllVersions(String namespace, String id) throws StageException {
-    for(long version : allVersions(namespace, id)) {
-      delete(namespace, id, version);
-    }
-  }
+  public void deleteAllVersions(String namespace, String id) throws StageException;
 }
