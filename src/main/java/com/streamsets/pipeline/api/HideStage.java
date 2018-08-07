@@ -37,9 +37,22 @@ public @interface HideStage {
      * Field process is special kind of processor that works on per-field basis rather then per-record basis. They
      * are used for specific purpose in few places primarily in StreamSets Control Hub.
      */
-    FIELD_PROCESSOR
+    FIELD_PROCESSOR,
 
-    // In the future we will transition also @StatsAggregatorStage and @ErrorStage annotations here
+    /**
+     * This stage should be used as possible target for error records.
+     */
+    ERROR_STAGE,
+
+    /**
+     * Lifecycle stage can be used in the pipeline start and stop even handlers.
+     */
+    LIFECYCLE_STAGE,
+
+    /**
+     * Stats aggregation stages are used to send metrics from Data Collector to Control hub.
+     */
+    STATS_AGGREGATOR_STAGE,
   }
 
   /**
