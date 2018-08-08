@@ -75,6 +75,28 @@ public interface Interceptor {
      * @return New instance of the stage or null if the stage can't be created from any reason
      */
     public <S> S createStage(String jsonDefinition, Class<S> klass);
+
+    /**
+     * Indicates if the pipeline is running in preview mode or not.
+     *
+     * @return if the pipeline is running in preview mode or not.
+     */
+    public boolean isPreview();
+
+    /**
+     * Return unique id that identifies this data collector.
+     *
+     * @return unique id that identifies this data collector.
+     */
+    public String getSdcId();
+
+    /**
+     * Return unique id that identifies this pipeline.
+     *
+     * @return unique id that identifies this pipeline.
+     */
+    public String getPipelineId();
+
   }
 
   /**
