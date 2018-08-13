@@ -159,6 +159,11 @@ public @interface StageDef {
   boolean producesEvents() default false;
 
   /**
+   * Indicates if this stage can send response back to caller.
+   */
+  boolean sendsResponse() default false;
+
+  /**
    * Indicates if this stage implementation is beta.
    */
   boolean beta() default false;
