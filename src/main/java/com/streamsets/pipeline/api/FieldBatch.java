@@ -30,4 +30,8 @@ public interface FieldBatch extends FieldOperator {
    */
   public boolean next();
 
+  /**
+  * @return True if there is a next field, false otherwise.
+  */
+  public boolean hasNext();
 }

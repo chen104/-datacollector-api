@@ -64,6 +64,11 @@ public class RecordBasedFieldBatch implements FieldBatch {
   }
 
   @Override
+  public boolean hasNext() {
+    return fieldPathIterator.hasNext();
+  }
+
+  @Override
   public boolean next() {
     if(!fieldPathIterator.hasNext()) {
       return false;
