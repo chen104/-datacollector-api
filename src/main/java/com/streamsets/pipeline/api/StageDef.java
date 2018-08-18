@@ -172,4 +172,9 @@ public @interface StageDef {
    * List of services that this stage require for it's proper working.
    */
   ServiceDependency[] services() default {};
+
+  /**
+   * Flags describing behavior of this stage.
+   */
+  StageBehaviorFlags[] flags() default {};
 }

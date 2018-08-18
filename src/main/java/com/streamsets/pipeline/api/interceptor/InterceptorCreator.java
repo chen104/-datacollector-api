@@ -18,10 +18,12 @@ package com.streamsets.pipeline.api.interceptor;
 import com.streamsets.pipeline.api.BlobStore;
 import com.streamsets.pipeline.api.DeliveryGuarantee;
 import com.streamsets.pipeline.api.ExecutionMode;
+import com.streamsets.pipeline.api.StageBehaviorFlags;
 import com.streamsets.pipeline.api.StageDef;
 import com.streamsets.pipeline.api.StageType;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interceptor creator is used to create instance of interceptor for stages where they are required.
@@ -86,6 +88,11 @@ public interface InterceptorCreator {
      * Return StageDef of the stage. This method call might return null if the Stage didn't have proper StageDef.
      */
     public StageDef getStageDef();
+
+    /**
+     * Return set of Stage's behavior flags.
+     */
+    Set<StageBehaviorFlags> getStageBehaviorFlags();
   }
 
   /**
