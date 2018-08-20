@@ -91,6 +91,13 @@ public interface Interceptor {
     public String getSdcId();
 
     /**
+     * Return unique id of stage that this interceptor is associated with.
+     *
+     * @return Return unique id of stage that this interceptor is associated with.
+     */
+    public String getStageInstanceName();
+
+    /**
      * Return unique id that identifies this pipeline.
      *
      * @return unique id that identifies this pipeline.
