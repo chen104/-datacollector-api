@@ -40,6 +40,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -691,9 +692,26 @@ public class Field implements Cloneable {
    */
   public void setAttribute(String name, String value) {
     if (attributes == null) {
-      attributes = new LinkedHashMap<>();
+      attributes = new HashMap<>();
     }
     attributes.put(name, value);
+  }
+
+  /**
+   * Sets all attributes from the given map.
+   *
+   * The performed operation is "upsert" - if the given map contains an attribute that does not exist yet, it will
+   * be crated. If the attribute exists already, the value will be updated. All existing attributes that are not part
+   * of the new map will remain untouched.
+   *
+   * @param attributes
+   */
+  public void setAttributes(Map<String, String> attributes) {
+    if(this.attributes == null) {
+      this.attributes = new HashMap<>(attributes);
+    } else {
+      this.attributes.putAll(attributes);
+    }
   }
 
   /**
