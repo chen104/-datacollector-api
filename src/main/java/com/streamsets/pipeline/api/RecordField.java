@@ -16,19 +16,28 @@
 package com.streamsets.pipeline.api;
 
 /**
- * Field operator is used by {@FieldProcessor} to manipulate fields while avoiding object creation for performance.
+ * Record Field is a wrapper on top of field describing where the field is located (e.g. the path and record associated).
  */
-public interface FieldOperator extends RecordField {
+public interface RecordField {
   /**
-   * Replace the field the cursor is currently pointing to with the replacement.
+   * Field path of the filed that the cursor is currently pointing to.
    *
-   * @param replacement Replacement field.
+   * @return Path string or null if the cursor is invalid.
    */
-  public void replace(Field replacement);
+  public String getFieldPath();
 
   /**
-   * Drop the field that the cursor is pointing to.
+   * Field that the cursor is currently pointing to.
+   *
+   * @return Field or null if the cursor is invalid.
    */
-  public void drop();
+  public Field getField();
+
+  /**
+   * Return record associated with the field.
+   *
+   * @return Record where the field is from.
+   */
+  public Record getRecord();
 
 }

@@ -16,19 +16,15 @@
 package com.streamsets.pipeline.api;
 
 /**
- * Field operator is used by {@FieldProcessor} to manipulate fields while avoiding object creation for performance.
+ * Field Visitor interface that enables simple iteration over fields.
+ *
+ * This interface is evolving and might be changed in the future.
  */
-public interface FieldOperator extends RecordField {
-  /**
-   * Replace the field the cursor is currently pointing to with the replacement.
-   *
-   * @param replacement Replacement field.
-   */
-  public void replace(Field replacement);
+@FunctionalInterface
+public interface FieldVisitor {
 
   /**
-   * Drop the field that the cursor is pointing to.
+   * Visit given field.
    */
-  public void drop();
-
+  public void visit(RecordField recordField) throws StageException;
 }

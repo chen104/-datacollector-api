@@ -15,6 +15,7 @@
  */
 package com.streamsets.pipeline.api;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -343,5 +344,12 @@ public interface Record {
    * @return the <code>Field</code> being replaced at the specified field-path, or <code>NULL</code> if none.
    */
   public Field set(String fieldPath, Field newField);
+
+  /**
+   * Call given visitor for each field in this record.
+   *
+   * @param visitor Visitor that will be called for each field of the record.
+   */
+  public void forEachField(FieldVisitor visitor) throws StageException;
 
 }
