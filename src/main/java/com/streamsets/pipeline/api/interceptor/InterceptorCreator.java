@@ -90,6 +90,13 @@ public interface InterceptorCreator {
     public StageDef getStageDef();
 
     /**
+     * Return unique id of stage that this interceptor is associated with.
+     *
+     * @return Return unique id of stage that this interceptor is associated with.
+     */
+    public String getStageInstanceName();
+
+    /**
      * Return set of Stage's behavior flags.
      */
     Set<StageBehaviorFlags> getStageBehaviorFlags();
