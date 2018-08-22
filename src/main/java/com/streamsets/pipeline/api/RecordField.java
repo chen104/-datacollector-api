@@ -27,6 +27,17 @@ public interface RecordField {
   public String getFieldPath();
 
   /**
+   * Field name - the last part of field path.
+   *
+   * Few examples:
+   * * For /map/inner, the name will be 'inner'
+   * * For /list[2], the name will be only 'list' (e.g. the list name)
+   *
+   * @return String name or null if the cursor is invalid.
+   */
+  public String getFieldName();
+
+  /**
    * Field that the cursor is currently pointing to.
    *
    * @return Field or null if the cursor is invalid.

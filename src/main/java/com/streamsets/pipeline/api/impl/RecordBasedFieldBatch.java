@@ -43,6 +43,11 @@ public class RecordBasedFieldBatch implements FieldBatch {
   private String currentFieldPath;
 
   /**
+   * Lazily parsed field name from field path.
+   */
+  private String fieldName;
+
+  /**
    * Iterate over all field inside given record.
    *
    * @param record Record that is being processed
@@ -75,12 +80,36 @@ public class RecordBasedFieldBatch implements FieldBatch {
     }
 
     currentFieldPath = fieldPathIterator.next();
+    fieldName = null;
     return true;
   }
 
   @Override
   public String getFieldPath() {
     return currentFieldPath;
+  }
+
+  @Override
+  public String getFieldName() {
+    if(fieldName != null) {
+      return fieldName;
+    }
+
+    if(currentFieldPath == null) {
+      return null;
+    }
+
+    // We sadly don't have a proper tools to parse field paths here, so this is quick implementation. In the future
+    // we should make field parsing code available from data collector container module here in API. This code does not
+    // properly support escaping of field names at this time.
+
+    // Get latest part of the field path
+    String[] parts = currentFieldPath.split("/");
+
+    // For arrays drop end index
+    fieldName = parts[parts.length - 1].replaceAll("\\[\\d+\\]$", "");
+
+    return fieldName;
   }
 
   @Override
