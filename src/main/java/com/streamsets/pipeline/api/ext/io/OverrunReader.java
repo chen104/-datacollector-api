@@ -32,6 +32,7 @@ public class OverrunReader extends CountingReader {
   private final int readLimit;
   private final boolean removeCtrlChars;
   private boolean enabled;
+  private static int readLimitSysProp = Integer.parseInt(System.getProperty(READ_LIMIT_SYS_PROP, "1048576"));
 
   public OverrunReader(Reader in, int readLimit, boolean overrunCheckEnabled, boolean removeCtrlChars) {
     super(in);
@@ -41,7 +42,7 @@ public class OverrunReader extends CountingReader {
   }
 
   public static int getDefaultReadLimit() {
-    return Integer.parseInt(System.getProperty(READ_LIMIT_SYS_PROP, "1048576"));
+    return readLimitSysProp;
   }
 
   public void setEnabled(boolean enabled) {
