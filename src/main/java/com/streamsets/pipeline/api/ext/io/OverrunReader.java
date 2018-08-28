@@ -28,11 +28,16 @@ import java.nio.CharBuffer;
  */
 public class OverrunReader extends CountingReader {
   public static final String READ_LIMIT_SYS_PROP = "overrun.reader.read.limit";
+  public static final String DEFAULT_READ_LIMIT = "1048576";
 
   private final int readLimit;
   private final boolean removeCtrlChars;
   private boolean enabled;
-  private static int readLimitSysProp = Integer.parseInt(System.getProperty(READ_LIMIT_SYS_PROP, "1048576"));
+  private static int readLimitSysProp;
+
+  static {
+    reInitializeDefaultReadLimit();
+  }
 
   public OverrunReader(Reader in, int readLimit, boolean overrunCheckEnabled, boolean removeCtrlChars) {
     super(in);
@@ -43,6 +48,10 @@ public class OverrunReader extends CountingReader {
 
   public static int getDefaultReadLimit() {
     return readLimitSysProp;
+  }
+
+  public static void reInitializeDefaultReadLimit() {
+    readLimitSysProp = Integer.parseInt(System.getProperty(READ_LIMIT_SYS_PROP, DEFAULT_READ_LIMIT));
   }
 
   public void setEnabled(boolean enabled) {
