@@ -273,7 +273,6 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
    * @see Context#createConfigIssue(String, String, ErrorCode, Object...)
    * @see com.streamsets.pipeline.api.ConfigIssue
    */
-  @Deprecated
   public interface ConfigIssue {
   }
 
