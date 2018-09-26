@@ -83,8 +83,17 @@ public interface ProtoConfigurableEntity {
      *
      * @param configName Configuration option name
      * @return String representation of the value or null if it's not defined.
+     * @deprecated Use getConfiguration() instead.
      */
+    @Deprecated
     public String getConfig(String configName);
+
+    /**
+     * Return configuration relevant to stages from the data collector main configuration files.
+     *
+     * Stages have their own namespace, so method won't be able to return generic SDC configuration.
+     */
+    public Configuration getConfiguration();
 
     /**
      * Get integer representing runner id - a value that doesn't change for given stage as it's executed in different

@@ -17,6 +17,7 @@ package com.streamsets.pipeline.api.interceptor;
 
 import com.streamsets.pipeline.api.BlobStore;
 import com.streamsets.pipeline.api.ConfigIssue;
+import com.streamsets.pipeline.api.Configuration;
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.MetricContext;
 import com.streamsets.pipeline.api.Record;
@@ -52,8 +53,15 @@ public interface Interceptor {
      *
      * @param configName Configuration option name
      * @return String representation of the value or null if it's not defined.
+     * @deprecated Use getConfiguration() instead.
      */
+    @Deprecated
     public String getConfig(String configName);
+
+    /**
+     * Return configuration object corresponding to the data collector main configuration files.
+     */
+    public Configuration getConfiguration();
 
     /**
      * Returns SDC singleton instance for the BLOB store
