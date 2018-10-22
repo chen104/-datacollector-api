@@ -177,4 +177,9 @@ public @interface StageDef {
    * Flags describing behavior of this stage.
    */
   StageBehaviorFlags[] flags() default {};
+
+  /**
+   * Tags describing features of stage like object store, messaging queue.
+   */
+  String[] tags() default {};
 }

@@ -305,8 +305,8 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
         .append(stageDef.description()).append("\"");
     sb.append(",\n");
 
-    sb.append("\t\"").append("version").append("\"").append(": \"")
-        .append(stageDef.version()).append("\"");
+    sb.append("\t\"").append("version").append("\"").append(": ")
+        .append(stageDef.version());
     sb.append(",\n");
 
     sb.append("\t\"").append("statsAggregatorStage").append("\"").append(": ")
@@ -317,9 +317,13 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
         .append(errorStage);
     sb.append(",\n");
 
-    sb.append("\t\"").append("beta").append("\"").append(": \"")
-        .append(stageDef.beta()).append("\"");
+    sb.append("\t\"").append("beta").append("\"").append(": ")
+        .append(stageDef.beta());
     sb.append(",\n");
+
+    sb.append("\t\"").append("tags").append("\"").append(": [")
+        .append(String.join(",", stageDef.tags()));
+    sb.append(",]\n");
 
     sb.append("\t\"").append("icon").append("\"").append(": \"")
         .append(base64Image).append("\"");
