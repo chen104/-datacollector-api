@@ -322,8 +322,13 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     sb.append(",\n");
 
     sb.append("\t\"").append("tags").append("\"").append(": [")
-        .append(String.join(",", stageDef.tags()));
-    sb.append(",]\n");
+        .append(String.join(",", stageDef.tags()))
+        .append("]");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("onlineHelpRefUrl").append("\"").append(": \"")
+        .append(stageDef.onlineHelpRefUrl()).append("\"");
+    sb.append(",\n");
 
     sb.append("\t\"").append("icon").append("\"").append(": \"")
         .append(base64Image).append("\"");
