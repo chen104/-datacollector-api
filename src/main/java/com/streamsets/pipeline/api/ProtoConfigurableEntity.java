@@ -105,6 +105,12 @@ public interface ProtoConfigurableEntity {
     public int getRunnerId();
 
     /**
+     * Get the number of runners that were created for this pipeline. This method will not return proper value during
+     * origin's init() method as origins init is called before number of runners is known.
+     */
+    public int getRunnerCount();
+
+    /**
      * Returns the absolute path to the SDC resources directory.
      *
      * @return  the absolute path to the SDC resources directory.
