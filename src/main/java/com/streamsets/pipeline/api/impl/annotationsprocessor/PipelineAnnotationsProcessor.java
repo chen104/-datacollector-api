@@ -283,8 +283,6 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
       boolean errorStage
   ) {
 
-    String base64Image = getBase64Image(stageDef);
-
     StringBuilder sb = new StringBuilder();
 
     sb.append("{\n");
@@ -331,7 +329,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     sb.append(",\n");
 
     sb.append("\t\"").append("icon").append("\"").append(": \"")
-        .append(base64Image).append("\"");
+        .append(stageDef.icon()).append("\"");
     sb.append("\n }");
 
     return sb.toString();
