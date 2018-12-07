@@ -45,6 +45,16 @@ public interface RecordField {
   public Field getField();
 
   /**
+   * Parent field of the field that the cursor is currently pointing to, if applicable.  May not be available in all
+   * contexts.
+   *
+   * @return Parent field or null if there is no such parent field, or if it is not available
+   */
+  default Field getParentField() {
+    return null;
+  }
+
+  /**
    * Return record associated with the field.
    *
    * @return Record where the field is from.
