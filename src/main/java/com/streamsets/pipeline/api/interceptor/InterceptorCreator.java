@@ -16,14 +16,12 @@
 package com.streamsets.pipeline.api.interceptor;
 
 import com.streamsets.pipeline.api.BlobStore;
-import com.streamsets.pipeline.api.BlobStoreDef;
 import com.streamsets.pipeline.api.DeliveryGuarantee;
 import com.streamsets.pipeline.api.ExecutionMode;
 import com.streamsets.pipeline.api.StageBehaviorFlags;
 import com.streamsets.pipeline.api.StageDef;
 import com.streamsets.pipeline.api.StageType;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -112,10 +110,4 @@ public interface InterceptorCreator {
    */
   public Interceptor create(Context context);
 
-  /**
-   * This method packs information about Blobstore resource that this Interceptor uses.
-   * @Param parameters same map as InterceptorCreator.Context stores
-   * @return List of BlobstoreDef
-   */
-  public List<BlobStoreDef> blobStoreResource(Map<String, String> parameters);
 }
