@@ -108,10 +108,9 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
     public ExecutionMode getExecutionMode();
 
     /**
-     * Returns the maximum amount of memory (in bytes) the pipeline can use.
-     *
-     * @return the maximum amount of memory (in bytes) the pipeline can use.
+     * This method always returns -1 and is no longer supported.
      */
+    @Deprecated
     public long getPipelineMaxMemory();
 
     /**
