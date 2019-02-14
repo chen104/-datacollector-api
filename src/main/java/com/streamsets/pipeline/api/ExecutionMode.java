@@ -34,7 +34,9 @@ public enum ExecutionMode implements Label {
   CLUSTER_MESOS_STREAMING("Cluster Mesos Streaming"),
   SLAVE("Slave"),
   EDGE("Edge"),
-  EMR_BATCH("Cluster EMR Batch")
+  EMR_BATCH("Cluster EMR Batch"),
+  BATCH("Batch"),
+  STREAMING("Streaming"),
   ;
 
   private final String label;
