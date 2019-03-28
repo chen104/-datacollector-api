@@ -182,4 +182,10 @@ public @interface StageDef {
    * Tags describing features of stage like object store, messaging queue.
    */
   String[] tags() default {};
+
+  /**
+   * True if this stage receive more than one input.
+   * This is ignored for origins.
+   */
+  boolean multiInput() default true;
 }
