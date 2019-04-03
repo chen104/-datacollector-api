@@ -193,4 +193,24 @@ public @interface StageDef {
    *  This configuration is not just a hint, pipeline validation will fail if the configuration is not met.
    */
   int numberOfInputStreams() default -1;
+
+  /**
+   * Java doesn't allow null to be used in annotations, so this DefaultInputStream serves as a constant replacement for
+   * null - it's an empty enumeration and corresponds to situation when numberOfInputStreams() returns -1.
+   */
+  @GenerateResourceBundle
+  public enum DefaultInputStreams implements Label {
+    ;
+    @Override
+    public String getLabel() {
+      return null;
+    }
+  }
+
+  /**
+   * Indicates an enum (implementing {@link Label}) that defines the input stream names and UI labels for the stage.
+   *
+   * This value will be used by the framework only if the value of {@see numberOfInputStreams} returns positive integer.
+   */
+  Class<? extends Label> inputStreams() default DefaultInputStreams.class;
 }
