@@ -184,8 +184,13 @@ public @interface StageDef {
   String[] tags() default {};
 
   /**
-   * True if this stage receive more than one input.
-   * This is ignored for origins.
+   * Specifies the number of input lanes that this stage supports.
+   *
+   * -1: No specific configuration, framework will expose usual guarantees (no inputs for origins, 1 or more other stages)
+   *  0: This stage explicitly allow arbitrary amount of input lanes
+   *  X: (Positive integer) Given stage must have exactly that many input lanes
+   *
+   *  This configuration is not just a hint, pipeline validation will fail if the configuration is not met.
    */
-  boolean multiInput() default true;
+  int numberOfInputStreams() default -1;
 }
