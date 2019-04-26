@@ -230,7 +230,17 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
     /**
      * After current batch, transition pipeline state to FINISHED.
      */
+    @Deprecated
     void finishPipeline();
+
+    /**
+     * After current batch, transition pipeline state to FINISHED.
+     *
+     * Optionally also reset the offset.
+     *
+     * @param resetOffset Whether offset should be discarded.
+     */
+    void finishPipeline(boolean resetOffset);
 
     /**
      * Return unique id that identifies this pipeline.
