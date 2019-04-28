@@ -15,12 +15,14 @@
  */
 package com.streamsets.pipeline.api.impl;
 
+import com.streamsets.pipeline.api.AntennaDoctorMessage;
 import com.streamsets.pipeline.api.ErrorCode;
 import com.streamsets.pipeline.api.StageException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ErrorMessage implements LocalizableString {
   private static final Object[] NULL_ONE_ARG = {null};
@@ -30,6 +32,7 @@ public class ErrorMessage implements LocalizableString {
   private final long timestamp;
   private final boolean preppendErrorCode;
   private final String stackTrace;
+  private final List<AntennaDoctorMessage> antennaDoctorMessages;
 
   public ErrorMessage(final StageException ex) {
     errorCode = ex.getErrorCode().getCode();
@@ -48,6 +51,7 @@ public class ErrorMessage implements LocalizableString {
       }
     };
     preppendErrorCode = false;
+    antennaDoctorMessages = Collections.emptyList();
   }
 
   public ErrorMessage(String errorCode, final String nonLocalizedMsg, long timestamp) {
@@ -66,13 +70,26 @@ public class ErrorMessage implements LocalizableString {
     this.timestamp = timestamp;
     stackTrace = null;
     preppendErrorCode = true;
+    antennaDoctorMessages = Collections.emptyList();
+  }
+
+  public ErrorMessage(List<AntennaDoctorMessage> antennaDoctorMessages, ErrorCode errorCode, Object... params) {
+    this(antennaDoctorMessages, Utils.checkNotNull(errorCode, "errorCode").getClass().getName() + "-bundle", errorCode, params);
   }
 
   public ErrorMessage(ErrorCode errorCode, Object... params) {
-    this(Utils.checkNotNull(errorCode, "errorCode").getClass().getName() + "-bundle", errorCode, params);
+    this(Collections.emptyList(), Utils.checkNotNull(errorCode, "errorCode").getClass().getName() + "-bundle", errorCode, params);
   }
 
   public ErrorMessage(String resourceBundle, ErrorCode errorCode, Object... params) {
+    this(Collections.emptyList(), resourceBundle, errorCode, params);
+  }
+
+  public List<AntennaDoctorMessage> getAntennaDoctorMessages() {
+    return antennaDoctorMessages;
+  }
+
+  public ErrorMessage(List<AntennaDoctorMessage> antennaDoctorMessages, String resourceBundle, ErrorCode errorCode, Object... params) {
     this.errorCode = Utils.checkNotNull(errorCode, "errorCode").getCode();
     if ( params != null && params.length > 0 && params[params.length-1] instanceof Throwable){
       stackTrace = toStackTrace((Throwable)params[params.length-1]);
@@ -89,6 +106,7 @@ public class ErrorMessage implements LocalizableString {
     );
     timestamp = System.currentTimeMillis();
     preppendErrorCode = true;
+    this.antennaDoctorMessages = Collections.unmodifiableList(antennaDoctorMessages);
   }
 
   /*
