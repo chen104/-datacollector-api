@@ -17,6 +17,8 @@ package com.streamsets.pipeline.api;
 
 import com.streamsets.pipeline.api.impl.ErrorMessage;
 
+import java.util.List;
+
 /***
  * Exception thrown by stages when there is an error while processing.
  */
@@ -24,6 +26,7 @@ public class StageException extends Exception {
   private final transient ErrorCode errorCode;
   private final transient ErrorMessage errorMessage;
   private final transient Object[] params;
+  private List<AntennaDoctorMessage> antennaDoctorMessages;
 
   /**
    * Exception constructor.
@@ -35,6 +38,7 @@ public class StageException extends Exception {
   public StageException(ErrorCode errorCode, Object... params) {
     this.errorCode = errorCode;
     this.params = params;
+    this.antennaDoctorMessages = null;
     errorMessage = new ErrorMessage(errorCode, params);
     Throwable cause = getCause(params);
     if(cause != null) {
@@ -88,4 +92,17 @@ public class StageException extends Exception {
     return errorMessage.getLocalized();
   }
 
+  /**
+   * Returns Antenna Doctor messages associated with this exception.
+   *
+   * * `null` means that Antenna Doctor were not run for this exception at all
+   * * Empty list means that Antenna doctor was run, but no suggestions were found
+   */
+  public List<AntennaDoctorMessage> getAntennaDoctorMessages() {
+    return antennaDoctorMessages;
+  }
+
+  public void setAntennaDoctorMessages(List<AntennaDoctorMessage> antennaDoctorMessages) {
+    this.antennaDoctorMessages = antennaDoctorMessages;
+  }
 }
