@@ -194,6 +194,8 @@ public @interface StageDef {
    */
   int numberOfInputStreams() default -1;
 
+  boolean bisectable() default false;
+
   /**
    * Java doesn't allow null to be used in annotations, so this DefaultInputStream serves as a constant replacement for
    * null - it's an empty enumeration and corresponds to situation when numberOfInputStreams() returns -1.
