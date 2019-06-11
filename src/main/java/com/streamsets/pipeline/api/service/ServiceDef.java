@@ -63,4 +63,15 @@ public @interface ServiceDef {
    * Indicates the upgrader implementation class to use to upgrade stage configurations for older stage versions.
    */
   Class<? extends StageUpgrader> upgrader() default StageUpgrader.Default.class;
+
+  /**
+   * Defines the upgrader definition.
+   * <p/>
+   * The upgrader definition is a YAML file, found in the classpath of the stage library, that declares the stage
+   * configuration upgrade steps.
+   * <p/>
+   * Refer to the developer documentation for details.
+   */
+  String upgraderDef() default "";
+
 }
