@@ -22,7 +22,7 @@ import java.util.List;
 /***
  * Exception thrown by stages when there is an error while processing.
  */
-public class StageException extends Exception {
+public class StageException extends RuntimeException {
   private final transient ErrorCode errorCode;
   private final transient ErrorMessage errorMessage;
   private final transient Object[] params;
