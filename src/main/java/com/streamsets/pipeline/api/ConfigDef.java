@@ -116,6 +116,12 @@ public @interface ConfigDef {
   String defaultValue() default "";
 
   /**
+   * Use instead of defaultValue to read a text resource in with UTF-8 as a String and use it as the defaultValue.
+   * Path must be relative to the directory within \resources corresponding to the enclosing ConfigDef's class package.
+   */
+  String defaultValueFromResource() default "";
+
+  /**
    * Indicates if a configuration value is required or not. This is enforced by the validation logic.
    */
   boolean required();
