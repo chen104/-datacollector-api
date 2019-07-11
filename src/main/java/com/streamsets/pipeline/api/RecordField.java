@@ -24,7 +24,7 @@ public interface RecordField {
    *
    * @return Path string or null if the cursor is invalid.
    */
-  public String getFieldPath();
+  String getFieldPath();
 
   /**
    * Field name - the last part of field path.
@@ -35,14 +35,14 @@ public interface RecordField {
    *
    * @return String name or null if the cursor is invalid.
    */
-  public String getFieldName();
+  String getFieldName();
 
   /**
    * Field that the cursor is currently pointing to.
    *
    * @return Field or null if the cursor is invalid.
    */
-  public Field getField();
+  Field getField();
 
   /**
    * Parent field of the field that the cursor is currently pointing to, if applicable.  May not be available in all
@@ -55,10 +55,30 @@ public interface RecordField {
   }
 
   /**
+   * Path of the parent field of the field that the cursor is currently pointing to, if applicable.  May not be
+   * available in all contexts.
+   *
+   * @return Path of the parent field or null if there is no such parent field path, or if it is not available
+   */
+  default String getParentFieldPath() {
+    return null;
+  }
+
+  /**
+   * Index of the field that the cursor is currently pointing to, within a parent LIST type field, if applicable.  If
+   * not, then an invalid index will be returned (-1).
+   *
+   * @return the index of this field within the parent LIST, or -1 if not applicable or not available
+   */
+  default int getIndexInParent() {
+    return -1;
+  }
+
+  /**
    * Return record associated with the field.
    *
    * @return Record where the field is from.
    */
-  public Record getRecord();
+   Record getRecord();
 
 }
