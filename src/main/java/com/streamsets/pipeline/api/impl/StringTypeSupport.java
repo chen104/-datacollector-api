@@ -26,6 +26,11 @@ public class StringTypeSupport extends TypeSupport<String> {
 
   @Override
   public String convert(Object value) {
+    // Shortcut if the input is already string
+    if(value instanceof String) {
+      return (String)value;
+    }
+
     if(value instanceof Map || value instanceof List || value instanceof byte[]|| value instanceof FileRef) {
       throw new IllegalArgumentException(Utils.format(Errors.API_18.getMessage()));
     }
