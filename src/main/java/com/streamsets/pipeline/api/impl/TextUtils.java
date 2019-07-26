@@ -15,16 +15,31 @@
  */
 package com.streamsets.pipeline.api.impl;
 
-import java.util.regex.Pattern;
-
 public class TextUtils {
+
+  /**
+   * Valid name is the one that passes the following regular expression.
+   *
+   * We don't use a regular expression for actual parsing as for this particular expression we will be faster with loop.
+   */
   public static final String VALID_NAME= "[0-9A-Za-z_\\s]+";
-  private static final Pattern VALID_NAME_PATTERN = Pattern.compile(VALID_NAME);
 
   private TextUtils() {}
 
   public static boolean isValidName(String name) {
-    return (name != null) && VALID_NAME_PATTERN.matcher(name).matches();
+    if(name == null || name.isEmpty()) {
+      return false;
+    }
+
+    for(int i = 0; i < name.length(); i++) {
+      char c = name.charAt(i);
+      if(!Character.isWhitespace(c) && !Character.isLetterOrDigit(c) && c != '_') {
+        return false;
+      }
+
+    }
+
+    return true;
   }
 
 }
