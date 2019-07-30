@@ -38,4 +38,5 @@ public @interface ConfigDefBean {
    */
   String[] groups() default {};
 
+  Dependency[] dependencies() default {};
 }
