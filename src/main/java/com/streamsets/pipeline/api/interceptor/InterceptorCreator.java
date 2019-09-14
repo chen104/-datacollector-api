@@ -43,9 +43,11 @@ public interface InterceptorCreator {
   }
 
   /**
-   * Context that provides runtime information and services to the creator.
+   * Base context class that contains information and services to the creator without any
+   * association to the underlying stage. This is particularly used to retrieve relevant
+   * blob store objects.
    */
-  public interface Context {
+  public interface BaseContext {
     /**
      * Return value for given configuration option from data collector main configuration.
      *
@@ -58,16 +60,6 @@ public interface InterceptorCreator {
      * Returns SDC singleton instance for the BLOB store
      */
     public BlobStore getBlobStore();
-
-    /**
-     * Returns type of the stage for which the create() method is called.
-     */
-    public StageType getStageType();
-
-    /**
-     * Return type of the interceptor (where exactly it will be called).
-     */
-    public InterceptorType getInterceptorType();
 
     /**
      * Parameters that were generated for this pipeline.
@@ -85,6 +77,23 @@ public interface InterceptorCreator {
      * Return configured delivery guarantee of the pipeline.
      */
     public DeliveryGuarantee getDeliveryGuarantee();
+
+  }
+
+  /**
+   * Context that provides runtime information and services to the creator.
+   */
+  public interface Context extends BaseContext {
+
+    /**
+     * Returns type of the stage for which the create() method is called.
+     */
+    public StageType getStageType();
+
+    /**
+     * Return type of the interceptor (where exactly it will be called).
+     */
+    public InterceptorType getInterceptorType();
 
     /**
      * Return StageDef of the stage. This method call might return null if the Stage didn't have proper StageDef.
@@ -117,5 +126,5 @@ public interface InterceptorCreator {
    * @Param parameters same map as InterceptorCreator.Context stores
    * @return List of BlobstoreDef
    */
-  public List<BlobStoreDef> blobStoreResource(Map<String, String> parameters);
+  public List<BlobStoreDef> blobStoreResource(BaseContext context);
 }
