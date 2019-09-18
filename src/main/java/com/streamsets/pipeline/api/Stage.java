@@ -101,6 +101,14 @@ public interface Stage<C extends Stage.Context> extends ProtoConfigurableEntity 
   public interface Context extends ProtoConfigurableEntity.Context {
 
     /**
+     * Returns the current environment version. e.g. If current environment is a data collector then it returns data
+     * collector version.
+     *
+     * @return the current environment version.
+     */
+    public String getEnvironmentVersion();
+
+    /**
      * Returns the current execution mode of the pipeline.
      *
      * @return the current execution mode of the pipeline.
