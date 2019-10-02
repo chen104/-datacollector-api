@@ -102,6 +102,19 @@ public @interface ConfigDef {
   public enum Evaluation {IMPLICIT, EXPLICIT}
 
   /**
+   * Display mode for the configuration when authoring pipelines. When the pipeline designer tool is in BASIC
+   * display mode all ADVANCED configs are hidden. All ADVANCED configs must have a sensible default value.
+   * BASIC configs are shown always.
+   * <p/>
+   * The display mode is a UI gimmick only.
+   */
+  public enum DisplayMode {
+    BASIC,
+    ADVANCED
+  }
+
+
+  /**
    * The configuration type for the configuration variable.
    */
   Type type();
@@ -234,4 +247,14 @@ public @interface ConfigDef {
    * @return
    */
   boolean stageSuggestions() default false;
+
+  /**
+   * Display mode for the configuration, defaults to BASIC (always shown).
+   * <p/>
+   * All ADVANCED configs must have a sensible default value. BASIC configs are shown always.
+   * <p/>
+   * The display mode is a UI gimmick only.
+   */
+  DisplayMode displayMode() default DisplayMode.BASIC;
+
 }
