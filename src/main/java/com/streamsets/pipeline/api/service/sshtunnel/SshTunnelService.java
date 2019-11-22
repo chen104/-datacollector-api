@@ -18,7 +18,6 @@ package com.streamsets.pipeline.api.service.sshtunnel;
 import com.streamsets.pipeline.api.StageException;
 import com.streamsets.pipeline.api.impl.Utils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -79,70 +78,32 @@ public interface SshTunnelService {
   }
 
   /**
-   * SSH Port forwarding handler. Returned by the <B>SshTunnelService</B> on initialization.
-   */
-  interface PortsForwarding {
-
-    /**
-     * Returns if port forwarding is enabled or not.
-     */
-    boolean isEnabled();
-
-    /**
-     * Returns the host and port pairs mapping for port forwarding.
-     * <p/>
-     * The keys of the Map are the target host and port pairs given in the <B>SshTunnelService#init()</B> method.
-     * <p/>
-     * The values of the Map are the forwarder host and port pairs.
-     * <p/>
-     * IMPORTANT: if port forwarding is not enabled the key and value of each Map entry are the same host and port pair.
-     */
-    Map<HostPort, HostPort> getPortMapping();
-
-    /**
-     * Checks the port forwarding health, throws a <B>StageException</B> if unhealthy.
-     */
-    void healthCheck() throws StageException;
-  }
-
-  /**
-   * It should be used by stages as default value instead of NULL.
-   */
-  PortsForwarding NONE = new PortsForwarding() {
-    @Override
-    public boolean isEnabled() {
-      return false;
-    }
-
-    @Override
-    public Map<HostPort, HostPort> getPortMapping() {
-      return Collections.emptyMap();
-    }
-
-    @Override
-    public void healthCheck() throws StageException {
-    }
-  };
-
-  /**
    * Returns if SSH tunneling is enabled or not.
    */
   boolean isEnabled();
 
   /**
-   * Starts the ports forwarding if the configuration of the service indicates tunneling is enabled,
-   * otherwise is a No-Op.
+   * Starts the SSH tunnel and ports forwarding through the SSH tunnel if the configuration of the service indicates
+   * tunneling is enabled otherwise is a No-Op.
+   * <p/>
+   * There will be a single SSH Tunnel with one port forwarding per target host and port given.
    * <p/>
    * This method must be called before the stage attempts to connect to the external system and the connection
-   * to the external system must be done using the host and port pairs returned by the SshTunnel
+   * to the external system must be done using the host and port pairs returned by the SshTunnel.
    * <p/>
-   * There will be a single SSH Tunnel with one port forwarding per target host and port pair given.
+   * @return The target host port to local host port forwarding mapping. If SSH tunnel is not enabled the key and
+   * value of each Map entry are the same host and port pair.
    */
-  PortsForwarding start(List<HostPort> targetHostsPorts);
+  Map<HostPort, HostPort> start(List<HostPort> targetHostsPorts);
+
+  /**
+   * Checks the SSH tunnel health throwing a <B>StageException</B> if unhealthy.
+   */
+  void healthCheck() throws StageException;
 
   /**
    * Stops the SSH tunnel. If tunneling is disabled is a No-Op.
    */
-  void stop(PortsForwarding portsForwarding);
+  void stop();
 
 }
