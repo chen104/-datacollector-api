@@ -67,7 +67,7 @@
     -->
     <guava.version>18.0</guava.version>
     <jacoco.version>0.7.7.201606060606</jacoco.version>
-    <jetbrains.annotations.version>15.0</jetbrains.annotations.version>
+    <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
     <junit.version>4.11</junit.version>
     <log4j.version>1.2.17</log4j.version>
     <metrics.version>3.1.2</metrics.version>
@@ -102,11 +102,17 @@
       <version>${metrics.version}</version>
       <scope>compile</scope>
     </dependency>
+    <!--
+      This dependency is needed only at compile time, not at runtime
+      Maven does not have the equivalent of Gradle's compileOnly.
+      We can mark it provided and simply not provide it at runtime to
+      avoid leaking it.
+     -->
     <dependency>
       <groupId>org.jetbrains</groupId>
-      <artifactId>annotations-java5</artifactId>
+      <artifactId>annotations</artifactId>
       <version>${jetbrains.annotations.version}</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -354,7 +360,7 @@
             <exclude>.git/**</exclude>
             <exclude>.gitignore</exclude>
             <exclude>.gitreview</exclude>
-	    
+
 	    <!-- Jenkins -->
             <exclude>**/buildInfo*.properties</exclude>
 	    <exclude>**/ok</exclude>
