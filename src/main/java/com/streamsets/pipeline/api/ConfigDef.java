@@ -115,9 +115,21 @@ public @interface ConfigDef {
 
 
   /**
+   * Defines the upload capability for a configuration. NO means no upload configuration support. TEXT indicates
+   * a text payload can be uploaded to the property. BASE64 indicates a binary payload BASE64 encoded can be
+   * uploaded to the property.
+   */
+  enum Upload { NO, TEXT, BASE64 }
+
+  /**
    * The configuration type for the configuration variable.
    */
   Type type();
+
+  /**
+   * The upload capability for the configuration.
+   */
+  Upload upload() default Upload.NO;
 
   /**
    * The default value for the configuration variable. If the {@link #evaluation()} is
