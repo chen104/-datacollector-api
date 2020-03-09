@@ -53,9 +53,15 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @SupportedAnnotationTypes({
@@ -126,29 +132,60 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
     typeOfTarget = processingEnv.getElementUtils().getTypeElement(Target.class.getName()).asType();
   }
 
+  Set<String> getIgnoreStages() {
+    Set<String> ignoreStages = Collections.emptySet();
+
+    try {
+      FileObject resource = processingEnv.getFiler().getResource(
+          StandardLocation.CLASS_OUTPUT,
+          "",
+          "data-collector-library.properties"
+      );
+      InputStream is = resource.openInputStream();
+      if (is == null) {
+        printError("Could not find 'data-collector-library.properties'");
+        error = true;
+      } else {
+        Properties props = new Properties();
+        props.load(is);
+        String ignoreStagesStr = props.getProperty("ignore.stage.definitions", "");
+        String[] stages = ignoreStagesStr.split(",");
+        ignoreStages = Arrays.asList(stages).stream().map(s -> s.trim()).collect(Collectors.toSet());
+      }
+    } catch (IOException ex) {
+      printError("Could not read 'data-collector-library.properties': " + ex, ex);
+      error = true;
+    }
+    return ignoreStages;
+  }
+
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
     if (skipProcessor) {
       return true;
     }
+
+    Set<String> ignoreStages = getIgnoreStages();
     // Collect @StageDef classes
     for(Element e : roundEnv.getElementsAnnotatedWith(StageDef.class)) {
       StageDef stageDef = e.getAnnotation(StageDef.class);
 
       if(e.getKind().isClass()) {
         String className = ((TypeElement)e).getQualifiedName().toString();
-        stagesClasses.add(className);
+        if (!ignoreStages.contains(className)) {
+          stagesClasses.add(className);
 
-        boolean statsAggregatorStage = e.getAnnotation(StatsAggregatorStage.class) != null;
-        boolean errorStage = e.getAnnotation(ErrorStage.class) != null;
-        stageDefJsonList.add(stageDefToJson(
-            stageDef,
-            getStageName(className),
-            extractStageType(e.asType()),
-            statsAggregatorStage,
-            errorStage
-        ));
+          boolean statsAggregatorStage = e.getAnnotation(StatsAggregatorStage.class) != null;
+          boolean errorStage = e.getAnnotation(ErrorStage.class) != null;
+          stageDefJsonList.add(stageDefToJson(
+              stageDef,
+              getStageName(className),
+              extractStageType(e.asType()),
+              statsAggregatorStage,
+              errorStage
+          ));
+        }
       } else {
         printError("'{}' is not a class, cannot be @StageDef annotated", e);
         error = true;
