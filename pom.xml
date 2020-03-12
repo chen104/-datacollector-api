@@ -108,11 +108,12 @@
       We can mark it provided and simply not provide it at runtime to
       avoid leaking it.
      -->
+    <!-- Keeping it as scope compile till all dependents are fixed -->
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
       <version>${jetbrains.annotations.version}</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
