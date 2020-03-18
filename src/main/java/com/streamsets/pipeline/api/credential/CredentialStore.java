@@ -62,6 +62,13 @@ public interface CredentialStore {
      * @return String representation of the value or null if it's not defined.
      */
     String getConfig(String configName);
+
+    /**
+     * Returns StreamSets Configuration directory path.
+     *
+     * @return StreamSets Configuration directory path.
+     */
+    String getStreamSetsConfigDir();
   }
 
   /**
