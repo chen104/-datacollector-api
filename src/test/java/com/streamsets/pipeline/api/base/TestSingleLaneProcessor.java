@@ -98,6 +98,11 @@ public class TestSingleLaneProcessor {
     Processor processor = new SingleLaneProcessor() {
 
       @Override
+      protected List<ConfigIssue> initConnection() {
+        return super.initConnection();
+      }
+
+      @Override
       protected List<ConfigIssue> init() {
         return super.init();
       }

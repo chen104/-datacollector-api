@@ -94,4 +94,15 @@ public class TestPipelineAnnotationsProcessor {
     Assert.assertTrue(resource.contains(DummySource.class.getSimpleName()));
   }
 
+  @Test
+  public void testConnectionDefListResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.CONNECTIONS_LIST_FILE);
+    Assert.assertTrue(resource.contains(DummyConnection.class.getSimpleName()));
+  }
+
+  @Test
+  public void testConnectionVerifierDefListResource() throws Exception {
+    String resource = readResource(PipelineAnnotationsProcessor.CONNECTION_VERIFIERS_LIST_FILE);
+    Assert.assertTrue(resource.contains(DummyConnectionVerifier.class.getSimpleName()));
+  }
 }

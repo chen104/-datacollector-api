@@ -53,6 +53,11 @@ public @interface HideStage {
      * Stats aggregation stages are used to send metrics from Data Collector to Control hub.
      */
     STATS_AGGREGATOR_STAGE,
+
+    /**
+     * Connection verifier stages are used by Control Hub to verify connections in pipeline previews.
+     */
+    CONNECTION_VERIFIER,
   }
 
   /**
