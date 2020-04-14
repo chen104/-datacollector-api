@@ -18,7 +18,14 @@ package com.streamsets.pipeline.api.ext;
 import java.io.Closeable;
 import java.io.IOException;
 
+/**
+ * This is private interface for some internal Data Collector stages. This interface should not be used as it can change
+ * in non-compatible ways at any time.
+ */
 public interface JsonObjectReader extends Closeable {
+
+  public static Object EOF = new Object();
+
   Object read() throws IOException;
 
   long getReaderPosition();
