@@ -15,20 +15,46 @@
  */
 package com.streamsets.pipeline.api;
 
+import com.streamsets.pipeline.api.base.BaseSource;
+
 import java.util.List;
 
 /**
  * Allows Connections to verify their configuration.  It is up to the individual Connection type to determine the best
  * way to do this.  For some types that may be simply calling a "ping" function while others may require running a
- * pipeline preview, or something else entirely.
+ * pipeline preview, or something else entirely.  In any case, subclasses should implement the {@link #initConnection()}
+ * method to provide this logic, and optionally use the {@link #destroyConnection()} method for any cleanup.  Subclasses
+ * should also include the Config Bean with the associated {@link ConnectionDef} as the configuration for this stage.
  */
-public interface ConnectionVerifier {
+public abstract class ConnectionVerifier extends BaseSource {
+  @Override
+  protected List<ConfigIssue> init() {
+    List<ConfigIssue> issues = super.init();
+    issues.addAll(initConnection());
+    return issues;
+  }
+
+  @Override
+  public void destroy() {
+    destroyConnection();
+  }
+
+  @Override
+  public String produce(String lastSourceOffset, int maxBatchSize, BatchMaker batchMaker) throws StageException {
+    return null;
+  }
 
   /**
-   * Verifying the connection configuration.
+   * Verifies the Connection's configuration.  Subclasses should override this to provide the logic to do the
+   * verification.
    *
-   * @param configs The configurations for the Connection to verify.
-   * @return A list of {@link ConfigIssue} describing any problems, or an empty list if no problems.
+   * @return  A list of {@link ConfigIssue} describing any problems, or an empty list if no problems.
    */
-  List<ConfigIssue> verify(List<Config> configs);
+  protected abstract List<ConfigIssue> initConnection();
+
+  /**
+   * Destroys the Connection, if applicable.  Subclasses can override this to provide the logic for that; the default
+   * implementation is a no-op.
+   */
+  protected void destroyConnection() {};
 }
