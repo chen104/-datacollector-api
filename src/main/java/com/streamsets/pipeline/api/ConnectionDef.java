@@ -58,4 +58,9 @@ public @interface ConnectionDef {
    * The {@link ConnectionVerifier} to use for verifying a Connection's configuration.
    */
   Class<? extends ConnectionVerifier> verifier();
+
+  /**
+   * The possible execution engines that a Connection can support.
+   */
+  ConnectionEngine[] supportedEngines();
 }
