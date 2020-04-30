@@ -27,6 +27,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ConnectionDef {
 
+  class Constants {
+    /**
+     * Expected {@link Dependency#triggeredByValues} value for {@link ConfigDef.Type#CONNECTION} field which
+     * denotes manual entry for {@link ConnectionDef} object attributes.
+     */
+    public static final String CONNECTION_SELECT_MANUAL = "MANUAL";
+  }
+
   /**
    * A user-facing label or name for this Connection Definition.
    */
