@@ -15,6 +15,8 @@
  */
 package com.streamsets.pipeline.api;
 
+import com.streamsets.pipeline.api.gateway.GatewayInfo;
+
 import java.util.Map;
 
 /**
@@ -111,6 +113,19 @@ public interface PushSource extends ProtoSource<PushSource.Context> {
      * @return DeliveryGuarantee for this pipeline.
      */
     public DeliveryGuarantee getDeliveryGuarantee();
+
+    /**
+     * Register API Gateway for given gateway info entity
+     *
+     * @return API Endpoint for this pipeline.
+     */
+    String registerApiGateway(GatewayInfo gatewayInfo);
+
+    /**
+     * UnRegister API Gateway for given gateway info entity
+     *
+     */
+    void unregisterApiGateway(GatewayInfo gatewayInfo);
   }
 
   /**
