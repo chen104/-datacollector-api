@@ -128,6 +128,12 @@ public @interface StageDef {
    */
   boolean resetOffset() default false;
 
+  /**
+   * Indicates that the stage will not touch records after they were passed down to the framework
+   * via BatchMaker.addRecord(). Framework uses this knowledge to optimize the execution and avoid unnecessary copies
+   * of the record. It's critical that stage declaring recordsByRef doesn't re-use any maps, lists in multiple records
+   * as that could have unforeseen consequences.
+   */
   boolean recordsByRef() default false;
 
   /**
