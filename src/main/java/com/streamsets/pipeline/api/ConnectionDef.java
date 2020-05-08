@@ -44,18 +44,18 @@ public @interface ConnectionDef {
 
   /**
    * The current version of this Connection Definition.  It should be incremented whenever a change is made that
-   * requires the {@link #upgraderDef()} to be run.
+   * requires the {@link #upgrader()} to be run.
    */
   int version();
 
   /**
-   * The YAML-based upgrader definition associated with this Connection Definition that knows how to upgrade a
-   * Connection configuration when the {@link #version()} is incremented.
+   * The {@link ConnectionUpgrader} associated with this Connection Definition that knows how to upgrade a Connection
+   * configuration when the {@link #version()} is incremented.
    */
-  String upgraderDef();
+  Class<? extends ConnectionUpgrader> upgrader();
 
   /**
-   * The {@link ConnectionVerifier} to use for verifying a Connection's configuration.
+   * The {@link ConnectionVerifier} to use for doing verifying a Connection Definition.
    */
   Class<? extends ConnectionVerifier> verifier();
 }
