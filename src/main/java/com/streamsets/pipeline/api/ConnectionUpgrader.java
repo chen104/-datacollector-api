@@ -18,17 +18,18 @@ package com.streamsets.pipeline.api;
 import java.util.List;
 
 /**
- * Allows Connections to verify their configuration.  It is up to the individual Connection type to determine the best
- * way to do this.  For some types that may be simply calling a "ping" function while others may require running a
- * pipeline preview, or something else entirely.
+ * Allows Connections to upgrade their configuration from previous versions.  Similar upgrades should also be done in
+ * any Stages using a Connection type to ensure that the configs are also upgraded when a Connection is not being used.
  */
-public interface ConnectionVerifier {
+public interface ConnectionUpgrader {
 
   /**
-   * Verifying the connection configuration.
+   * Upgrades the connection configuration from a previous version to current version.
    *
-   * @param configs The configurations for the Connection to verify.
-   * @return A list of {@link ConfigIssue} describing any problems, or an empty list if no problems.
+   * @param fromVersion version recorded in the connection configuration to upgrade.
+   * @param toVersion the version to upgrade the configuration to.
+   * @param configs The configurations to upgrade.
+   * @return The upgraded configuration.
    */
-  List<ConfigIssue> verify(List<Config> configs);
+  List<Config> upgrade(int fromVersion, int toVersion, List<Config> configs);
 }
