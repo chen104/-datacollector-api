@@ -21,33 +21,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TestBaseStage {
   private Stage.Info info = Mockito.mock(Stage.Info.class);
   private Stage.Context context = Mockito.mock(Stage.Context.class);
-  private boolean inited, connInited;
-  private List<Stage.ConfigIssue> initIssues = null;
-  private List<Stage.ConfigIssue> initConnIssues = null;
+  private boolean inited;
 
   public class TBaseStage extends BaseStage<Stage.Context> {
 
     @Override
-    protected List<ConfigIssue> initConnection() {
-      List<ConfigIssue> issues = super.initConnection();
-      issues.addAll(initConnIssues);
-      Assert.assertEquals(info, getInfo());
-      Assert.assertEquals(context, getContext());
-      connInited = true;
-      return issues;
-    }
-
-    @Override
     protected List<ConfigIssue> init() {
       List<ConfigIssue> issues = super.init();
-      issues.addAll(initIssues);
       Assert.assertEquals(info, getInfo());
       Assert.assertEquals(context, getContext());
       inited = true;
@@ -58,59 +43,16 @@ public class TestBaseStage {
 
   @Before
   public void before() {
-    connInited = false;
-    initConnIssues = new ArrayList<>();
     inited = false;
-    initIssues = new ArrayList<>();
   }
 
   @Test
   @SuppressWarnings("unchecked")
   public void testBaseStage() throws Exception {
     Stage stage = new TBaseStage();
-    List<Stage.ConfigIssue> issues = stage.init(info, context);
-    Assert.assertEquals(0, issues.size());
-    Assert.assertTrue(connInited);
+    stage.init(info, context);
     Assert.assertTrue(inited);
     stage.destroy();
   }
 
-  @Test
-  @SuppressWarnings("unchecked")
-  public void testBaseStageInitConnFailure() throws Exception {
-    Stage stage = new TBaseStage();
-    initConnIssues.add(Mockito.mock(Stage.ConfigIssue.class));
-    List<Stage.ConfigIssue> issues = stage.init(info, context);
-    Assert.assertEquals(1, issues.size());
-    Assert.assertTrue(connInited);
-    Assert.assertFalse(inited);
-    stage.destroy();
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public void testBaseStageInitFailure() throws Exception {
-    Stage stage = new TBaseStage();
-    initIssues.add(Mockito.mock(Stage.ConfigIssue.class));
-    List<Stage.ConfigIssue> issues = stage.init(info, context);
-    Assert.assertEquals(1, issues.size());
-    Assert.assertTrue(connInited);
-    Assert.assertTrue(inited);
-    stage.destroy();
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public void testBaseStageBothFailure() throws Exception {
-    Stage stage = new TBaseStage();
-    initConnIssues.add(Mockito.mock(Stage.ConfigIssue.class));
-    initIssues.add(Mockito.mock(Stage.ConfigIssue.class));
-    List<Stage.ConfigIssue> issues = stage.init(info, context);
-    // should be only 1, because the logic short-circuits init() call if
-    // initConnection() failed
-    Assert.assertEquals(1, issues.size());
-    Assert.assertTrue(connInited);
-    Assert.assertFalse(inited);
-    stage.destroy();
-  }
 }
