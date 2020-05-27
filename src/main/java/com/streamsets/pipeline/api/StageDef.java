@@ -142,11 +142,8 @@ public @interface StageDef {
   boolean privateClassLoader() default false;
 
   /**
-   * Indicates the upgrader implementation class to use to upgrade stage configurations for older stage versions.
-   * <p/>
-   * Use {@link #upgraderDef()} instead.
+   * Indicates the upgrader implementation class to use to upgrade stage configurations.
    */
-  @Deprecated
   Class<? extends StageUpgrader> upgrader() default StageUpgrader.Default.class;
 
   /**

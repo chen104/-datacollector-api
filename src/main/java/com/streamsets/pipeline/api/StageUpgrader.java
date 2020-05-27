@@ -133,6 +133,8 @@ public interface StageUpgrader {
   /**
    * Upgrades the stage configuration from a previous version to current version.
    *
+   * @deprecated use {@link #upgrade(List, Context)} instead
+   *
    * @param library stage library name.
    * @param stageName stage name.
    * @param stageInstance stage instance name.
