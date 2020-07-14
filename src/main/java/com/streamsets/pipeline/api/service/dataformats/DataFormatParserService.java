@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -118,15 +117,4 @@ public interface DataFormatParserService {
    * @return True if the checksum info should be required.
    */
   public boolean isWholeFileChecksumRequired();
-
-  /**
-   * Initializes the underlying DataFormatConfig
-   *
-   * Should be called after some configuration has been changed in the Stage init and the value
-   * needs to be propagated to another object that is already initialized.
-   *
-   * E.g. when changing the stringBuilderPoolSize, the value needs to be propagated to the
-   * DataParserFactory, so it needs to be rebuilt.
-   */
-  public void initDataFormatConfig(List issues);
 }
