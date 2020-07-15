@@ -75,7 +75,7 @@ public class LocalizableMessage implements LocalizableString {
         } catch (MissingResourceException ex) {
           if (!MISSING_BUNDLE_WARNS.contains(bundle)) {
             MISSING_BUNDLE_WARNS.add(bundle);
-            LOG.debug("ResourceBundle '{}' not found via ClassLoader '{}'", bundle, classLoader);
+            LOG.trace("ResourceBundle '{}' not found via ClassLoader '{}'", bundle, classLoader);
           }
         }
       }
