@@ -73,6 +73,7 @@ public interface DataFormatParserService {
    *
    * @param poolSize Pool size for StringBuilder
    */
+  @Deprecated
   public void setStringBuilderPoolSize(int poolSize);
 
   /**
@@ -80,6 +81,7 @@ public interface DataFormatParserService {
    *
    * @return Pool size
    */
+  @Deprecated
   public int getStringBuilderPoolSize();
 
   /**
