@@ -15,10 +15,8 @@
  */
 package com.streamsets.pipeline.api;
 
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A <code>Record</code> represents the unit of data Data Collector pipelines process. A record has a {@link Field}
@@ -222,6 +220,13 @@ public interface Record {
      * @return Job ID in String format, <code>NULL</code> if Job ID does not exists.
      */
     public String getErrorJobId();
+
+    /**
+     * Job Name is set when the pipeline has an associated SCH Job Name
+     *
+     * @return Job Name in String format, <code>NULL</code> if Job Name does not exists.
+     */
+    public String getErrorJobName();
 
   }
 
