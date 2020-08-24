@@ -45,27 +45,11 @@ public abstract class BaseStage<C extends Context> implements Stage<C> {
     List<ConfigIssue> issues = new ArrayList<>();
     this.info = info;
     this.context = context;
-    issues.addAll(initConnection());
-    if (issues.isEmpty()) {
-      issues.addAll(init());
-      if (requiresSuperInit && !superInitCalled) {
-        issues.add(context.createConfigIssue(null, null, Errors.API_20));
-      }
+    issues.addAll(init());
+    if (requiresSuperInit && !superInitCalled) {
+      issues.add(context.createConfigIssue(null, null, Errors.API_20));
     }
     return issues;
-  }
-
-  /**
-   * Initializes the stage connection details, if necessary. Subclasses can override this method for stage
-   * initialization. This method should be called before init(), as it is intended to perform connection
-   * configuration setup required for subsequent stage logic.
-   * <p/>
-   * This implementation is a no-operation.
-   *
-   * @return the list of configuration issues found during connection initialization, an empty list if none.
-   */
-  protected List<ConfigIssue> initConnection() {
-    return new ArrayList<>();
   }
 
   /**
