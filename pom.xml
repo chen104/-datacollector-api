@@ -66,7 +66,7 @@
          mismatches with multiple artifacts of the same logical dependency.
     -->
     <guava.version>18.0</guava.version>
-    <jacoco.version>0.7.7.201606060606</jacoco.version>
+    <jacoco.version>0.8.4</jacoco.version>
     <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
     <junit.version>4.11</junit.version>
     <log4j.version>1.2.17</log4j.version>
@@ -291,7 +291,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.8.1</version>
         <configuration>
           <source>${javaVersion}</source>
           <target>${javaVersion}</target>
@@ -316,7 +316,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19.1</version>
+        <version>2.22.2</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -403,7 +403,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.1</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>javadoc</id>
@@ -414,6 +414,8 @@
             </goals>
             <configuration>
               <doctitle>StreamSets Data Collector API ${project.version}</doctitle>
+              <detectJavaApiLink>false</detectJavaApiLink>
+              <doclint>none</doclint>
               <linksource>true</linksource>
               <quiet>true</quiet>
               <verbose>false</verbose>
@@ -423,7 +425,7 @@
 
               <groups>
                 <group>
-                  <title>Pipeline API</title>
+                  <title>Data Collector API</title>
                   <packages>com.streamsets.pipeline.api:com.streamsets.pipeline.api.*</packages>
                 </group>
               </groups>
