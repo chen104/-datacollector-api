@@ -21,6 +21,7 @@ import com.streamsets.pipeline.api.ElDef;
 import com.streamsets.pipeline.api.ErrorStage;
 import com.streamsets.pipeline.api.Executor;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
+import com.streamsets.pipeline.api.HideStage;
 import com.streamsets.pipeline.api.Processor;
 import com.streamsets.pipeline.api.PushSource;
 import com.streamsets.pipeline.api.Source;
@@ -55,6 +56,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
@@ -152,12 +154,19 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
 
         boolean statsAggregatorStage = e.getAnnotation(StatsAggregatorStage.class) != null;
         boolean errorStage = e.getAnnotation(ErrorStage.class) != null;
+        boolean connectionVerifier = false;
+        HideStage hideStageAnnotation = e.getAnnotation(HideStage.class);
+        if (hideStageAnnotation != null) {
+          connectionVerifier =
+              Arrays.stream(hideStageAnnotation.value()).anyMatch(h -> h == HideStage.Type.CONNECTION_VERIFIER);
+        }
         stageDefJsonList.add(stageDefToJson(
             stageDef,
             getStageName(className),
             extractStageType(e.asType()),
             statsAggregatorStage,
-            errorStage
+            errorStage,
+            connectionVerifier
         ));
       } else {
         printError("'{}' is not a class, cannot be @StageDef annotated", e);
@@ -314,7 +323,8 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
       String stageName,
       StageType stageType,
       boolean statsAggregatorStage,
-      boolean errorStage
+      boolean errorStage,
+      boolean connectionVerifier
   ) {
 
     StringBuilder sb = new StringBuilder();
@@ -364,6 +374,10 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
 
     sb.append("\t\"").append("icon").append("\"").append(": \"")
         .append(stageDef.icon()).append("\"");
+    sb.append(",\n");
+
+    sb.append("\t\"").append("isConnectionVerifier").append("\"").append(": ")
+        .append(connectionVerifier);
     sb.append("\n }");
 
     return sb.toString();
