@@ -59,11 +59,6 @@ public @interface ConfigDef {
      * during runtime by other means.
      */
     RUNTIME(null),
-    /**
-     * If a configurable variable is defined as <code>CONNECTION</code>, the variable must also include the
-     * {@link #connectionType} field.
-     */
-    CONNECTION("")
     ;
 
     private final transient Object defaultValue;
@@ -275,7 +270,8 @@ public @interface ConfigDef {
   DisplayMode displayMode() default DisplayMode.BASIC;
 
   /**
-   * Indicates the connection type for {@link Type#CONNECTION}.
+   * Indicates that this field is a "connection selection" field for a particular Connection Type
+   * (see {@link ConnectionDef#type()}.  An empty-string value (default) indicates that it is not.
    */
   String connectionType() default "";
 

@@ -19,6 +19,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The <code>ConnectionDef</code> annotation is used to designate Config Beans as being Connection Definitions too.
@@ -29,10 +31,34 @@ public @interface ConnectionDef {
 
   class Constants {
     /**
-     * Expected {@link Dependency#triggeredByValues} value for {@link ConfigDef.Type#CONNECTION} field which
+     * Expected {@link Dependency#triggeredByValues} value for {@link ConfigDef#connectionType()} field which
      * denotes manual entry for {@link ConnectionDef} object attributes.
      */
     public static final String CONNECTION_SELECT_MANUAL = "MANUAL";
+
+    /**
+     * {@link ChooserValues} for the {@link ConfigDef#connectionType()} field.
+     */
+    public static class ConnectionChooserValues implements ChooserValues {
+
+      private static final List<String> VALUES = Collections.singletonList(CONNECTION_SELECT_MANUAL);
+      private static final List<String> LABELS = Collections.singletonList("None");
+
+      @Override
+      public String getResourceBundle() {
+        return null;
+      }
+
+      @Override
+      public List<String> getValues() {
+        return VALUES;
+      }
+
+      @Override
+      public List<String> getLabels() {
+        return LABELS;
+      }
+    }
   }
 
   /**
