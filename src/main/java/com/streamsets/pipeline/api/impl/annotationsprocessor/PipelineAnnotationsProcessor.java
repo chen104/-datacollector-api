@@ -376,7 +376,7 @@ public class PipelineAnnotationsProcessor extends AbstractProcessor {
         .append(stageDef.icon()).append("\"");
     sb.append(",\n");
 
-    sb.append("\t\"").append("isConnectionVerifier").append("\"").append(": ")
+    sb.append("\t\"").append("connectionVerifierStage").append("\"").append(": ")
         .append(connectionVerifier);
     sb.append("\n }");
 
