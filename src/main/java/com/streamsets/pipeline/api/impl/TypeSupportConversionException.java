@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 StreamSets Inc.
+ * Copyright 2020 StreamSets Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,19 @@
  */
 package com.streamsets.pipeline.api.impl;
 
-import com.streamsets.pipeline.api.base.Errors;
+import com.streamsets.pipeline.api.ErrorCode;
 
-public class CharTypeSupport extends TypeSupport<Character> {
+/**
+ * Thrown by {@link TypeSupport} implementations when a value conversion is not possible.
+ */
+public class TypeSupportConversionException extends IllegalArgumentException {
+  public final ErrorCode errorCode;
+  public final Object[] params;
 
-  @Override
-  public Character convert(Object value) {
-    if (value instanceof Character) {
-      return (Character) value;
-    }
-    if (value instanceof String) {
-      String s = (String) value;
-      if (s.length() > 0) {
-        return s.charAt(0);
-      }
-    }
-    throw new TypeSupportConversionException(Errors.API_05,
-                                                    value.getClass().getSimpleName(), value);
+  public TypeSupportConversionException(final ErrorCode errorCode, final Object... params) {
+    super(Utils.format(errorCode.getMessage(), params));
+
+    this.errorCode = errorCode;
+    this.params = params;
   }
-
 }

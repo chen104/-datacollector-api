@@ -45,8 +45,8 @@ public class DoubleTypeSupport extends TypeSupport<Double> {
     if (value instanceof Number) {
       return ((Number)value).doubleValue();
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_09.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_09,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

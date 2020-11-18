@@ -32,7 +32,7 @@ public class StringTypeSupport extends TypeSupport<String> {
     }
 
     if(value instanceof Map || value instanceof List || value instanceof byte[]|| value instanceof FileRef) {
-      throw new IllegalArgumentException(Utils.format(Errors.API_18.getMessage()));
+      throw new TypeSupportConversionException(Errors.API_18);
     }
     // ZoneDatetime.toString() does not use a standard format which can be parsed.
     if (value instanceof ZonedDateTime) {

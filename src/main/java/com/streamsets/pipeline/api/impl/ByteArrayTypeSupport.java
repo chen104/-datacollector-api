@@ -25,8 +25,8 @@ public class ByteArrayTypeSupport extends TypeSupport<byte[]> {
     if (value instanceof byte[]) {
       return (byte[])value;
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_02.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_02,
+                                                    value.getClass().getSimpleName(), value);
   }
 
   @Override
@@ -34,7 +34,7 @@ public class ByteArrayTypeSupport extends TypeSupport<byte[]> {
     if (targetTypeSupport instanceof ByteArrayTypeSupport) {
       return value;
     } else {
-      throw new IllegalArgumentException(Utils.format(Errors.API_03.getMessage(), targetTypeSupport));
+      throw new TypeSupportConversionException(Errors.API_03, targetTypeSupport);
     }
   }
 

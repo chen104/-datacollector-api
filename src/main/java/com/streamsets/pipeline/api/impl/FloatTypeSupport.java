@@ -45,8 +45,8 @@ public class FloatTypeSupport extends TypeSupport<Float> {
     if (value instanceof Number) {
       return ((Number)value).floatValue();
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_10.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_10,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

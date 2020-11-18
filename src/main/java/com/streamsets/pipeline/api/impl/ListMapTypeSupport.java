@@ -41,8 +41,8 @@ public class ListMapTypeSupport extends TypeSupport<LinkedHashMap> {
       Map map = (Map) value;
       return new LinkedHashMap(map);
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_21.getMessage(),
-      value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_21,
+      value.getClass().getSimpleName(), value);
   }
 
   @Override
@@ -55,7 +55,7 @@ public class ListMapTypeSupport extends TypeSupport<LinkedHashMap> {
       LinkedHashMap listMap = (LinkedHashMap) value;
       return new ArrayList<>(listMap.values());
     } else {
-      throw new IllegalArgumentException(Utils.format(Errors.API_22.getMessage(), targetTypeSupport));
+      throw new TypeSupportConversionException(Errors.API_22, targetTypeSupport);
     }
   }
 

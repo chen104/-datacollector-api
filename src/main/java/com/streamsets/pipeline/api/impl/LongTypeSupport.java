@@ -50,8 +50,8 @@ public class LongTypeSupport extends TypeSupport<Long> {
     if (value instanceof Date) {
       return ((Date)value).getTime();
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_14.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_14,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

@@ -32,7 +32,7 @@ public class DateTypeSupport extends TypeSupport<Date> {
       try {
         return Utils.parse((String) value);
       } catch (ParseException ex) {
-        throw new IllegalArgumentException(Utils.format(Errors.API_06.getMessage(), value));
+        throw new TypeSupportConversionException(Errors.API_06, value);
       }
     }
     if (value instanceof Long) {
@@ -41,8 +41,8 @@ public class DateTypeSupport extends TypeSupport<Date> {
     if (value instanceof Integer) {
       return new Date((int) value);
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_07.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_07,
+                                                    value.getClass().getSimpleName(), value);
   }
 
   @Override

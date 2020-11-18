@@ -40,7 +40,7 @@ public class ZonedDateTimeTypeSupport extends TypeSupport<ZonedDateTime> {
       );
       return Utils.parseZoned((String) value);
     } catch (DateTimeParseException ex) {
-      throw new IllegalArgumentException(Utils.format(Errors.API_26.getMessage(), value));
+      throw new TypeSupportConversionException(Errors.API_26, value);
     }
   }
 

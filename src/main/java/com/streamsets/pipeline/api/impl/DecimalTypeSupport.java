@@ -36,8 +36,8 @@ public class DecimalTypeSupport extends TypeSupport<BigDecimal> {
       return new BigDecimal(value.toString());
     }
 
-    throw new IllegalArgumentException(Utils.format(Errors.API_08.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_08,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

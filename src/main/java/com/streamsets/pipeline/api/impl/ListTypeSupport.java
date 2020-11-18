@@ -29,8 +29,8 @@ public class ListTypeSupport extends TypeSupport<List> {
     if (value instanceof List) {
       return (List) value;
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_12.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_12,
+                                                    value.getClass().getSimpleName(), value);
   }
 
   @Override
@@ -45,7 +45,7 @@ public class ListTypeSupport extends TypeSupport<List> {
       }
       return listMap;
     } else {
-      throw new IllegalArgumentException(Utils.format(Errors.API_13.getMessage(), targetTypeSupport));
+      throw new TypeSupportConversionException(Errors.API_13, targetTypeSupport);
     }
   }
 

@@ -45,8 +45,8 @@ public class IntegerTypeSupport extends TypeSupport<Integer> {
     if (value instanceof Number) {
       return ((Number)value).intValue();
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_11.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_11,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

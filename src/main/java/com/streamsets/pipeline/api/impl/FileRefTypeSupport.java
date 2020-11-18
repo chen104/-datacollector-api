@@ -30,14 +30,14 @@ public class FileRefTypeSupport extends TypeSupport<FileRef> {
     if (value instanceof FileRef) {
       return (FileRef)value;
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_23.getMessage(), value.getClass().getName()));
+    throw new TypeSupportConversionException(Errors.API_23, value.getClass().getName());
   }
   @Override
   public Object convert(Object value, TypeSupport targetTypeSupport) {
     if (targetTypeSupport instanceof FileRefTypeSupport) {
       return value;
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_24.getMessage(), targetTypeSupport));
+    throw new TypeSupportConversionException(Errors.API_24, targetTypeSupport);
   }
 
   @Override

@@ -45,8 +45,8 @@ public class ByteTypeSupport extends TypeSupport<Byte> {
     if (value instanceof Number) {
       return ((Number)value).byteValue();
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_04.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_04,
+                                                    value.getClass().getSimpleName(), value);
   }
 
 }

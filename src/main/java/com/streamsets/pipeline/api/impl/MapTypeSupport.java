@@ -28,8 +28,8 @@ public class MapTypeSupport extends TypeSupport<Map> {
     if (value instanceof Map) {
       return (Map) value;
     }
-    throw new IllegalArgumentException(Utils.format(Errors.API_15.getMessage(),
-                                                    value.getClass().getSimpleName(), value));
+    throw new TypeSupportConversionException(Errors.API_15,
+                                                    value.getClass().getSimpleName(), value);
   }
 
   @Override
@@ -37,7 +37,7 @@ public class MapTypeSupport extends TypeSupport<Map> {
     if (targetTypeSupport instanceof MapTypeSupport || targetTypeSupport instanceof ListMapTypeSupport) {
       return value;
     } else {
-      throw new IllegalArgumentException(Utils.format(Errors.API_16.getMessage(), targetTypeSupport));
+      throw new TypeSupportConversionException(Errors.API_16, targetTypeSupport);
     }
   }
 
